@@ -1,0 +1,49 @@
+<div class="client-form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+        <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type">
+                <mat-option *ngFor="let type of vehicleTypeList" [value]="type">
+                    {{ type }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('c')?.hasError('required')">
+                Selecciona una clase
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Marca</mat-label>
+            <input matInput formControlName="brand" placeholder="Ej. Honda" />
+            <mat-error *ngIf="form.get('brand')?.hasError('required')">
+                La marca del vehiculo es obligatoria
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Modelo</mat-label>
+            <input matInput formControlName="model" placeholder="Ej. Civic" />
+            <mat-error *ngIf="form.get('model')?.hasError('required')">
+                El modelo es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Año</mat-label>
+            <input matInput formControlName="year" placeholder="Ej. 1997" type="number" />
+            <mat-error *ngIf="form.get('year')?.hasError('required')">
+                El año es invalido
+            </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

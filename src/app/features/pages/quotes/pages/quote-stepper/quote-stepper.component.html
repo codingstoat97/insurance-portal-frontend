@@ -1,0 +1,16 @@
+<div class="stepper-container">
+    <mat-stepper linear #stepper>
+        <mat-step>
+            <ng-template matStepLabel>Ingresa tus datos</ng-template>
+            <app-client-form (submitted)="onClientSubmitted($event)" (cancelled)="onCancelled()"></app-client-form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Ingresa los datos de tu Vehiculo</ng-template>
+            <app-vehicle-form (submitted)="onVehicleSubmitted($event)" (cancelled)="onCancelled()"></app-vehicle-form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Elige tu cotización</ng-template>
+            <app-offer-list></app-offer-list>
+        </mat-step>
+    </mat-stepper>
+</div>

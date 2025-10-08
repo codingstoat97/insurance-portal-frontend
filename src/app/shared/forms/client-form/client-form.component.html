@@ -1,0 +1,58 @@
+<div class="client-form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" placeholder="Ej. Erick" />
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+                El nombre es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="lastname" placeholder="Ej. Kinlock" />
+            <mat-error *ngIf="form.get('lastname')?.hasError('required')">
+                El apellido es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('lastname')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput formControlName="email" placeholder="ejemplo@correo.com" type="email" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">
+                El correo es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">
+                Correo inválido
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Región</mat-label>
+            <mat-select formControlName="region">
+                <mat-option *ngFor="let region of regionList" [value]="region">
+                    {{ region }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('region')?.hasError('required')">
+                Selecciona una región
+            </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

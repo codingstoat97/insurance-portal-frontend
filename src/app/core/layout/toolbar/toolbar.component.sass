@@ -1,0 +1,26 @@
+.toolbar-container
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    background-color: var(--kin-primary)
+    box-shadow: 0 2px 8px rgba(0,0,0,.08)
+    z-index: 1001
+    color: var(--kin-gray-200)
+
+    &.is-home
+        background: transparent !important
+        box-shadow: none !important
+
+.spacer
+    flex: 1 1 auto
+
+.right > span
+    font-size: 16px
+    font-weight: lighter
+
+.right > span:hover
+    cursor: pointer
+
+.right > span + span
+    margin-left: 16px
