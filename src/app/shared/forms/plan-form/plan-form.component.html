@@ -1,0 +1,59 @@
+<div class="form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+        <mat-form-field appearance="outline">
+            <mat-label>Prima:</mat-label>
+            <input matInput formControlName="premium" placeholder="Ej. 2000" />
+            <mat-error *ngIf="form.get('premium')?.hasError('required')">
+                La cantidad de prima es obligatoria
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Descuento:</mat-label>
+            <input matInput formControlName="discount" placeholder="Ej. 20%" />
+            <mat-error *ngIf="form.get('discount')?.hasError('required')">
+                El porcentaje de descuento es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Total:</mat-label>
+            <input matInput formControlName="total" placeholder="Ej. 1900" />
+            <mat-error *ngIf="form.get('total')?.hasError('required')">
+                El total es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Aseguradora:</mat-label>
+            <input matInput formControlName="insurance" placeholder="Ej. Bisa Seguros" />
+            <mat-error *ngIf="form.get('insurance')?.hasError('required')">
+                La aseguradora es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Vehiculo:</mat-label>
+            <input matInput formControlName="vehicule" placeholder="Ej. Nissan" />
+            <mat-error *ngIf="form.get('vehicule')?.hasError('required')">
+                El vehiculo es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Beneficios:</mat-label>
+            <input matInput formControlName="insurance" placeholder="Ej. Bisa Seguros" />
+            <mat-error *ngIf="form.get('insurance')?.hasError('required')">
+                La aseguradora es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
