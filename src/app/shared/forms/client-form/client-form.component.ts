@@ -2,14 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Client, REGIONES_BO } from 'src/app/shared/models';
+import { Client } from 'src/app/shared/models';
 
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
+import { FormImportsModule } from '../form-imports.module';
 
 @Component({
   selector: 'app-client-form',
@@ -17,12 +12,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule
+    FormImportsModule
   ],
   templateUrl: './client-form.component.html',
   styleUrls: ['./client-form.component.sass']
@@ -31,13 +21,13 @@ export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() value?: Client | null;
   @Input() title?: string | null = 'Ingrese sus Datos';
-  @Input() submitLabel = 'Siguiente';
+  @Input() submitLabel?: string | null = 'Siguiente';
   @Input() showCancel = false;
 
   @Output() submitted = new EventEmitter<Client>();
   @Output() cancelled = new EventEmitter<void>();
 
-  regionList = REGIONES_BO;
+  regionList = ['Cochabamba', 'La Paz', 'Santa Cruz'];
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],

@@ -1,8 +1,8 @@
-<div class="client-form-container">
+<div class="form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select formControlName="type">
@@ -33,6 +33,20 @@
             <input matInput formControlName="year" placeholder="Ej. 1997" type="number" />
             <mat-error *ngIf="form.get('year')?.hasError('required')">
                 El año es invalido
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Electrico:</mat-label>
+            <mat-select formControlName="electric">
+                <mat-option [value]="true">
+                    Si
+                </mat-option>
+                <mat-option [value]="false">
+                    No
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('c')?.hasError('required')">
+                Selecciona una clase
             </mat-error>
         </mat-form-field>
 

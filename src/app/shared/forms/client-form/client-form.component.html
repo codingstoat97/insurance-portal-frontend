@@ -1,8 +1,8 @@
-<div class="client-form-container">
+<div class="form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="name" placeholder="Ej. Erick" />

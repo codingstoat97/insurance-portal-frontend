@@ -2,12 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { FormImportsModule } from '../form-imports.module';
 
 import { Vehicle, VEHICLE_TYPES } from '../../models';
 
@@ -17,12 +12,8 @@ import { Vehicle, VEHICLE_TYPES } from '../../models';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule],
+    FormImportsModule
+  ],
   templateUrl: './vehicle-form.component.html',
   styleUrls: ['./vehicle-form.component.sass']
 })
@@ -43,6 +34,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     brand: [''],
     model: [''],
     year: [null as number | null, [Validators.required, Validators.min(1900)]],
+    electric: [false]
   });
 
   constructor(private fb: FormBuilder) { }
