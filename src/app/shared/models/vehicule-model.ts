@@ -13,6 +13,7 @@ export interface Vehicle {
     brand: string;
     model: string;
     year: number;
+    electric: boolean;
 }
 
 export const VEHICLE_TYPES: readonly VehicleType[] = [
