@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared.module';
 
 import { Region } from '../../models';
 import { FormImportsModule } from '../form-imports.module';
+import { HttpService } from 'src/app/core/services/http/http.service';
 
 
 @Component({
@@ -33,11 +34,10 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   form = this.fb.group({
     name: [''],
-    zipcode: [''],
     country: ['']
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
 
@@ -56,6 +56,10 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Region;
+    this.httpService.post('regionals', payload).subscribe(res => {
+      console.log(res);
+      
+    })
     this.submitted.emit(payload);
   }
 

@@ -14,16 +14,6 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Código Postal:</mat-label>
-            <input matInput formControlName="zipcode" placeholder="Ej. 0000" />
-            <mat-error *ngIf="form.get('zipcode')?.hasError('required')">
-                El Código Postal es obligatorio
-            </mat-error>
-            <mat-error *ngIf="form.get('zipcode')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
             <mat-label>País:</mat-label>
             <input matInput formControlName="country" placeholder="Ej. Bolivia" />
             <mat-error *ngIf="form.get('country')?.hasError('required')">
