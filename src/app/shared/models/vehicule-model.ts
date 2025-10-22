@@ -3,7 +3,7 @@ export interface Vehicle {
     classifications: string;
     brand: string;
     model: string;
-    highend: boolean;
+    highEnd: boolean;
     electric: boolean;
 }
 
