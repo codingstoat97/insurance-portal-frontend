@@ -36,5 +36,8 @@ export class ToolbarComponent {
     this.router.navigate(['/home']);
   }
 
+  goToBroker(): void {
+    this.router.navigate(['/broker']);
+  }
 
 }

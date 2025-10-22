@@ -14,6 +14,12 @@ const routes: Routes = [
       import('./features/pages/quotes/quotes.module')
         .then(m => m.QuotesModule),
   },
+  {
+    path: 'broker',
+    loadChildren: () =>
+      import('./features/pages/broker/broker.module')
+        .then(m => m.BrokerModule),
+  },
   { path: '**', redirectTo: 'home' }
 ];
 
