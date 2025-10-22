@@ -1,22 +1,25 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { Insurance, Region } from '../../models';
 
 import { SharedModule } from '../../shared.module';
 import { FormImportsModule } from '../form-imports.module';
 
+import { HttpService } from 'src/app/core/services/http/http.service';
+
+
 @Component({
   selector: 'app-insurance-form',
   standalone: true,
   imports: [
-      CommonModule,
-      SharedModule,
-      FormImportsModule,
-      ReactiveFormsModule
-    ],
+    CommonModule,
+    SharedModule,
+    FormImportsModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './insurance-form.component.html',
   styleUrls: ['./insurance-form.component.sass']
 })
@@ -27,18 +30,22 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() submitLabel?: string | null = 'Guardar';
   @Input() showCancel = false;
 
-  @Output() submitted = new EventEmitter<Region>();
+  @Output() submitted = new EventEmitter<Insurance>();
   @Output() cancelled = new EventEmitter<void>();
 
+  regionList: Region[] = [];
+
   form = this.fb.group({
-    name: [''],
-    region: ['']
+    name: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
+    type: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
+    email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    region: this.fb.control<Region | null>(null, { validators: [Validators.required] }),
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
-
+    this.fetchRegionList();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,12 +60,28 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.value as Region;
+    const payload = this.form.value as Insurance;
+    this.saveInsuranceData(payload);
     this.submitted.emit(payload);
   }
 
   onCancel() {
     this.cancelled.emit();
+  }
+
+  private fetchRegionList(): void {
+    this.httpService.get<Region[]>('regionals').subscribe(res => {
+      console.log(res);
+
+      this.regionList = res;
+    });
+  }
+
+  private saveInsuranceData(body: Insurance): void {
+    this.httpService.post<Insurance>('insurances', body).subscribe(res => {
+      console.log(res);
+
+    });
   }
 
 }

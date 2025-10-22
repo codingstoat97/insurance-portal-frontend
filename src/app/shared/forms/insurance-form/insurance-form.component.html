@@ -14,13 +14,31 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Region/Departamento:</mat-label>
-            <input matInput formControlName="region" placeholder="Ej. Cochabamba" />
-            <mat-error *ngIf="form.get('region')?.hasError('required')">
-               Este campo es obligatorio
+            <mat-label>Tipo de Aseguradora:</mat-label>
+            <input matInput formControlName="type" placeholder="Ej. Vehicular" />
+            <mat-error *ngIf="form.get('type')?.hasError('required')">
+                El tipo es obligatorio
             </mat-error>
-            <mat-error *ngIf="form.get('region')?.hasError('minlength')">
+            <mat-error *ngIf="form.get('type')?.hasError('minlength')">
                 Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Correo Electrónico:</mat-label>
+            <input matInput formControlName="email" placeholder="Ej. bisaseguros@gmail.com" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">
+                El correo electrónico es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Region/Departamento:</mat-label>
+            <mat-select formControlName="region">
+                <mat-option *ngFor="let r of regionList" [value]="r">
+                    {{ r.name }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('r')?.hasError('required')">
+                Selecciona una Region/Departamento
             </mat-error>
         </mat-form-field>
 
