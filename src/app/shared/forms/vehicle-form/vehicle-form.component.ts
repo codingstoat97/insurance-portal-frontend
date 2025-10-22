@@ -4,7 +4,8 @@ import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 
 import { FormImportsModule } from '../form-imports.module';
 
-import { Vehicle, VEHICLE_TYPES } from '../../models';
+import { Vehicle } from '../../models';
+import { HttpService } from 'src/app/core/services/http/http.service';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -20,27 +21,27 @@ import { Vehicle, VEHICLE_TYPES } from '../../models';
 export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() value?: Vehicle | null;
-  @Input() title?: string | null = 'Datos del Vehiculo';
-  @Input() submitLabel = 'Siguiente';
+  @Input() title?: string | null;
+  @Input() submitLabel: string | null = 'Siguiente';
   @Input() showCancel = false;
 
   @Output() submitted = new EventEmitter<Vehicle>();
   @Output() cancelled = new EventEmitter<void>();
 
-  vehicleTypeList = VEHICLE_TYPES;
+  vehicleClassificationList = [];
 
   form = this.fb.group({
-    type: [''],
-    brand: [''],
-    model: [''],
-    year: [null as number | null, [Validators.required, Validators.min(1900)]],
-    electric: [false]
+    classifications: this.fb.control<string | null>(null, { validators: [Validators.required] }),
+    brand: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
+    model: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
+    highEnd: this.fb.control<boolean | null>(null),
+    electric: this.fb.control<boolean | null>(null),
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
-
+    this.getVehiculeClassificationList();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,12 +51,25 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
+  private getVehiculeClassificationList(): void {
+    this.httpService.get<any>('vehicleCatalog/vehicleClassification').subscribe(res => {
+      this.vehicleClassificationList = res;
+      console.log(this.vehicleClassificationList);
+
+    })
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     const payload = this.form.value as Vehicle;
+
+    this.httpService.post('vehicleCatalog', payload).subscribe(res => {
+      console.log(res);
+
+    })
     this.submitted.emit(payload);
   }
 
