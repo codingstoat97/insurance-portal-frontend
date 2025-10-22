@@ -6,6 +6,7 @@ import { FormImportsModule } from '../form-imports.module';
 
 import { Vehicle } from '../../models';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -38,7 +39,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     electric: this.fb.control<boolean | null>(null),
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.getVehiculeClassificationList();
@@ -68,7 +69,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
     this.httpService.post('vehicleCatalog', payload).subscribe(res => {
       console.log(res);
-
+      this.snackbar.success('Guardado con éxito');
     })
     this.submitted.emit(payload);
   }

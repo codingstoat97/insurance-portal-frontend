@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared.module';
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
     region: this.fb.control<Region | null>(null, { validators: [Validators.required] }),
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.fetchRegionList();
@@ -80,7 +81,7 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
   private saveInsuranceData(body: Insurance): void {
     this.httpService.post<Insurance>('insurances', body).subscribe(res => {
       console.log(res);
-
+      this.snackbar.success('Guardado con éxito');
     });
   }
 

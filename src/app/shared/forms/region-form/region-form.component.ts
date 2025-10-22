@@ -8,6 +8,7 @@ import { SharedModule } from '../../shared.module';
 import { Region } from '../../models';
 import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
     country: ['']
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
 
@@ -58,7 +59,7 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
     const payload = this.form.value as Region;
     this.httpService.post('regionals', payload).subscribe(res => {
       console.log(res);
-      
+      this.snackbar.success('Guardado con éxito');
     })
     this.submitted.emit(payload);
   }
