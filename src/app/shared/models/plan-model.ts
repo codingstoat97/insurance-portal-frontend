@@ -1,23 +1,13 @@
-import { Benefit } from "./benefit-model";
 import { Client } from "./user-model";
-import { Vehicle } from "./vehicule-model";
-
-// export interface Plan {
-//     premium: number;
-//     discount: number;
-//     total: number;
-//     insurance: string;
-//     vehicule: Vehicle;
-//     benefits: Benefit[];
-// }
 
 export interface Plan {
-    premium: string;
+    vehicule_catalog_id: number,
+    regional_id: number,
+    insurance_id: number,
+    minimum_premium: string;
+    rate: number;
+    age_limit: number,
     discount: string;
-    total: string;
-    insurance: string;
-    vehicule: string;
-    benefits: string;
 }
 
 export interface ClientPlan {

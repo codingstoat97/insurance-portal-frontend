@@ -1,28 +1,9 @@
-export type VehicleType =
-    | 'Sedán'
-    | 'Hatchback'
-    | 'SUV'
-    | 'Pickup'
-    | 'Motocicleta'
-    | 'Van'
-    | 'Camión ligero'
-    | 'Bus';
 
 export interface Vehicle {
-    type: VehicleType;
+    classifications: string;
     brand: string;
     model: string;
-    year: number;
+    highend: boolean;
     electric: boolean;
 }
 
-export const VEHICLE_TYPES: readonly VehicleType[] = [
-    'Sedán',
-    'Hatchback',
-    'SUV',
-    'Pickup',
-    'Motocicleta',
-    'Van',
-    'Camión ligero',
-    'Bus',
-] as const;
