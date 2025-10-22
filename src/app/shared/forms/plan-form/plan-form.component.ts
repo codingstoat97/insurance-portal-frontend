@@ -6,6 +6,8 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { FormImportsModule } from '../form-imports.module';
 
 import { Plan } from '../../models';
+import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 
 @Component({
@@ -30,15 +32,16 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() cancelled = new EventEmitter<void>();
 
   form = this.fb.group({
-    premium: [''],
-    discount: [''],
-    total: [''],
-    insurance: [''],
-    vehicule: [''],
-    benefits: ['']
+    vehicleCatalogId:[''],
+    regionalId: [''],
+    insuranceId: [''],
+    rate: [''],
+    minimumPremium: [''],
+    ageLimit: [''],
+    discount: ['']
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
 
@@ -57,6 +60,12 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Plan;
+
+    this.httpService.post('plans', payload).subscribe(res => {
+      console.log(res);
+      this.snackbar.success('Guardado con éxito');
+    })
+
     this.submitted.emit(payload);
   }
 

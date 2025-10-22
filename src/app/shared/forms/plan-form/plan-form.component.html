@@ -4,10 +4,48 @@
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
+            <mat-label>Vehiculo:</mat-label>
+            <input matInput formControlName="vehicleCatalogId" placeholder="Ej. Nissan" />
+            <mat-error *ngIf="form.get('vehicleCatalogId')?.hasError('required')">
+                El vehiculo es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Regional:</mat-label>
+            <input matInput formControlName="regionalId" placeholder="Ej. Bisa Seguros" />
+            <mat-error *ngIf="form.get('regionalId')?.hasError('required')">
+                La aseguradora es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Aseguradora:</mat-label>
+            <input matInput formControlName="insuranceId" placeholder="Ej. Bisa Seguros" />
+            <mat-error *ngIf="form.get('insuranceId')?.hasError('required')">
+                La aseguradora es un campo obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
             <mat-label>Prima:</mat-label>
-            <input matInput formControlName="premium" placeholder="Ej. 2000" />
-            <mat-error *ngIf="form.get('premium')?.hasError('required')">
+            <input matInput formControlName="minimumPremium" placeholder="Ej. 2000" />
+            <mat-error *ngIf="form.get('minimumPremium')?.hasError('required')">
                 La cantidad de prima es obligatoria
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Rate:</mat-label>
+            <input matInput formControlName="rate" placeholder="Ej. 2.4" />
+            <mat-error *ngIf="form.get('rate')?.hasError('required')">
+                El total es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Limite de Años:</mat-label>
+            <input matInput formControlName="ageLimit" placeholder="Ej. 20" />
+            <mat-error *ngIf="form.get('ageLimit')?.hasError('required')">
+                El limite es obligatorio
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -15,34 +53,6 @@
             <input matInput formControlName="discount" placeholder="Ej. 20%" />
             <mat-error *ngIf="form.get('discount')?.hasError('required')">
                 El porcentaje de descuento es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Total:</mat-label>
-            <input matInput formControlName="total" placeholder="Ej. 1900" />
-            <mat-error *ngIf="form.get('total')?.hasError('required')">
-                El total es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Aseguradora:</mat-label>
-            <input matInput formControlName="insurance" placeholder="Ej. Bisa Seguros" />
-            <mat-error *ngIf="form.get('insurance')?.hasError('required')">
-                La aseguradora es un campo obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Vehiculo:</mat-label>
-            <input matInput formControlName="vehicule" placeholder="Ej. Nissan" />
-            <mat-error *ngIf="form.get('vehicule')?.hasError('required')">
-                El vehiculo es un campo obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Beneficios:</mat-label>
-            <input matInput formControlName="insurance" placeholder="Ej. Bisa Seguros" />
-            <mat-error *ngIf="form.get('insurance')?.hasError('required')">
-                La aseguradora es un campo obligatorio
             </mat-error>
         </mat-form-field>
 

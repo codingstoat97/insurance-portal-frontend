@@ -1,12 +1,12 @@
 import { Client } from "./user-model";
 
 export interface Plan {
-    vehicule_catalog_id: number,
-    regional_id: number,
-    insurance_id: number,
-    minimum_premium: string;
-    rate: number;
-    age_limit: number,
+    vehiculeCatalogId: string,
+    regionalId: string,
+    insuranceId: string,
+    minimumPremium: string;
+    rate: string;
+    ageLimit: string,
     discount: string;
 }
 
