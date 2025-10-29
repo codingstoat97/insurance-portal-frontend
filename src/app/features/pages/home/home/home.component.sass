@@ -7,33 +7,42 @@ $toolbar-h: 64px
   position: relative
   display: flex
   align-items: center
-  justify-content: center
 
   margin-top: -$toolbar-h
-  min-height: calc(90vh + #{$toolbar-h})
+  min-height: calc(65vh + #{$toolbar-h})
 
   width: 100%
 
 .banner-content
-  margin: 0
+  margin-left: 50px
   padding: 0
-  text-align: center
-  color: var(--kin-gray-200)
+  text-align: left
+  color: var(--kin-white)
   max-width: 960px
   text-shadow: 0 2px 8px rgba(0,0,0,0.4)
 
-  > button
-    background-color: var(--kin-accent)
-    border-radius: 50px !important
-    color: var(--kin-secondary)
-    font-size: 15px
-    font-weight: bold
+  .banner-logo
+    height: 100px
+    width: auto
+    display: inline-block
+
+  .banner-text
+    margin-top: 50px
+
+    > button
+      margin-top: 50px
+      background-color: var(--kin-accent)
+      border-radius: 50px !important
+      color: var(--kin-white)
+      font-size: 15px
+      font-weight: bold
 
 .step-container
   mat-card
     width: 70%
     max-width: 480px
     text-align: left
+    color: var(--kin-gray-600)
 
   mat-card-title
     display: flex
@@ -48,7 +57,7 @@ $toolbar-h: 64px
     line-height: 24px
 
 .slogan-container
-  background-color: var(--kin-gray-200)
+  background-color: var(--kin-primary)
   position: relative
   display: flex
   align-items: center
@@ -65,9 +74,11 @@ $toolbar-h: 64px
     text-align: center
     max-width: 960px
     > h1, p
-      color: var(--kin-primary)
+      color: var(--kin-white)
     > button
-      margin-top: 20px
-      background-color: var(--kin-accent-dark)
+      margin-top: 50px
+      background-color: var(--kin-accent)
       border-radius: 50px !important
-      color: white
+      color: var(--kin-white)
+      font-size: 15px
+      font-weight: bold

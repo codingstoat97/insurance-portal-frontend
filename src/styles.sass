@@ -1,4 +1,4 @@
-@use '@angular/material/prebuilt-themes/indigo-pink.css' as *
+//@use '@angular/material/prebuilt-themes/indigo-pink.css' as *
 @use '@angular/material' as mat
 @use 'styles/_palette'
 @use 'styles/_form-styles'
@@ -6,21 +6,21 @@
 
 @font-face
   font-family: "Futura MD BT"
-  src: local("Futura Md BT"), local("FuturaBT-Medium"), url("/assets/fonts/futura-md-bt/FuturaMdBT-Medium.ttf") format("truetype")
+  src: local("Futura Md BT"), local("FuturaBT-Medium"), url("/assets/fonts/futura-medium/futuraMediumBT.ttf") format("truetype")
   font-weight: 500
   font-style: normal
   font-display: swap
 
 @font-face
   font-family: "Futura MD BT"
-  src: local("Futura Md BT"), local("FuturaBT-Bold"), url("/assets/fonts/futura-md-bt/FuturaMdBT-Bold.ttf") format("truetype")
+  src: local("Futura Md BT"), local("FuturaBT-Bold"), url("/assets/fonts/futura-medium/futuraMediumBT.ttf") format("truetype")
   font-weight: 700
   font-style: normal
   font-display: swap
 
 @font-face
   font-family: "Futura Now Headline"
-  src: local("Futura Now Headline"), url("/assets/fonts/futura-now-headline/FuturaNowHeadline-Variable.ttf") format("truetype")
+  src: local("Futura Now Headline"), url("/assets/fonts/futura-headline/FuturaNowHeadlineMedium.ttf") format("truetype")
   font-weight: 300 900
   font-stretch: 75% 125%
   font-style: normal
@@ -28,17 +28,17 @@
 
 @font-face
   font-family: "Futura Now Headline"
-  src: local("Futura Now Headline Bold"), url("/assets/fonts/futura-now-headline/FuturaNowHeadline-Bold.ttf") format("truetype")
+  src: local("Futura Now Headline Bold"), url("/assets/fonts/futura-headline/FuturaNowHeadlineBold.ttf") format("truetype")
   font-weight: 700
   font-style: normal
   font-display: swap
 
 :root
-  --font-body: "Futura MD BT", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
-  --font-head: "Futura Now Headline", var(--font-body)
+  --font-body: "Futura Now Headline", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+  --font-head: "Futura MD BT", var(--font-body)
 
 
-h1, h2, h3, .headline
+h1, h2, h3, p .headline
   font-family: var(--font-head)
 
 h1

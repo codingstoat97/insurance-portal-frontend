@@ -1,26 +1,54 @@
 .toolbar-container
-    position: fixed
-    top: 0
-    left: 0
-    width: 100%
-    background-color: var(--kin-primary)
-    box-shadow: 0 2px 8px rgba(0,0,0,.08)
-    z-index: 1001
-    color: var(--kin-gray-200)
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  background-color: var(--kin-primary)
+  box-shadow: 0 2px 8px rgba(0,0,0,.08)
+  z-index: 1001
+  color: var(--kin-white)
+  font-size: 20px
 
-    &.is-home
-        background: transparent !important
-        box-shadow: none !important
+  &.is-home
+    background: transparent !important
+    box-shadow: none !important
 
-.spacer
+.toolbar-container
+  cursor: pointer
+  padding-inline: 12px
+  .brand
+    margin-left: 15px
+    display: inline-flex
+    align-items: center
+    gap: 8px
+    text-decoration: none
+    color: inherit
+    img
+      height: 28px
+      width: auto
+    .brand-text
+      font-weight: 600
+  .spacer
     flex: 1 1 auto
 
+.spacer
+  flex: 1 1 auto
+
+.right
+  margin-right: 20px
+
 .right > span
-    font-size: 16px
-    font-weight: lighter
+  font-size: 16px
+  font-weight: lighter
 
 .right > span:hover
-    cursor: pointer
+  cursor: pointer
+
+.right > span.pill
+  &:hover,
+  &:focus-visible
+    background-color: rgba(255,255,255,.12)
+    transform: translateY(-1px)
 
 .right > span + span
-    margin-left: 16px
+  margin-left: 16px
