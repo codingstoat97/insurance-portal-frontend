@@ -4,10 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
-import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
-import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 
 
 @Component({
@@ -33,6 +30,10 @@ export class BrokerMainComponent implements OnInit {
 
   rows = [];
 
+  actions: any[] = [
+    { id: 'edit', icon: 'edit', tooltip: 'Editar Plan' }
+  ];
+
   constructor(private httpService: HttpService) { }
 
   ngOnInit(): void {
@@ -42,70 +43,23 @@ export class BrokerMainComponent implements OnInit {
   fetchPlanList() {
     this.httpService.get<any>('plans').subscribe(res => {
       console.log(res);
-
       this.rows = res;
     })
   }
 
-  openRegionDialog() {
-    const dialogRef = this.dialog.open(RegionFormComponent, {
-      width: '520px',
-    });
+  openPlanDialog(plan?: any) {
+    console.log(plan);
 
-    dialogRef.componentInstance.title = 'Añadir región';
-    dialogRef.componentInstance.value = null;
-    dialogRef.componentInstance.submitLabel = 'Guardar';
-    dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
-  }
-
-  openInsuranceDialog() {
-    const dialogRef = this.dialog.open(InsuranceFormComponent, {
-      width: '520px',
-    });
-
-    dialogRef.componentInstance.title = 'Registrar Aseguradora';
-    dialogRef.componentInstance.value = null;
-    dialogRef.componentInstance.submitLabel = 'Guardar';
-    dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
-  }
-
-  openPlanDialog() {
     const dialogRef = this.dialog.open(PlanFormComponent, {
       width: '520px',
     });
 
     dialogRef.componentInstance.title = 'Crear Plan';
-    dialogRef.componentInstance.value = null;
+    if (plan) {
+      dialogRef.componentInstance.value = plan;
+    } else {
+      dialogRef.componentInstance.value = null;
+    }
     dialogRef.componentInstance.submitLabel = 'Guardar';
     dialogRef.componentInstance.showCancel = true;
 
@@ -125,30 +79,12 @@ export class BrokerMainComponent implements OnInit {
     });
   }
 
-  openVehicleDialog() {
-    const dialogRef = this.dialog.open(VehicleFormComponent, {
-      width: '520px',
-    });
+  onRowAction(e: { actionId: string; row: any }): void {
+    console.log(e);
 
-    dialogRef.componentInstance.title = 'Crear Plan';
-    dialogRef.componentInstance.value = null;
-    dialogRef.componentInstance.submitLabel = 'Guardar';
-    dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log(result);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
+    switch (e.actionId) {
+      case 'edit': this.openPlanDialog(e.row); break;
+    }
   }
 
 }

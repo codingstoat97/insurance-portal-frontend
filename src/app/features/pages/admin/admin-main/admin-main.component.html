@@ -1,0 +1,10 @@
+<button mat-raised-button (click)="openRegionDialog()">Crear Region</button>
+<button mat-raised-button (click)="openVehicleDialog()">Crear Vehiculo</button>
+<button mat-raised-button (click)="openInsuranceDialog()">Crear Aseguradora</button>
+
+<h3>Regionales</h3>
+<app-data-table [rows]="regionRows" [columns]="regionColumns"></app-data-table>
+<h3>Vehiculos</h3>
+<app-data-table [rows]="vehicleRows" [columns]="vehicleColumns"></app-data-table>
+<h3>Aseguradoras</h3>
+<app-data-table [rows]="insuranceRows" [columns]="insuranceColumns"></app-data-table>

@@ -20,6 +20,12 @@ const routes: Routes = [
       import('./features/pages/broker/broker.module')
         .then(m => m.BrokerModule),
   },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./features/pages/admin/admin.module')
+        .then(m => m.AdminModule),
+  },
   { path: '**', redirectTo: 'home' }
 ];
 

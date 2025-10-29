@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../../shared.module';
@@ -8,6 +8,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
     MatSortModule,
     MatTableModule,
     MatInputModule,
+    MatTooltipModule,
     MatFormFieldModule
   ],
   templateUrl: './data-table.component.html',
@@ -29,6 +31,9 @@ export class DataTableComponent implements AfterViewInit {
 
   @Input() rows: any[] = [];
   @Input() columns: any[] = [];
+  @Input() actions: any[] = [];
+
+  @Output() action = new EventEmitter<{ actionId: string; row: any }>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -52,6 +57,15 @@ export class DataTableComponent implements AfterViewInit {
     if (changes['rows']) {
       this.dataSource.data = this.rows || [];
     }
+    if (changes['columns'] || changes['actions']) {
+      const base = (this.columns || []).map(c => c.id);
+      this.displayedColumns = (this.actions && this.actions.length)
+        ? [...base, 'actions']
+        : base;
+    }
+    if (changes['rows']) {
+      this.dataSource.data = this.rows || [];
+    }
   }
 
   applyFilter(event: Event) {
@@ -62,5 +76,11 @@ export class DataTableComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  onAction(a: any, row: any, ev?: MouseEvent) {
+    ev?.stopPropagation();
+    this.action.emit({ actionId: a.id, row });
+  }
+
 }
 

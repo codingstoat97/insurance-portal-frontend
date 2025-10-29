@@ -4,26 +4,38 @@
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
-            <mat-label>Vehiculo:</mat-label>
-            <input matInput formControlName="vehicleCatalogId" placeholder="Ej. Nissan" />
+            <mat-label>Vehículo:</mat-label>
+            <mat-select formControlName="vehicleCatalogId">
+                <mat-option *ngFor="let v of vehicleList" [value]="v.id">
+                    {{ getVehicleInfo(v) }}
+                </mat-option>
+            </mat-select>
             <mat-error *ngIf="form.get('vehicleCatalogId')?.hasError('required')">
-                El vehiculo es un campo obligatorio
+                Selecciona un vehículo.
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Regional:</mat-label>
-            <input matInput formControlName="regionalId" placeholder="Ej. Bisa Seguros" />
+            <mat-label>Región:</mat-label>
+            <mat-select formControlName="regionalId">
+                <mat-option *ngFor="let r of regionList" [value]="r.id">
+                    {{ r.name }}
+                </mat-option>
+            </mat-select>
             <mat-error *ngIf="form.get('regionalId')?.hasError('required')">
-                La aseguradora es un campo obligatorio
+                Selecciona una clase
             </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Aseguradora:</mat-label>
-            <input matInput formControlName="insuranceId" placeholder="Ej. Bisa Seguros" />
+            <mat-select formControlName="insuranceId">
+                <mat-option *ngFor="let i of insuranceList" [value]="i.id">
+                    {{ i.name }}
+                </mat-option>
+            </mat-select>
             <mat-error *ngIf="form.get('insuranceId')?.hasError('required')">
-                La aseguradora es un campo obligatorio
+                Selecciona una aseguradora.
             </mat-error>
         </mat-form-field>
 

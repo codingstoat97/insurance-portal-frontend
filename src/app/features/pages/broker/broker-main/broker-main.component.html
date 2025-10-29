@@ -4,16 +4,7 @@
     </mat-drawer>
     <mat-drawer-content>
         <h2> Planes </h2>
-        <button matButton (click)="openRegionDialog()">Crear Region</button>
-        <button matButton (click)="openVehicleDialog()">Crear Vehiculo</button>
-        <button matButton (click)="openInsuranceDialog()">Crear Aseguradora</button>
-        <button matButton (click)="openPlanDialog()">Crear Plan</button>
-        <app-data-table [rows]="rows" [columns]="columns"></app-data-table>
+        <button mat-raised-button (click)="openPlanDialog()">Crear Plan</button>
+        <app-data-table [rows]="rows" [columns]="columns"[actions]="actions" (action)="onRowAction($event)"></app-data-table>
     </mat-drawer-content>
 </mat-drawer-container>
-
-<h2 mat-dialog-title>Dialog with elements</h2>
-<mat-dialog-content>This dialog showcases the title, close, content and actions elements.</mat-dialog-content>
-<mat-dialog-actions>
-    <button matButton mat-dialog-close>Close</button>
-</mat-dialog-actions>

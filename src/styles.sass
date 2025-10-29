@@ -4,8 +4,49 @@
 @use 'styles/_form-styles'
 @use 'styles/_variables'
 
+@font-face
+  font-family: "Futura MD BT"
+  src: local("Futura Md BT"), local("FuturaBT-Medium"), url("/assets/fonts/futura-md-bt/FuturaMdBT-Medium.ttf") format("truetype")
+  font-weight: 500
+  font-style: normal
+  font-display: swap
+
+@font-face
+  font-family: "Futura MD BT"
+  src: local("Futura Md BT"), local("FuturaBT-Bold"), url("/assets/fonts/futura-md-bt/FuturaMdBT-Bold.ttf") format("truetype")
+  font-weight: 700
+  font-style: normal
+  font-display: swap
+
+@font-face
+  font-family: "Futura Now Headline"
+  src: local("Futura Now Headline"), url("/assets/fonts/futura-now-headline/FuturaNowHeadline-Variable.ttf") format("truetype")
+  font-weight: 300 900
+  font-stretch: 75% 125%
+  font-style: normal
+  font-display: swap
+
+@font-face
+  font-family: "Futura Now Headline"
+  src: local("Futura Now Headline Bold"), url("/assets/fonts/futura-now-headline/FuturaNowHeadline-Bold.ttf") format("truetype")
+  font-weight: 700
+  font-style: normal
+  font-display: swap
+
+:root
+  --font-body: "Futura MD BT", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+  --font-head: "Futura Now Headline", var(--font-body)
+
+
+h1, h2, h3, .headline
+  font-family: var(--font-head)
+
+h1
+  font-variation-settings: "wght" 750
+
+
 html, body
+  font-family: var(--font-body)
   height: 100%
   margin: 0
   padding: 0
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif
