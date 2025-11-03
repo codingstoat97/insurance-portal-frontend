@@ -133,8 +133,9 @@ export class AdminMainComponent implements OnInit {
       width: '520px',
     });
 
-    dialogRef.componentInstance.title = 'Crear Plan';
+    dialogRef.componentInstance.title = 'Crear Vehículo';
     dialogRef.componentInstance.value = null;
+    dialogRef.componentInstance.showDescription = false;
     dialogRef.componentInstance.submitLabel = 'Guardar';
     dialogRef.componentInstance.showCancel = true;
 
