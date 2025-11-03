@@ -28,11 +28,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrls: ['./data-table.component.sass']
 })
 export class DataTableComponent implements AfterViewInit {
-
   @Input() rows: any[] = [];
   @Input() columns: any[] = [];
   @Input() actions: any[] = [];
+  @Input() title: string = '';
+  @Input() addElement: boolean = false;
 
+  @Output() addNewElementAction = new EventEmitter<void>();
   @Output() action = new EventEmitter<{ actionId: string; row: any }>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -80,6 +82,10 @@ export class DataTableComponent implements AfterViewInit {
   onAction(a: any, row: any, ev?: MouseEvent) {
     ev?.stopPropagation();
     this.action.emit({ actionId: a.id, row });
+  }
+
+  onAddNewElement() {
+    this.addNewElementAction.emit();
   }
 
 }
