@@ -87,4 +87,8 @@ export class BrokerMainComponent implements OnInit {
     }
   }
 
+  onAddNewElement(): void {
+    this.openPlanDialog();
+  }
+
 }

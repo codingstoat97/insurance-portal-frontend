@@ -3,8 +3,11 @@
         <app-broker-profile></app-broker-profile>
     </mat-drawer>
     <mat-drawer-content>
-        <h2> Planes </h2>
-        <button mat-raised-button (click)="openPlanDialog()">Crear Plan</button>
-        <app-data-table [rows]="rows" [columns]="columns"[actions]="actions" (action)="onRowAction($event)"></app-data-table>
+        <div class="page-header">
+            <h2> Hola, Erick Kinlock </h2>
+            <p> Administra tus planes de seguro en esta sección. </p>
+        </div>
+        <app-data-table [rows]="rows" [columns]="columns" [actions]="actions" [addElement]="true" [title]="'Planes'"
+            (action)="onRowAction($event)" (addNewElementAction)="onAddNewElement()"></app-data-table>
     </mat-drawer-content>
 </mat-drawer-container>
