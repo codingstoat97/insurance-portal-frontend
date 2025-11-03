@@ -1,6 +1,7 @@
 <div class="form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
+        <p *ngIf="showDescription">{{ description }}</p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">

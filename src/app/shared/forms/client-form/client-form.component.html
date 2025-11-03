@@ -1,6 +1,9 @@
 <div class="form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
+        <p *ngIf="showDescription">
+            {{description}}
+        </p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
@@ -37,7 +40,7 @@
             <mat-label>Región</mat-label>
             <mat-select formControlName="region">
                 <mat-option *ngFor="let region of regionList" [value]="region">
-                    {{ region }}
+                    {{ region.name }}
                 </mat-option>
             </mat-select>
             <mat-error *ngIf="form.get('region')?.hasError('required')">

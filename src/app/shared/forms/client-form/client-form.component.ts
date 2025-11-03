@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Client } from 'src/app/shared/models';
+import { Client, Region } from 'src/app/shared/models';
 
 import { FormImportsModule } from '../form-imports.module';
+import { HttpService } from 'src/app/core/services/http/http.service';
 
 @Component({
   selector: 'app-client-form',
@@ -20,14 +21,16 @@ import { FormImportsModule } from '../form-imports.module';
 export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() value?: Client | null;
-  @Input() title?: string | null = 'Ingrese sus Datos';
+  @Input() title?: string | null = 'Tus Datos';
   @Input() submitLabel?: string | null = 'Siguiente';
   @Input() showCancel = false;
+  @Input() showDescription: boolean = false;
 
   @Output() submitted = new EventEmitter<Client>();
   @Output() cancelled = new EventEmitter<void>();
 
-  regionList = ['Cochabamba', 'La Paz', 'Santa Cruz'];
+  regionList: Region[] = [];
+  description = "No compartiremos tu información con terceros — la usamos únicamente para ayudarte a encontrar el mejor seguro";
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -36,10 +39,10 @@ export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
     region: ['', [Validators.required]],
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
-
+    this.fetchRegionList();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,6 +59,12 @@ export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
     }
     const payload = this.form.value as Client;
     this.submitted.emit(payload);
+  }
+
+  private fetchRegionList(): void {
+    this.httpService.get<any>('regionals').subscribe(res => {
+      this.regionList = res;
+    });
   }
 
   onCancel() {

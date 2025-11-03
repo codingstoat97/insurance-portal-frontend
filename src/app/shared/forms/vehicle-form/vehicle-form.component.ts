@@ -22,14 +22,16 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() value?: Vehicle | null;
-  @Input() title?: string | null;
+  @Input() title?: string | null = "Datos del Vehículo";
   @Input() submitLabel: string | null = 'Siguiente';
   @Input() showCancel = false;
+  @Input() showDescription: boolean = false;
 
   @Output() submitted = new EventEmitter<Vehicle>();
   @Output() cancelled = new EventEmitter<void>();
 
   vehicleClassificationList = [];
+  description = "Con esta información podremos mostrarte planes adaptados al modelo, año y características de tu vehículo. Así evitamos ofrecerte opciones que no se ajusten a lo que realmente necesitas."
 
   form = this.fb.group({
     classifications: this.fb.control<string | null>(null, { validators: [Validators.required] }),
@@ -55,9 +57,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
   private getVehiculeClassificationList(): void {
     this.httpService.get<any>('vehicleCatalog/vehicleClassification').subscribe(res => {
       this.vehicleClassificationList = res;
-      console.log(this.vehicleClassificationList);
-
-    })
+    });
   }
 
   onSubmit() {
