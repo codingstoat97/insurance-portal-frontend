@@ -155,4 +155,12 @@ export class AdminMainComponent implements OnInit {
     });
   }
 
+  onAddNewElement(type: string): void {
+    switch(type) {
+      case 'region': this.openRegionDialog(); break;
+      case 'vehicle': this.openVehicleDialog(); break;
+      case 'insurance': this.openInsuranceDialog(); break;
+    }
+  }
+
 }
