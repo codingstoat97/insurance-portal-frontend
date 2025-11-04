@@ -1,7 +1,7 @@
 
 export interface Vehicle {
     id: any,
-    classifications: string;
+    classification: string;
     brand: string;
     model: string;
     highEnd: boolean;

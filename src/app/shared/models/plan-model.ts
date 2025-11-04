@@ -8,6 +8,7 @@ export interface Plan {
     rate: number;
     ageLimit: number,
     discount: number;
+    state: boolean;
 }
 
 export interface ClientPlan {
