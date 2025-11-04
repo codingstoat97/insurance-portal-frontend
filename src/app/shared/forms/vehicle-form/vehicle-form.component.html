@@ -6,12 +6,12 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Clasificación:</mat-label>
-            <mat-select formControlName="classifications">
+            <mat-select formControlName="classification">
                 <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
                     {{ c }}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('classifications')?.hasError('required')">
+            <mat-error *ngIf="form.get('classification')?.hasError('required')">
                 Selecciona una clase
             </mat-error>
         </mat-form-field>
