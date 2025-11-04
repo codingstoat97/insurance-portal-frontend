@@ -17,6 +17,8 @@ export const benefitList = 'benefits/list';
 
 export const planPath = 'plans';
 export const planList = 'plans/list'
+export const planAdd = 'plans/add'
+export const planGetByID = 'plans/getById'
 
 export const insurancePath = 'insurances'
 export const insuranceList = 'insurances/list'
