@@ -47,7 +47,7 @@ export class DataTableComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource(this.rows);
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -70,7 +70,7 @@ export class DataTableComponent implements AfterViewInit {
     }
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -79,13 +79,17 @@ export class DataTableComponent implements AfterViewInit {
     }
   }
 
-  onAction(a: any, row: any, ev?: MouseEvent) {
+  onAction(a: any, row: any, ev?: MouseEvent): void {
     ev?.stopPropagation();
     this.action.emit({ actionId: a.id, row });
   }
 
-  onAddNewElement() {
+  onAddNewElement(): void {
     this.addNewElementAction.emit();
+  }
+
+  refresh(): void {
+
   }
 
 }
