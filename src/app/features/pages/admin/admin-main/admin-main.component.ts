@@ -1,12 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
+import { Insurance, Region, Vehicle } from 'src/app/shared/models';
+
+import * as PATH from 'src/app/shared/utils/request-paths.util'
 
 @Component({
   selector: 'app-admin-main',
@@ -45,7 +49,7 @@ export class AdminMainComponent implements OnInit {
 
   insuranceRows = [];
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.fetchRegionList();
@@ -54,25 +58,19 @@ export class AdminMainComponent implements OnInit {
   }
 
   fetchInsuranceList() {
-    this.httpService.get<any>('insurances').subscribe(res => {
-      console.log(res);
-
+    this.httpService.get<any>(PATH.insuranceList).subscribe(res => {
       this.insuranceRows = res;
     })
   }
 
   fetchRegionList() {
-    this.httpService.get<any>('regionals').subscribe(res => {
-      console.log(res);
-
+    this.httpService.get<any>(PATH.regionList).subscribe(res => {
       this.regionRows = res;
     })
   }
 
   fetchVehicleList() {
-    this.httpService.get<any>('vehicleCatalog').subscribe(res => {
-      console.log(res);
-
+    this.httpService.get<any>(PATH.vehicleList).subscribe(res => {
       this.vehicleRows = res;
     })
   }
@@ -88,7 +86,6 @@ export class AdminMainComponent implements OnInit {
     dialogRef.componentInstance.showCancel = true;
 
     const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
       dialogRef.close(payload);
     });
     const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
@@ -97,7 +94,7 @@ export class AdminMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.saveRegion(result);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
@@ -114,7 +111,6 @@ export class AdminMainComponent implements OnInit {
     dialogRef.componentInstance.showCancel = true;
 
     const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
       dialogRef.close(payload);
     });
     const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
@@ -123,7 +119,7 @@ export class AdminMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.saveInsurance(result);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
@@ -141,7 +137,6 @@ export class AdminMainComponent implements OnInit {
     dialogRef.componentInstance.showCancel = true;
 
     const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      console.log('broker main', payload);
       dialogRef.close(payload);
     });
     const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
@@ -150,18 +145,39 @@ export class AdminMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.saveVehicle(result);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
   }
 
   onAddNewElement(type: string): void {
-    switch(type) {
+    switch (type) {
       case 'region': this.openRegionDialog(); break;
       case 'vehicle': this.openVehicleDialog(); break;
       case 'insurance': this.openInsuranceDialog(); break;
     }
+  }
+
+  private saveRegion(payload: Region): void {
+    this.httpService.post(PATH.regionAdd, payload).subscribe(res => {
+      this.snackbar.success('Guardado con éxito');
+      this.fetchRegionList();
+    })
+  }
+
+  private saveVehicle(payload: Vehicle): void {
+    this.httpService.post(PATH.vehicleAdd, payload).subscribe(res => {
+      this.snackbar.success('Guardado con éxito');
+      this.fetchVehicleList();
+    })
+  }
+
+  private saveInsurance(payload: Insurance): void {
+    this.httpService.post(PATH.insuranceAdd, payload).subscribe(res => {
+      this.snackbar.success('Guardado con éxito');
+      this.fetchInsuranceList();
+    })
   }
 
 }

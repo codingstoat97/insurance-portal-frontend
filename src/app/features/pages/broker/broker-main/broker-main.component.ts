@@ -6,6 +6,8 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 
+import * as PATHS from 'src/app/shared/utils/request-paths.util'
+
 
 @Component({
   selector: 'app-broker-main',
@@ -43,15 +45,13 @@ export class BrokerMainComponent implements OnInit {
   }
 
   fetchPlanList() {
-    this.httpService.get<any>('plans').subscribe(res => {
+    this.httpService.get<any>(PATHS.planList).subscribe(res => {
       console.log(res);
       this.rows = res;
     })
   }
 
   openPlanDialog(plan?: any) {
-    console.log(plan);
-
     const dialogRef = this.dialog.open(PlanFormComponent, {
       width: '520px',
     });
