@@ -11,4 +11,9 @@
             <mat-card-subtitle *ngIf="showOccupation">Broker de Seguros</mat-card-subtitle>
         </div>
     </mat-card-content>
+    <mat-card-actions>
+        <button mat-fab matTooltip="Cerrar Sesión" (click)="goHome()">
+          <mat-icon>logout</mat-icon>
+        </button>
+    </mat-card-actions>
 </mat-card>
