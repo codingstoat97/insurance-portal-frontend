@@ -1,0 +1,16 @@
+<div class="delete-modal">
+    <mat-dialog-content>
+        <div class="modal-title">
+            <mat-icon fontIcon="delete"></mat-icon>
+            <h4>Eliminar {{data.type}}?</h4>
+        </div>
+        <div class="modal-message">
+            <mat-label>Eliminar <b>"{{data.element}}"</b>?</mat-label>
+            <mat-label>Esta acción no puede revertirse.</mat-label>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="closeModal()">No, gracias.</button>
+        <button mat-button class="delete-btn" [mat-dialog-close]="true" cdkFocusInitial>Eliminar</button>
+    </mat-dialog-actions>
+</div>
