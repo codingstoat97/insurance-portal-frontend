@@ -1,0 +1,14 @@
+<mat-card class="profile-card" appearance="outlined">
+    <mat-card-header>
+        <div class="brand">
+            <img src="assets/logo/orange-logo.png" alt="bubo" />
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="profile-header">
+            <img mat-card-avatar class="profile-image" [src]="profilePictureURL" alt="Profile Picture" />
+            <mat-card-title>{{ username }}</mat-card-title>
+            <mat-card-subtitle *ngIf="showOccupation">Broker de Seguros</mat-card-subtitle>
+        </div>
+    </mat-card-content>
+</mat-card>

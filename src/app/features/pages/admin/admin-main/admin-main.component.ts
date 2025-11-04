@@ -16,6 +16,7 @@ import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-
 export class AdminMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  username: string = 'Admin';
 
   regionColumns = [
     { id: 'id', header: 'ID', field: 'id' },

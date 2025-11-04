@@ -1,10 +1,10 @@
 <mat-drawer-container class="page-container">
     <mat-drawer mode="side" opened class="drawer-container">
-        <app-broker-profile></app-broker-profile>
+        <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL" [showOccupation]="true"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
-            <h2> Hola, Erick Kinlock </h2>
+            <h2> Hola, {{ username }} </h2>
             <p> Administra tus planes de seguro en esta sección. </p>
         </div>
         <app-data-table [rows]="rows" [columns]="columns" [actions]="actions" [addElement]="true" [title]="'Planes'"

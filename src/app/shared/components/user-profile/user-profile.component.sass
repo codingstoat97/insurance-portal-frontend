@@ -9,8 +9,20 @@
     display: flex
     flex-direction: column
     border: none
+    .mat-mdc-card-header
+        justify-content: center
+        .brand
+            display: flex
+            justify-content: center
+            align-items: center
+            width: 100%
+            padding: 12px 0
+        img
+            max-height: 50px
+            width: auto
 
-.profile-card mat-card-header
+.profile-card .profile-header
+    gap: 10px
     display: flex
     flex-direction: column
     align-items: center
@@ -29,7 +41,6 @@
     background-position: center
 
 .profile-image
-    background-image: url('https://cdn-icons-png.freepik.com/512/12225/12225935.png')
     background-size: cover
 
 .profile-card mat-card-actions

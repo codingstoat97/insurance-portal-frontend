@@ -1,9 +1,10 @@
 <mat-drawer-container class="page-container">
     <mat-drawer mode="side" opened class="drawer-container">
+        <app-user-profile [username]="username"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
-            <h2> Hola, Administrador </h2>
+            <h2> Hola, {{ username }} </h2>
             <p> El acceso a todas las entidades se encuentra en esta sección. </p>
         </div>
         <div class="tab-container">

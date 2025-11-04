@@ -15,6 +15,8 @@ import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.comp
 export class BrokerMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  username: string = 'Erick Kinlock';
+  profilePictureURL = '/assets/user-pp.jpg'
 
   columns = [
     { id: 'id', header: 'ID', field: 'id' },
