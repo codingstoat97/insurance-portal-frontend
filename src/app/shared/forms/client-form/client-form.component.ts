@@ -62,7 +62,7 @@ export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchRegionList(): void {
-    this.httpService.get<any>('regionals').subscribe(res => {
+    this.httpService.get<any>('regionals/list').subscribe(res => {
       this.regionList = res;
     });
   }
