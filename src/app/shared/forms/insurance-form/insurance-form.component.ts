@@ -8,8 +8,7 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { Insurance, Region } from '../../models';
-import * as PATHS from 'src/app/shared/utils/request-paths.util'
+import { Insurance } from '../../models';
 
 
 @Component({
@@ -34,27 +33,25 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() submitted = new EventEmitter<Insurance>();
   @Output() cancelled = new EventEmitter<void>();
 
-  regionList: Region[] = [];
-
   form = this.fb.group({
     name: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
     type: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-    email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    region: this.fb.control<Region | null>(null, { validators: [Validators.required] }),
+    email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] })
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
-    this.fetchRegionList();
+    this.applyValueToForm(this.value);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if ('value' in changes) {
+      this.applyValueToForm(changes['value'].currentValue);
+    }
   }
 
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void { }
 
   onSubmit() {
     if (this.form.invalid) {
@@ -69,10 +66,28 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
     this.cancelled.emit();
   }
 
-  private fetchRegionList(): void {
-    this.httpService.get<Region[]>(PATHS.regionList).subscribe(res => {
-      this.regionList = res;
-    });
+  private applyValueToForm(v?: Insurance | null) {
+    if (v) {
+      this.form.reset(
+        {
+          name: v.name ?? '',
+          type: v.type ?? '',
+          email: v.email ?? ''
+        },
+        { emitEvent: false }
+      );
+    } else {
+      this.form.reset(
+        {
+          name: '',
+          type: '',
+          email: ''
+        },
+        { emitEvent: false }
+      );
+    }
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
 }

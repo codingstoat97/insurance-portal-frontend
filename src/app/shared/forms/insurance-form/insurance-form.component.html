@@ -30,18 +30,6 @@
                 El correo electrónico es obligatorio
             </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Region/Departamento:</mat-label>
-            <mat-select formControlName="region">
-                <mat-option *ngFor="let r of regionList" [value]="r">
-                    {{ r.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('r')?.hasError('required')">
-                Selecciona una Region/Departamento
-            </mat-error>
-        </mat-form-field>
-
         <div class="form-actions">
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
                 {{ submitLabel }}
