@@ -1,14 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { SharedModule } from '../../shared.module';
 
 import { Region } from '../../models';
 import { FormImportsModule } from '../form-imports.module';
-import { HttpService } from 'src/app/core/services/http/http.service';
-import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 
 @Component({
@@ -34,21 +32,42 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() cancelled = new EventEmitter<void>();
 
   form = this.fb.group({
-    name: [''],
-    country: ['']
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    country: ['', [Validators.required, Validators.minLength(2)]],
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-
+    this.applyValueToForm(this.value);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if ('value' in changes) {
+      this.applyValueToForm(changes['value'].currentValue);
+    }
   }
 
   ngOnDestroy(): void {
 
+  }
+
+  private applyValueToForm(v: Region | null | undefined) {
+    if (v) {
+      this.form.reset(
+        {
+          name: v.name ?? '',
+          country: v.country ?? '',
+        },
+        { emitEvent: false }
+      );
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
+    } else {
+      this.form.reset({ name: '', country: '' }, { emitEvent: false });
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
+    }
   }
 
   onSubmit() {
@@ -56,7 +75,11 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.value as Region;
+    const payload: Region = {
+      ...this.value,
+      ...this.form.value,
+    } as Region;
+
     this.submitted.emit(payload);
   }
 

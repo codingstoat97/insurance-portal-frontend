@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { FormImportsModule } from '../form-imports.module';
 
-import { Plan, Vehicle, Region, Insurance } from '../../models';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
+import { Plan, Vehicle, Region, Insurance } from 'src/app/shared/models';
+import * as PATH from 'src/app/shared/utils/request-paths.util'
 
 @Component({
   selector: 'app-plan-form',
@@ -44,6 +44,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     minimumPremium: this.fb.control<number | null>(null),
     ageLimit: this.fb.control<number | null>(null),
     discount: this.fb.control<number | null>(null),
+    state: this.fb.control<boolean | true>(true)
   });
 
   constructor(
@@ -66,19 +67,19 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void { }
 
   fetchVehicleList(): void {
-    this.httpService.get<Vehicle[]>('vehicleCatalog/list').subscribe(res => {
+    this.httpService.get<Vehicle[]>(PATH.vehicleList).subscribe(res => {
       this.vehicleList = res;
     });
   }
 
   fetchRegionalList(): void {
-    this.httpService.get<Region[]>('regionals/list').subscribe(res => {
+    this.httpService.get<Region[]>(PATH.regionList).subscribe(res => {
       this.regionList = res;
     });
   }
 
   fetchInsuranceList(): void {
-    this.httpService.get<Insurance[]>('insurances/list').subscribe(res => {
+    this.httpService.get<Insurance[]>(PATH.insuranceList).subscribe(res => {
       this.insuranceList = res;
     });
   }
@@ -94,12 +95,8 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Plan;
-
-    this.httpService.post('plans/add', payload).subscribe(res => {
-      console.log(res);
-      this.snackbar.success('Guardado con éxito');
-    })
-
+    console.log('on plan form', payload);
+    
     this.submitted.emit(payload);
   }
 

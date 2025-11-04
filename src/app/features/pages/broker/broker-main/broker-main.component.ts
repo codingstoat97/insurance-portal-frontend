@@ -3,8 +3,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
+import { Plan } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
@@ -30,6 +32,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'minimumPremium', header: 'Prima', field: 'minimumPremium' },
     { id: 'rate', header: 'Tasa', field: 'rate' },
     { id: 'discount', header: 'Descuento', field: 'discount' },
+    { id: 'state', header: 'Plan Activado', field: 'state'}
   ];
 
   rows = [];
@@ -38,20 +41,19 @@ export class BrokerMainComponent implements OnInit {
     { id: 'edit', icon: 'edit', tooltip: 'Editar Plan' }
   ];
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.fetchPlanList();
   }
 
-  fetchPlanList() {
+  fetchPlanList(): void {
     this.httpService.get<any>(PATHS.planList).subscribe(res => {
-      console.log(res);
       this.rows = res;
     })
   }
 
-  openPlanDialog(plan?: any) {
+  openPlanDialog(plan?: any): void {
     const dialogRef = this.dialog.open(PlanFormComponent, {
       width: '520px',
     });
@@ -75,7 +77,7 @@ export class BrokerMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.savePlan(result);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
@@ -89,8 +91,23 @@ export class BrokerMainComponent implements OnInit {
     }
   }
 
+  getPlanByID(planID: number): Plan {
+    let response: any;
+    this.httpService.get<Plan>(PATHS.planGetByID + '/' + planID).subscribe(res => {
+      response = res; 
+    })
+    return response;
+  }
+
   onAddNewElement(): void {
     this.openPlanDialog();
+  }
+
+  private savePlan(payload: Plan): void {
+    this.httpService.post(PATHS.planAdd, payload).subscribe(res => {
+      this.snackbar.success('Guardado con éxito');
+      this.fetchPlanList();
+    })
   }
 
 }
