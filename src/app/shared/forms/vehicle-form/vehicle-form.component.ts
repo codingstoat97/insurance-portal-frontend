@@ -4,9 +4,11 @@ import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 
 import { FormImportsModule } from '../form-imports.module';
 
-import { Vehicle } from '../../models';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
+
+import { Vehicle } from '../../models';
+import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 @Component({
   selector: 'app-vehicle-form',
@@ -41,7 +43,10 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     electric: this.fb.control<boolean | null>(null),
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private httpService: HttpService, 
+    private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.getVehiculeClassificationList();
@@ -55,7 +60,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getVehiculeClassificationList(): void {
-    this.httpService.get<any>('vehicleCatalog/vehicleClassification').subscribe(res => {
+    this.httpService.get<any>(PATHS.vehicleClassificationList).subscribe(res => {
       this.vehicleClassificationList = res;
     });
   }
@@ -66,11 +71,6 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Vehicle;
-
-    this.httpService.post('vehicleCatalog', payload).subscribe(res => {
-      console.log(res);
-      this.snackbar.success('Guardado con éxito');
-    })
     this.submitted.emit(payload);
   }
 

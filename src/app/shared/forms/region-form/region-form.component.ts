@@ -57,10 +57,6 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Region;
-    this.httpService.post('regionals', payload).subscribe(res => {
-      console.log(res);
-      this.snackbar.success('Guardado con éxito');
-    })
     this.submitted.emit(payload);
   }
 

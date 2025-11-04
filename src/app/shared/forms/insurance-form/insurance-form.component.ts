@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-
-import { Insurance, Region } from '../../models';
 
 import { SharedModule } from '../../shared.module';
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
+
+import { Insurance, Region } from '../../models';
+import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 
 @Component({
@@ -62,7 +62,6 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Insurance;
-    this.saveInsuranceData(payload);
     this.submitted.emit(payload);
   }
 
@@ -71,17 +70,8 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchRegionList(): void {
-    this.httpService.get<Region[]>('regionals').subscribe(res => {
-      console.log(res);
-
+    this.httpService.get<Region[]>(PATHS.regionList).subscribe(res => {
       this.regionList = res;
-    });
-  }
-
-  private saveInsuranceData(body: Insurance): void {
-    this.httpService.post<Insurance>('insurances', body).subscribe(res => {
-      console.log(res);
-      this.snackbar.success('Guardado con éxito');
     });
   }
 
