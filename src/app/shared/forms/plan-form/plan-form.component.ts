@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Plan, Vehicle, Region, Insurance } from 'src/app/shared/models';
+import { Plan, Vehicle, Region, Insurance, Benefit } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
 
 @Component({
@@ -21,7 +21,7 @@ import * as PATH from 'src/app/shared/utils/request-paths.util'
   styleUrls: ['./plan-form.component.sass']
 })
 export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() value?: Plan | null;
+  @Input() value?: Plan;
   @Input() title?: string | null = 'Datos del Plan';
   @Input() submitLabel?: string | null = 'Guardar';
   @Input() showCancel = false;
@@ -35,14 +35,18 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   insuranceList: Insurance[] = [];
 
   form = this.fb.group({
-    vehicleCatalogId: this.fb.control<number | null>(null, { validators: [] }),
+    vehicleId: this.fb.control<number | null>(null, { validators: [] }),
     regionalId: this.fb.control<number | null>(null, { validators: [] }),
     insuranceId: this.fb.control<number | null>(null, { validators: [] }),
-    rate: this.fb.control<number | null>(null),
     minimumPremium: this.fb.control<number | null>(null),
+    rate: this.fb.control<number | null>(null),
     ageLimit: this.fb.control<number | null>(null),
     discount: this.fb.control<number | null>(null),
-    state: this.fb.control<boolean | true>(true)
+    price: this.fb.control<number | null>(null),
+    level: ['', [Validators.required, Validators.minLength(2)]],
+    franchise: this.fb.control<number | null>(null),
+    state: this.fb.control<boolean | true>(true),
+    benefits: this.fb.nonNullable.control<Benefit[]>([]),
   });
 
   constructor(
@@ -50,9 +54,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     private httpService: HttpService) { }
 
   ngOnInit(): void {
-    if (this.value) {
-      this.form.patchValue(this.value, { emitEvent: false });
-    }
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();

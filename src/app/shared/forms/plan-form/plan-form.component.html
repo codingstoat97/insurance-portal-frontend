@@ -5,16 +5,15 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Vehículo:</mat-label>
-            <mat-select formControlName="vehicleCatalogId">
+            <mat-select formControlName="vehicleId">
                 <mat-option *ngFor="let v of vehicleList" [value]="v.id">
                     {{ getVehicleInfo(v) }}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('vehicleCatalogId')?.hasError('required')">
+            <mat-error *ngIf="form.get('vehicleId')?.hasError('required')">
                 Selecciona un vehículo.
             </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
             <mat-label>Región:</mat-label>
             <mat-select formControlName="regionalId">
@@ -26,7 +25,6 @@
                 Selecciona una clase
             </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
             <mat-label>Aseguradora:</mat-label>
             <mat-select formControlName="insuranceId">
@@ -38,7 +36,6 @@
                 Selecciona una aseguradora.
             </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
             <mat-label>Prima:</mat-label>
             <input matInput formControlName="minimumPremium" placeholder="Ej. 2000" />
@@ -67,7 +64,34 @@
                 El porcentaje de descuento es obligatorio
             </mat-error>
         </mat-form-field>
-
+        <mat-form-field appearance="outline">
+            <mat-label>Precio:</mat-label>
+            <input matInput formControlName="price" placeholder="Ej. 20000" />
+            <mat-error *ngIf="form.get('price')?.hasError('required')">
+                El precio es obligatorio
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Nivel:</mat-label>
+            <mat-select formControlName="level">
+                <mat-option [value]="'basic'">
+                    Básico
+                </mat-option>
+                <mat-option [value]="'gold'">
+                    Premium
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('level')?.hasError('required')">
+                Selecciona una nivel.
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Franquicia:</mat-label>
+            <input matInput formControlName="franchise" placeholder="Ej. 150" />
+            <mat-error *ngIf="form.get('franchise')?.hasError('required')">
+                La franquicia es obligatoria.
+            </mat-error>
+        </mat-form-field>
         <div class="form-actions">
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
                 {{ submitLabel }}

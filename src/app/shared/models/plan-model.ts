@@ -1,15 +1,20 @@
+import { Benefit } from "./benefit-model";
 import { Client } from "./user-model";
 
 export interface Plan {
     id: number;
-    vehiculeCatalogId: number,
-    regionalId: number,
-    insuranceId: number,
+    vehicleId: number;
+    regionalId: number;
+    insuranceId: number;
     minimumPremium: number;
     rate: number;
-    ageLimit: number,
+    ageLimit: number;
     discount: number;
+    price: number;
+    level: string;
+    franchise: number;
     state: boolean;
+    benefits: Benefit[];
 }
 
 export interface ClientPlan {
