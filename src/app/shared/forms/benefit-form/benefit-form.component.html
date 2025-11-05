@@ -1,0 +1,48 @@
+<div class="form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre del Beneficio:</mat-label>
+            <input matInput formControlName="name" placeholder="Ej. Grua" />
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+                El nombre es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Descripcion:</mat-label>
+            <input matInput formControlName="description" placeholder="Ej. Servicio de grua." />
+            <mat-error *ngIf="form.get('description')?.hasError('required')">
+                Ingrese la descripción.
+            </mat-error>
+            <mat-error *ngIf="form.get('description')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Cobertura:</mat-label>
+            <mat-select formControlName="coverage">
+                <mat-option *ngFor="let c of coverageTypeList" [value]="c">
+                    {{ c }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('coverage')?.hasError('required')">
+                Selecciona un tipo de cobertura
+            </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
