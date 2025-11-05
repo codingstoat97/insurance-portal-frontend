@@ -1,13 +1,27 @@
 <mat-drawer-container class="page-container">
     <mat-drawer mode="side" opened class="drawer-container">
-        <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL" [showOccupation]="true"></app-user-profile>
+        <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL"
+            [showOccupation]="true"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
             <h2> Hola, {{ username }} </h2>
             <p> Administra tus planes de seguro en esta sección. </p>
         </div>
-        <app-data-table [rows]="rows" [columns]="columns" [actions]="actions" [addElement]="true" [title]="'Planes'"
-            (action)="onRowAction($event)" (addNewElementAction)="onAddNewElement()"></app-data-table>
+        <div class="tab-container">
+            <mat-tab-group>
+                <mat-tab label="Planes de Cobertura">
+                    <app-data-table [rows]="planRows" [columns]="planColumns" [actions]="actions" [addElement]="true"
+                        (action)="onRowAction('Plan', $event)"
+                        (addNewElementAction)="onAddNewElement('Plan')"></app-data-table>
+                </mat-tab>
+                <mat-tab label="Beneficios">
+                    <app-data-table [rows]="benefitRows" [columns]="benefitColumns" [actions]="actions"
+                        [addElement]="true" (action)="onRowAction('Benefit', $event)"
+                        (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
     </mat-drawer-content>
 </mat-drawer-container>
