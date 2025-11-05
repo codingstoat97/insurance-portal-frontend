@@ -15,6 +15,11 @@ export const regionGetByID = 'regionals/getById';
 
 export const benefitPath = 'benefits';
 export const benefitList = 'benefits/list';
+export const benefitAdd = 'benefits/add';
+export const benefitUpdate = 'benefits/edit';
+export const benefitDelete = 'benefits/delete';
+export const benefitGetById = 'benefits/getById';
+export const benefitGetCoverageTypeList = 'benefits/benefitCoverageType';
 
 export const planPath = 'plans';
 export const planList = 'plans/list';
