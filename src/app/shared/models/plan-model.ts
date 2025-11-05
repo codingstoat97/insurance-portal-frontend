@@ -1,6 +1,7 @@
 import { Client } from "./user-model";
 
 export interface Plan {
+    id: number;
     vehiculeCatalogId: number,
     regionalId: number,
     insuranceId: number,

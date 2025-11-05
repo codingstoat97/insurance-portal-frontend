@@ -1,12 +1,7 @@
 
 export interface Benefit {
-    id: string;
+    id: number;
     name: string;
-    description: number;
-    limits: Limit[];
-}
-
-export interface Limit {
-    name: string;
-    measurement: number;
+    description: string;
+    coverage: string;
 }
