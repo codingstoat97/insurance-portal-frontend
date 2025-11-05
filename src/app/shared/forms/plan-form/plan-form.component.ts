@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
-import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { Plan, Vehicle, Region, Insurance } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
@@ -30,11 +29,10 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() submitted = new EventEmitter<Plan>();
   @Output() cancelled = new EventEmitter<void>();
 
+  planForEdit: Plan | null = null;
   vehicleList: Vehicle[] = [];
   regionList: Region[] = [];
   insuranceList: Insurance[] = [];
-
-  private _hasPatchedFromInput = false;
 
   form = this.fb.group({
     vehicleCatalogId: this.fb.control<number | null>(null, { validators: [] }),
@@ -49,11 +47,9 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private httpService: HttpService,
-    private snackbar: SnackBarService) { }
+    private httpService: HttpService) { }
 
   ngOnInit(): void {
-    console.log('plan form', this.value);
     if (this.value) {
       this.form.patchValue(this.value, { emitEvent: false });
     }
@@ -95,8 +91,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     const payload = this.form.value as Plan;
-    console.log('on plan form', payload);
-    
     this.submitted.emit(payload);
   }
 

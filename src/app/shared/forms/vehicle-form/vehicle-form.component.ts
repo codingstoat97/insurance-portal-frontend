@@ -106,7 +106,6 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     return [...new Set(asStrings.filter(Boolean))];
   }
 
-
   private getVehiculeClassificationList(): void {
     this.httpService.get<any>(PATHS.vehicleClassificationList).subscribe(res => {
       this.vehicleClassificationList = this.normalizeClassifications(res);
@@ -117,7 +116,6 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
       if (this.value) this.applyValueToForm(this.value);
     });
-
   }
 
   onSubmit() {

@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
+import { FormImportsModule } from '../form-imports.module';
 import { SharedModule } from '../../shared.module';
 
 import { Region } from '../../models';
-import { FormImportsModule } from '../form-imports.module';
 
 
 @Component({
@@ -48,9 +48,7 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void { }
 
   private applyValueToForm(v: Region | null | undefined) {
     if (v) {
