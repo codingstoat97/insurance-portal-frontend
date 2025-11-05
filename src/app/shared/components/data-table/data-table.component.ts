@@ -10,6 +10,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { Column } from 'src/app/shared/utils/data-table-types.util';
 
 @Component({
   selector: 'app-data-table',
@@ -29,7 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class DataTableComponent implements AfterViewInit {
   @Input() rows: any[] = [];
-  @Input() columns: any[] = [];
+  @Input() columns: Column[] = [];
   @Input() actions: any[] = [];
   @Input() title: string = '';
   @Input() addElement: boolean = false;
@@ -50,6 +51,8 @@ export class DataTableComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.setupSortingAccessor();
+    this.setupFilterPredicate();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -64,6 +67,8 @@ export class DataTableComponent implements AfterViewInit {
       this.displayedColumns = (this.actions && this.actions.length)
         ? [...base, 'actions']
         : base;
+      this.setupSortingAccessor();
+      this.setupFilterPredicate();
     }
     if (changes['rows']) {
       this.dataSource.data = this.rows || [];
@@ -88,8 +93,39 @@ export class DataTableComponent implements AfterViewInit {
     this.addNewElementAction.emit();
   }
 
-  refresh(): void {
+  private readCellValue(row: any, colId: string): unknown {
+    const col = this.columns.find(c => c.id === colId);
+    if (!col) return row[colId];
+    const val = col.valueGetter ? col.valueGetter(row) : row[col.field || col.id];
+    return val;
+  }
 
+  private normalize(val: unknown): string | number {
+    if (val == null) return '';
+    return typeof val === 'string' ? val.toLowerCase() : (val as any);
+  }
+
+  private setupSortingAccessor(): void {
+    this.dataSource.sortingDataAccessor = (row, sortHeaderId) => {
+      const value = this.readCellValue(row, sortHeaderId);
+      return this.normalize(value);
+    };
+    this.dataSource.sort = this.sort;
+  }
+
+  private setupFilterPredicate(): void {
+    this.dataSource.filterPredicate = (row, filter) => {
+      const term = filter.trim().toLowerCase();
+      if (!term) return true;
+
+      // Solo columnas visibles (sin 'actions')
+      for (const col of this.columns) {
+        const raw = this.readCellValue(row, col.id);
+        const text = (raw == null) ? '' : String(raw).toLowerCase();
+        if (text.includes(term)) return true;
+      }
+      return false;
+    };
   }
 
 }
