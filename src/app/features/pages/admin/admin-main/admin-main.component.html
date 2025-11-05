@@ -10,16 +10,16 @@
         <div class="tab-container">
             <mat-tab-group>
                 <mat-tab label="Regionales">
-                    <app-data-table [rows]="regionRows" [columns]="regionColumns" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('region')"></app-data-table>
+                    <app-data-table [rows]="regionRows" [columns]="regionColumns" [actions]="actions" [addElement]="true"
+                        (addNewElementAction)="onAddNewElement('Region')" (action)="onRowAction($event, 'Region')"></app-data-table>
                 </mat-tab>
                 <mat-tab label="Vehículos">
-                    <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('vehicle')"></app-data-table>
+                    <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [actions]="actions" [addElement]="true"
+                        (addNewElementAction)="onAddNewElement('Vehicle')" (action)="onRowAction($event, 'Vehicle')"></app-data-table>
                 </mat-tab>
                 <mat-tab label="Aseguradoras">
-                    <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('insurance')"></app-data-table>
+                    <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [actions]="actions" [addElement]="true"
+                        (addNewElementAction)="onAddNewElement('Insurance')" (action)="onRowAction($event, 'Insurance')"></app-data-table>
                 </mat-tab>
             </mat-tab-group>
         </div>

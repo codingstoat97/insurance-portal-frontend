@@ -1,16 +1,19 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ScrollStrategy } from '@angular/cdk/overlay';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
+import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
-import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
-import { Insurance, Region, Vehicle } from 'src/app/shared/models';
+import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 
+import { Insurance, Region, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
+
 
 @Component({
   selector: 'app-admin-main',
@@ -20,6 +23,8 @@ import * as PATH from 'src/app/shared/utils/request-paths.util'
 export class AdminMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
+  public scrollStrategy: ScrollStrategy | undefined;
   username: string = 'Admin';
 
   regionColumns = [
@@ -49,7 +54,14 @@ export class AdminMainComponent implements OnInit {
 
   insuranceRows = [];
 
-  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
+  actions: any[] = [
+    { id: 'edit', icon: 'edit', tooltip: 'Editar' },
+    { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
+  ];
+
+  constructor(
+    private httpService: HttpService,
+    private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.fetchRegionList();
@@ -75,109 +87,123 @@ export class AdminMainComponent implements OnInit {
     })
   }
 
-  openRegionDialog() {
-    const dialogRef = this.dialog.open(RegionFormComponent, {
-      width: '520px',
+  openDeleteDialog(type: string, itemName: any, item: any): void {
+    this.deleteDialogRef = this.dialog.open(DeleteModalComponent, {
+      data: { type: type, element: itemName },
+      scrollStrategy: this.scrollStrategy
     });
 
-    dialogRef.componentInstance.title = 'Añadir región';
-    dialogRef.componentInstance.value = null;
-    dialogRef.componentInstance.submitLabel = 'Guardar';
-    dialogRef.componentInstance.showCancel = true;
+    this.deleteDialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        switch (type) {
+          case 'Insurance': this, this.deleteEntity(type, item.id); break;
+          case 'Region': this.deleteEntity(type, item.id); break;
+        }
+      }
+    });
+  }
 
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
+  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region) {
+    const dialogRef = this.getDialogRef(type);
+
+    if (entity) {
+      this.handleEditEntity(entity, dialogRef);
+    } else {
+      this.handleAddNewEntity(dialogRef);
+    }
+
+    const sub1 = dialogRef.componentInstance.submitted?.subscribe((payload: any) => {
       dialogRef.close(payload);
     });
     const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
       dialogRef.close();
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region) => {
       if (result) {
-        this.saveRegion(result);
+        this.saveEntity(type, result);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
   }
 
-  openInsuranceDialog() {
-    const dialogRef = this.dialog.open(InsuranceFormComponent, {
-      width: '520px',
-    });
+  private getDialogRef(type: string): any {
+    let dialogRef;
+    switch (type) {
+      case 'Vehicle':
+        dialogRef = this.dialog.open(VehicleFormComponent, {
+          width: '520px',
+        }); break;
+      case 'Insurance':
+        dialogRef = this.dialog.open(InsuranceFormComponent, {
+          width: '520px',
+        }); break;
+      case 'Region':
+        dialogRef = this.dialog.open(RegionFormComponent, {
+          width: '520px',
+        }); break;
+    }
+    return dialogRef;
+  }
 
-    dialogRef.componentInstance.title = 'Registrar Aseguradora';
-    dialogRef.componentInstance.value = null;
-    dialogRef.componentInstance.submitLabel = 'Guardar';
+  private handleEditEntity(entity: Vehicle | Insurance | Region, dialogRef: any) {
+    dialogRef.componentInstance.title = 'Editar';
+    dialogRef.componentInstance.value = entity;
+    dialogRef.componentInstance.showDescription = false;
+    dialogRef.componentInstance.submitLabel = 'Guardar Cambios';
     dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.saveInsurance(result);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
   }
 
-  openVehicleDialog() {
-    const dialogRef = this.dialog.open(VehicleFormComponent, {
-      width: '520px',
-    });
-
-    dialogRef.componentInstance.title = 'Crear Vehículo';
+  private handleAddNewEntity(dialogRef: any) {
+    dialogRef.componentInstance.title = 'Crear Nuevo';
     dialogRef.componentInstance.value = null;
     dialogRef.componentInstance.showDescription = false;
     dialogRef.componentInstance.submitLabel = 'Guardar';
     dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe(payload => {
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.saveVehicle(result);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
   }
 
   onAddNewElement(type: string): void {
-    switch (type) {
-      case 'region': this.openRegionDialog(); break;
-      case 'vehicle': this.openVehicleDialog(); break;
-      case 'insurance': this.openInsuranceDialog(); break;
+    this.openEntityDialog(type)
+  }
+
+  onRowAction(e: { actionId: string; row: any }, type: string): void {
+    switch (e.actionId) {
+      case 'edit': this.openEntityDialog(type, e.row); break;
+      case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
     }
   }
 
-  private saveRegion(payload: Region): void {
-    this.httpService.post(PATH.regionAdd, payload).subscribe(res => {
+  private saveEntity(type: string, payload: Insurance | Vehicle | Region): void {
+    const path = this.getEntityPath(type) + '/add';
+    this.httpService.post(path, payload).subscribe(res => {
       this.snackbar.success('Guardado con éxito');
-      this.fetchRegionList();
+      this.refreshData(type);
     })
   }
 
-  private saveVehicle(payload: Vehicle): void {
-    this.httpService.post(PATH.vehicleAdd, payload).subscribe(res => {
-      this.snackbar.success('Guardado con éxito');
-      this.fetchVehicleList();
-    })
+  private deleteEntity(entityType: string, entityID: string): void {
+    const path = this.getEntityPath(entityType) + '/delete/' + entityID;
+    this.httpService.delete(path).subscribe(res => {
+      this.snackbar.success('Eliminado correctamente.');
+      this.refreshData(entityType);
+    });
   }
 
-  private saveInsurance(payload: Insurance): void {
-    this.httpService.post(PATH.insuranceAdd, payload).subscribe(res => {
-      this.snackbar.success('Guardado con éxito');
-      this.fetchInsuranceList();
-    })
+  private getEntityPath(entityType: string): string {
+    switch (entityType) {
+      case 'Vehicle': return PATH.vehiclePath;
+      case 'Insurance': return PATH.insurancePath;
+      case 'Region': return PATH.regionPath;
+      default: return '';
+    }
+  }
+
+  private refreshData(tableType: string): void {
+    switch (tableType) {
+      case 'Insurance': this.fetchInsuranceList(); break;
+      case 'Vehicle': this.fetchVehicleList(); break;
+      case 'Region': this.fetchRegionList(); break;
+    }
   }
 
 }
