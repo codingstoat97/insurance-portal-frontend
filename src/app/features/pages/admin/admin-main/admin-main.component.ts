@@ -6,8 +6,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
+import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 
