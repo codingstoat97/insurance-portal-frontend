@@ -39,7 +39,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     brand: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
     model: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
     highEnd: this.fb.control<boolean | null>(null),
-    electric: this.fb.control<boolean | null>(null),
+    isElectric: this.fb.control<boolean | null>(null),
   });
 
   constructor(
@@ -76,7 +76,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
           brand: v.brand ?? '',
           model: v.model ?? '',
           highEnd: v.highEnd ?? null,
-          electric: v.electric ?? null,
+          isElectric: v.isElectric ?? null,
         },
         { emitEvent: false }
       );
@@ -87,7 +87,7 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
           brand: '',
           model: '',
           highEnd: null,
-          electric: null,
+          isElectric: null,
         },
         { emitEvent: false }
       );

@@ -41,6 +41,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'classifications', header: 'Clasificación', field: 'classifications' },
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'highEnd', header: 'Es Alta Gama', field: 'highEnd' },
+    { id: 'isElectric', header: 'Es Eléctrico', field: 'isElectric'}
   ];
 
   vehicleRows = [];

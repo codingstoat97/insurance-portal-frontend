@@ -5,7 +5,7 @@ export interface Vehicle {
     brand: string;
     model: string;
     highEnd: boolean;
-    electric: boolean;
+    isElectric: boolean;
 }
 
 export interface ClientVehicle {
