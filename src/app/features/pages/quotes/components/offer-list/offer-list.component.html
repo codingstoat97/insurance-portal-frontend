@@ -1,9 +1,7 @@
-<div class="offer-list-container">
-    <mat-grid-list cols="3" rowHeight="500px">
-        <mat-grid-tile>
-            <app-quote-offer></app-quote-offer>
-        </mat-grid-tile>
-        <mat-grid-tile><app-quote-offer></app-quote-offer></mat-grid-tile>
-        <mat-grid-tile><app-quote-offer></app-quote-offer></mat-grid-tile>
-    </mat-grid-list>
+<div *ngIf="offerList.length > 0" class="offer-list-container">
+    <app-quote-offer></app-quote-offer>
+</div>
+
+<div *ngIf="offerList.length == 0" class="empty-list">
+    <h2>No se encontraron ofertas disponibles.</h2>
 </div>
