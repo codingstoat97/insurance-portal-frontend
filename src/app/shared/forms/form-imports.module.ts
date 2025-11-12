@@ -9,7 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '../shared.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     SharedModule

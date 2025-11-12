@@ -7,7 +7,9 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 import { Plan, Vehicle, Region, Insurance, Benefit } from 'src/app/shared/models';
-import * as PATH from 'src/app/shared/utils/request-paths.util'
+import * as PATH from 'src/app/shared/utils/request-paths.util';
+
+type PlanLevel = 'basic' | 'gold';
 
 @Component({
   selector: 'app-plan-form',
@@ -43,7 +45,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     ageLimit: this.fb.control<number | null>(null),
     discount: this.fb.control<number | null>(null),
     price: this.fb.control<number | null>(null),
-    level: ['', [Validators.required, Validators.minLength(2)]],
+    level: this.fb.nonNullable.control<PlanLevel>('basic', [Validators.required]),
     franchise: this.fb.control<number | null>(null),
     state: this.fb.control<boolean | true>(true),
     benefits: this.fb.nonNullable.control<Benefit[]>([]),
@@ -54,12 +56,24 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     private httpService: HttpService) { }
 
   ngOnInit(): void {
+    console.log(this.value);
+
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
+
+    if (this.value) {
+      this.planForEdit = this.value;
+      this.setFormFromPlan(this.value);
+    }
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value']?.currentValue) {
+      this.planForEdit = changes['value'].currentValue as Plan;
+      this.setFormFromPlan(this.planForEdit);
+    }
+  }
 
   ngOnDestroy(): void { }
 
@@ -86,16 +100,43 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     return result;
   }
 
+  private setFormFromPlan(plan: Plan): void {
+    this.form.reset({
+      vehicleId: plan.vehicleId ?? null,
+      regionalId: plan.regionalId ?? null,
+      insuranceId: plan.insuranceId ?? null,
+      minimumPremium: plan.minimumPremium ?? null,
+      rate: plan.rate ?? null,
+      ageLimit: plan.ageLimit ?? null,
+      discount: plan.discount ?? null,
+      price: plan.price ?? null,
+      level: this.toLevel(this.value?.level),
+      franchise: plan.franchise ?? null,
+      state: plan.state ?? true,
+      benefits: [...(plan.benefits ?? [])],
+    }, { emitEvent: false });
+
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private toLevel(x: any): PlanLevel {
+    return x === 'gold' ? 'gold' : 'basic'; // fallback seguro
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.value as Plan;
+    const payload = this.form.getRawValue() as Plan;
     this.submitted.emit(payload);
   }
 
+
   onCancel() {
+    if (this.planForEdit) this.setFormFromPlan(this.planForEdit);
     this.cancelled.emit();
   }
 

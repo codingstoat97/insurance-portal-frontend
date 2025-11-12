@@ -5,7 +5,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Vehículo:</mat-label>
-            <mat-select formControlName="vehicleId">
+            <mat-select formControlName="vehicleCatalogId">
                 <mat-option *ngFor="let v of vehicleList" [value]="v.id">
                     {{ getVehicleInfo(v) }}
                 </mat-option>
@@ -74,15 +74,11 @@
         <mat-form-field appearance="outline">
             <mat-label>Nivel:</mat-label>
             <mat-select formControlName="level">
-                <mat-option [value]="'basic'">
-                    Básico
-                </mat-option>
-                <mat-option [value]="'gold'">
-                    Premium
-                </mat-option>
+                <mat-option value="basic">Básico</mat-option>
+                <mat-option value="gold">Premium</mat-option>
             </mat-select>
             <mat-error *ngIf="form.get('level')?.hasError('required')">
-                Selecciona una nivel.
+                Selecciona un nivel.
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
