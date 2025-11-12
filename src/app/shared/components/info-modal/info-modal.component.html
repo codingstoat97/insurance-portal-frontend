@@ -1,0 +1,20 @@
+<div class="info-modal">
+    <mat-dialog-content>
+        <div class="modal-title">
+            <mat-icon fontIcon="info"></mat-icon>
+            <h4>{{data.title}}</h4>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="modal-content">
+            <div class="row" *ngFor="let col of data.columns">
+                <span class="label">{{ col.header }}</span>
+                <span class="value">
+                   {{ ($any(data.element))[col.field] ?? '—' }}
+                </span>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Cerrar</button>
+    </mat-dialog-actions>
+</div>
