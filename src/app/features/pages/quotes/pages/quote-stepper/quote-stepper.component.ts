@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
+import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Client, Vehicle } from 'src/app/shared/models';
+import { ClientVehicle } from 'src/app/shared/models';
+import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 @Component({
   selector: 'app-quote-stepper',
@@ -10,40 +12,36 @@ import { Client, Vehicle } from 'src/app/shared/models';
 })
 export class QuoteStepperComponent {
 
+  constructor(private httpService: HttpService) { }
+
   @ViewChild('stepper') stepper!: MatStepper;
 
-  clientData: any;
-  vehicleData: any;
+  clientVehicleData: ClientVehicle | undefined;
+  clientVehicleDone = false;
 
-  clientDone = false;
-  vehicleDone = false;
+  offerList: any[] = [];
 
-  onClientSubmitted(client: Client) {
-    console.log(client);
-    this.clientData = client;
-    this.clientDone = true;
-    this.stepper.next();
-  }
-
-  onVehicleSubmitted(vehicle: Vehicle) {
-    console.log(vehicle);
-    this.vehicleData = vehicle;
-    this.vehicleDone = true;
-    this.buildParams();
+  onClientVehicleSubmitted(clientVehicle: ClientVehicle) {
+    console.log(clientVehicle);
+    this.clientVehicleData = clientVehicle;
+    this.clientVehicleDone = true;
+    this.sendForm();
     this.stepper.next();
   }
 
   sendForm(): void {
     const params = this.buildParams();
-    //send to backend
+    this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
+      this.offerList = res;
+      console.log(this.offerList);
+      
+    })
   }
 
   buildParams() {
     const payload = {
-      ...this.vehicleData,
-      ...this.clientData,
+      ...this.clientVehicleData,
     };
-    console.log(JSON.stringify(payload));
     return payload;
   }
 
