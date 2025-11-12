@@ -7,9 +7,11 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
-import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
+
+import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
+import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
 import { Insurance, Region, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
@@ -24,13 +26,14 @@ export class AdminMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
+  public infoDialogRef: MatDialogRef<InfoModalComponent> | undefined;
   public scrollStrategy: ScrollStrategy | undefined;
   username: string = 'Admin';
 
   regionColumns = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'name', header: 'Regional', field: 'name' },
-    { id: 'country', header: 'Pais', field: 'country' }
+    { id: 'country', header: 'País', field: 'country' }
   ];
 
   regionRows = [];
@@ -56,6 +59,7 @@ export class AdminMainComponent implements OnInit {
   insuranceRows = [];
 
   actions: any[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
@@ -103,6 +107,22 @@ export class AdminMainComponent implements OnInit {
         }
       }
     });
+  }
+
+  openInformationDialog(type: string, item: Vehicle | Region | Insurance): void {
+    this.infoDialogRef = this.dialog.open(InfoModalComponent, {
+      data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
+      scrollStrategy: this.scrollStrategy
+    });
+  }
+
+  private getInformationColumns(type: string): any[] {
+    switch(type) {
+      case 'Insurance': return this.insuranceColumns;
+      case 'Region': return this.regionColumns;
+      case 'Vehicle': return this.vehicleColumns;
+      default: return [];
+    }
   }
 
   openEntityDialog(type: string, entity?: Vehicle | Insurance | Region) {
@@ -170,6 +190,7 @@ export class AdminMainComponent implements OnInit {
 
   onRowAction(e: { actionId: string; row: any }, type: string): void {
     switch (e.actionId) {
+      case 'info': this.openInformationDialog(type, e.row); break;
       case 'edit': this.openEntityDialog(type, e.row); break;
       case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
     }
