@@ -5,7 +5,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Vehículo:</mat-label>
-            <mat-select formControlName="vehicleCatalogId">
+            <mat-select formControlName="vehicleId">
                 <mat-option *ngFor="let v of vehicleList" [value]="v.id">
                     {{ getVehicleInfo(v) }}
                 </mat-option>
@@ -62,13 +62,6 @@
             <input matInput formControlName="discount" placeholder="Ej. 20%" />
             <mat-error *ngIf="form.get('discount')?.hasError('required')">
                 El porcentaje de descuento es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Precio:</mat-label>
-            <input matInput formControlName="price" placeholder="Ej. 20000" />
-            <mat-error *ngIf="form.get('price')?.hasError('required')">
-                El precio es obligatorio
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">

@@ -10,7 +10,6 @@ export interface Plan {
     rate: number;
     ageLimit: number;
     discount: number;
-    price: number;
     level: string;
     franchise: number;
     state: boolean;

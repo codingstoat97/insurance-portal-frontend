@@ -41,7 +41,6 @@ export class BrokerMainComponent implements OnInit {
     { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
-    { id: 'price', header: 'Precio (Bs.)', field: 'price' },
     { id: 'level', header: 'Nivel', field: 'level' },
     { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
     { id: 'state', header: 'Plan Activado', field: 'state' }
