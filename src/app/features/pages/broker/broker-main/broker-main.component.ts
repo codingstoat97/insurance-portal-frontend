@@ -13,6 +13,7 @@ import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
 import { Column } from 'src/app/shared/utils/data-table-types.util';
+import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
 @Component({
   selector: 'app-broker-main',
@@ -23,6 +24,7 @@ export class BrokerMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
+  public infoDialogRef: MatDialogRef<InfoModalComponent> | undefined;
   public scrollStrategy: ScrollStrategy | undefined;
 
   username: string = 'Erick Kinlock';
@@ -58,6 +60,7 @@ export class BrokerMainComponent implements OnInit {
   benefitRows = [];
 
   actions: any[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
@@ -142,11 +145,25 @@ export class BrokerMainComponent implements OnInit {
         }); break;
       case 'Benefit':
         dialogRef = this.dialog.open(BenefitFormComponent, {
-          height: '600px',
           width: '520px',
         }); break;
     }
     return dialogRef;
+  }
+
+  openInformationDialog(type: string, item: Plan | Benefit): void {
+    this.infoDialogRef = this.dialog.open(InfoModalComponent, {
+      data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
+      scrollStrategy: this.scrollStrategy
+    });
+  }
+
+  private getInformationColumns(type: string): any[] {
+    switch (type) {
+      case 'Plan': return this.planColumns;
+      case 'Benefit': return this.benefitColumns;
+      default: return [];
+    }
   }
 
   openDeleteDialog(type: string, itemName: any, item: any): void {
@@ -195,6 +212,7 @@ export class BrokerMainComponent implements OnInit {
 
   onRowAction(type: string, e: { actionId: string; row: any }): void {
     switch (e.actionId) {
+      case 'info': this.openInformationDialog(type, e.row); break;
       case 'edit': this.openEntityDialog(type, e.row); break;
       case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
     }
