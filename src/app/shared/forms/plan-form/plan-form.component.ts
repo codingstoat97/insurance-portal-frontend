@@ -35,6 +35,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   vehicleList: Vehicle[] = [];
   regionList: Region[] = [];
   insuranceList: Insurance[] = [];
+  benefitList: Benefit[] = [];
 
   form = this.fb.group({
     vehicleId: this.fb.control<number | null>(null, { validators: [] }),
@@ -60,6 +61,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
+    this.fetchBenefitList();
 
     if (this.value) {
       this.planForEdit = this.value;
@@ -91,6 +93,12 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   fetchInsuranceList(): void {
     this.httpService.get<Insurance[]>(PATH.insuranceList).subscribe(res => {
       this.insuranceList = res;
+    });
+  }
+
+  fetchBenefitList(): void {
+    this.httpService.get<Benefit[]>(PATH.benefitList).subscribe(res => {
+      this.benefitList = res;
     });
   }
 
