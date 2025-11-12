@@ -96,8 +96,9 @@ export class AdminMainComponent implements OnInit {
     this.deleteDialogRef.afterClosed().subscribe(result => {
       if (result == true) {
         switch (type) {
-          case 'Insurance': this, this.deleteEntity(type, item.id); break;
+          case 'Insurance': this.deleteEntity(type, item.id); break;
           case 'Region': this.deleteEntity(type, item.id); break;
+          case 'Vehicle': this.deleteEntity(type, item.id); break;
         }
       }
     });
@@ -182,6 +183,8 @@ export class AdminMainComponent implements OnInit {
   }
 
   private deleteEntity(entityType: string, entityID: string): void {
+    console.log(entityType,entityID);
+    
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
     this.httpService.delete(path).subscribe(res => {
       this.snackbar.success('Eliminado correctamente.');
