@@ -56,8 +56,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     private httpService: HttpService) { }
 
   ngOnInit(): void {
-    console.log(this.value);
-
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();

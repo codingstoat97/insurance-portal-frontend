@@ -205,8 +205,6 @@ export class AdminMainComponent implements OnInit {
   }
 
   private deleteEntity(entityType: string, entityID: string): void {
-    console.log(entityType,entityID);
-    
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
     this.httpService.delete(path).subscribe(res => {
       this.snackbar.success('Eliminado correctamente.');

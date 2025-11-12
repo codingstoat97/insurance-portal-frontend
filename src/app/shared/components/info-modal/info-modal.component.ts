@@ -26,14 +26,9 @@ export class InfoModalComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<InfoModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
-  ngOnInit(): void {
-    console.log(this.data);
-    
-  }
+  ngOnInit(): void { }
 
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void { }
 
   closeModal(): void {
     this.dialogRef.close();

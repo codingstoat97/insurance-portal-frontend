@@ -20,7 +20,7 @@ export class OfferListComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('imon offer list',this.offerList);
+    console.log('im on offer list', this.offerList);
   }
 
   ngOnDestroy(): void { }

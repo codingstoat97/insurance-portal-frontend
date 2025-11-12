@@ -79,9 +79,7 @@ export class BrokerMainComponent implements OnInit {
   fetchPlanList(): void {
     this.httpService.get<any>(PATHS.planList).subscribe(res => {
       this.planRows = res;
-      console.log(res);
-      
-    })
+    });
   }
 
   fetchBenefitList(): void {
@@ -186,8 +184,6 @@ export class BrokerMainComponent implements OnInit {
 
   private deleteEntity(entityType: string, entityID: string): void {
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
-    console.log(path);
-
     this.httpService.delete(path).subscribe(res => {
       this.snackbar.success('Eliminado correctamente.');
       this.refreshData(entityType);

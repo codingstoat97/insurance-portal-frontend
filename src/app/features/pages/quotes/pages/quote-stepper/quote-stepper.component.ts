@@ -22,7 +22,6 @@ export class QuoteStepperComponent {
   offerList: any[] = [];
 
   onClientVehicleSubmitted(clientVehicle: ClientVehicle) {
-    console.log(clientVehicle);
     this.clientVehicleData = clientVehicle;
     this.clientVehicleDone = true;
     this.sendForm();
@@ -33,9 +32,7 @@ export class QuoteStepperComponent {
     const params = this.buildParams();
     this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
       this.offerList = res;
-      console.log(this.offerList);
-      
-    })
+    });
   }
 
   buildParams() {
