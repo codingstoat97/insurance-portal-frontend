@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { QuotesRoutingModule } from './quotes-routing.module';
@@ -12,6 +12,7 @@ import { ClientFormComponent } from "src/app/shared/forms/client-form/client-for
 import { VehicleFormComponent } from "src/app/shared/forms/vehicle-form/vehicle-form.component";
 import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.component";
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
+import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { OfferListComponent } from "./components/offer-list/offer-list.component
     ClientFormComponent,
     VehicleFormComponent,
     QuoteOfferComponent,
-    OfferListComponent
-]
+    OfferListComponent,
+    ClientVehicleComponent
+],
+schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class QuotesModule { }
