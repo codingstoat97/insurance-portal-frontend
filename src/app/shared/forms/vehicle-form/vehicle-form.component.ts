@@ -5,7 +5,6 @@ import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
-import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { Vehicle } from '../../models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
