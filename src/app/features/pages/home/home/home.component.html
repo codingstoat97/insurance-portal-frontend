@@ -1,59 +1,66 @@
 <section class="banner-container">
     <div class="banner-content">
-        <img class="banner-logo" src="assets/logo/logo-white.png" alt="bubo" />
         <div class="banner-text">
-            <h1>LLevamos los seguros al siguiente nivel</h1>
+            <h1>En tan solo un click</h1>
             <p>Más simple, más rápido y más cercano a ti.</p>
             <button mat-stroked-button (click)="goToStepper()">
-                Comenzar mi cotización
+                Obtiene tu cotización
             </button>
         </div>
     </div>
 </section>
 <section class="intro-container">
+    <img class="intro-logo" src="assets/logo/logo.png" alt="bubo" />
+    <h1>LLevamos los seguros al siguiente nivel</h1>
+    <p>Más simple, más rápido y más cercano a ti.</p>
     <mat-grid-list cols="3" rowHeight="2:1">
         <mat-grid-tile class="step-container">
             <mat-card>
-                <mat-card-header>
+                <div class="floating-avatar">
+                    <img src="assets/lapicero.svg" alt="Vehículo" />
+                </div>
+                <mat-card-header class="centered-header">
                     <mat-card-title>
-                        <mat-icon>edit</mat-icon>
-                        <h2>Ingresa tus datos</h2>
+                        <h2>Registra</h2>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Esto nos permitirá enviarte los planes más adecuados y contactarte para una experiencia
-                        personalizada.
+                        Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.
                     </p>
                 </mat-card-content>
             </mat-card>
         </mat-grid-tile>
         <mat-grid-tile class="step-container">
             <mat-card>
-                <mat-card-header>
+                <div class="floating-avatar">
+                    <img src="assets/auto.svg" alt="Vehículo" />
+                </div>
+                <mat-card-header class="centered-header">
                     <mat-card-title>
-                        <mat-icon>directions_car</mat-icon>
-                        <h2>Registra tu Vehiculo</h2>
+                        <h2>Compara</h2>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Ingresa los datos de tu vehículo para ofrecerte las mejores opciones según sus características.
+                        Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.
                     </p>
                 </mat-card-content>
             </mat-card>
         </mat-grid-tile>
         <mat-grid-tile class="step-container">
             <mat-card>
-                <mat-card-header>
+                <div class="floating-avatar">
+                    <img src="assets/escudo.svg" alt="Vehículo" />
+                </div>
+                <mat-card-header class="centered-header">
                     <mat-card-title>
-                        <mat-icon>done_outline</mat-icon>
-                        <h2>Compara y elige tu plan ideal</h2>
+                        <h2>Elige</h2>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Elige el plan que mejor se adapte a tus necesidades y presupuesto.
+                        Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.
                     </p>
                 </mat-card-content>
             </mat-card>
@@ -63,9 +70,10 @@
 <section class="slogan-container">
     <div class="slogan-content">
         <h1>Encuentra la mejor cotización para ti</h1>
-        <p>En tan solo 3 pasos tendras a tu alcance una lista de opciones formuladas a tu medida.</p>
-        <button mat-stroked-button (click)="goToStepper()">
-            Quiero cotizar mi seguro
+        <p>En tan solo 2 pasos tendras a tu alcance una lista de opciones formuladas a tu medida.</p>
+        <button mat-fab extended (click)="goToStepper()">
+          Comenzar
+          <mat-icon>start</mat-icon>
         </button>
     </div>
 </section>
