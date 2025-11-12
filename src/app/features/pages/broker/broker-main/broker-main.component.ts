@@ -37,13 +37,13 @@ export class BrokerMainComponent implements OnInit {
     { id: 'vehicleId', header: 'Vehículo', field: 'vehicleId', valueGetter: (row) => this.vehicleMap[row.vehicleId!]?.brand ?? '—' },
     { id: 'regionalId', header: 'Regional', field: 'regionalId', valueGetter: (row) => this.regionMap[row.regionalId!]?.name ?? '—' },
     { id: 'insuranceId', header: 'Aseguradora', field: 'insuranceId', valueGetter: (row) => this.insuranceMap[row.insuranceId!]?.name ?? '—' },
-    { id: 'minimumPremium', header: 'Prima', field: 'minimumPremium' },
-    { id: 'rate', header: 'Tasa', field: 'rate' },
+    { id: 'minimumPremium', header: 'Prima (Bs.)', field: 'minimumPremium' },
+    { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
-    { id: 'discount', header: 'Descuento', field: 'discount' },
-    { id: 'price', header: 'Precio', field: 'price' },
+    { id: 'discount', header: 'Descuento (%)', field: 'discount' },
+    { id: 'price', header: 'Precio (Bs.)', field: 'price' },
     { id: 'level', header: 'Nivel', field: 'level' },
-    { id: 'franchise', header: 'Franquicia', field: 'franchise' },
+    { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
     { id: 'state', header: 'Plan Activado', field: 'state' }
   ];
 
@@ -77,6 +77,8 @@ export class BrokerMainComponent implements OnInit {
   fetchPlanList(): void {
     this.httpService.get<any>(PATHS.planList).subscribe(res => {
       this.planRows = res;
+      console.log(res);
+      
     })
   }
 
