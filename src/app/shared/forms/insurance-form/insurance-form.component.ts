@@ -36,7 +36,8 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
   form = this.fb.group({
     name: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
     type: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
-    email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] })
+    email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    qrImage: [''],
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
@@ -64,6 +65,23 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
 
   onCancel() {
     this.cancelled.emit();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      console.log(base64);
+      this.form.patchValue({ qrImage: base64 });
+    };
+    
+    
+    reader.readAsDataURL(file);
   }
 
   private applyValueToForm(v?: Insurance | null) {
