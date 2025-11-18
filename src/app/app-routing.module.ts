@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthModule } from './features/auth/auth.module';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: 'login',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then(m => m.AuthModule)
+  },
   {
     path: 'home',
     loadChildren: () =>

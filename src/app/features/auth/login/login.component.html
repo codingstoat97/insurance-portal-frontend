@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="login-page-container">
+    <mat-card class="login-container" appearance="outlined">
+        <div class="floating-avatar">
+            <img src="assets/escudo.svg" alt="Vehículo" />
+        </div>
+
+        <mat-card-header class="centered-header">
+            <mat-card-title>Bubo Brokers</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+                <mat-form-field appearance="outline">
+                    <mat-label>Correo Electrónico</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="Ej. admin@kinlock.com" />
+                    <mat-error *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">
+                        Ingrese correo electrónico
+                    </mat-error>
+                    <mat-error *ngIf="form.get('email')?.hasError('email') && form.get('email')?.touched">
+                        Ingrese un correo válido
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput type="password" formControlName="password" placeholder="*******" />
+                    <mat-error *ngIf="form.get('password')?.hasError('required') && form.get('password')?.touched">
+                        Ingrese su contraseña
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-card-actions align="end">
+                    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                        Ingresar
+                    </button>
+                </mat-card-actions>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
