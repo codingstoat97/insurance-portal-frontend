@@ -31,6 +31,8 @@ export class QuoteStepperComponent {
   sendForm(): void {
     const params = this.buildParams();
     this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
+      console.log('im on stepper', res);
+
       this.offerList = res;
     });
   }
@@ -39,6 +41,8 @@ export class QuoteStepperComponent {
     const payload = {
       ...this.clientVehicleData,
     };
+    console.log(payload);
+
     return payload;
   }
 

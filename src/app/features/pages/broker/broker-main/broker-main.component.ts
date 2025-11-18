@@ -11,7 +11,7 @@ import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
-import * as PATHS from 'src/app/shared/utils/request-paths.util'
+import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Column } from 'src/app/shared/utils/data-table-types.util';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
