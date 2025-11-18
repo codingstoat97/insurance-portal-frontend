@@ -1,2 +1,2 @@
-<mat-toolbar class="footer-container" [class.is-home]="variant === 'transparent'">
+<mat-toolbar *ngIf="!showFooter" class="footer-container" [class.is-home]="variant === 'transparent'">
 </mat-toolbar>

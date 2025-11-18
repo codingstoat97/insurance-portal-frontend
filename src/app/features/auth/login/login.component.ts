@@ -32,6 +32,10 @@ export class LoginComponent {
     this.login(payload);
   }
 
+  goHome(): void {
+    this.router.navigate(['/home']);
+  }
+
   private login(payload: any): void {
     this.httpService.post<LoginResponse>('auth/login', payload).subscribe({
       next: (res) => {

@@ -22,6 +22,7 @@ import { filter } from 'rxjs';
 export class FooterComponent {
 
   public variant: any;
+  public showFooter: boolean = true;
   constructor(private router: Router, private route: ActivatedRoute) {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
@@ -29,6 +30,8 @@ export class FooterComponent {
         let r = this.route.root;
         while (r.firstChild) r = r.firstChild;
         this.variant = (r.snapshot.data['toolbar'] as any) || 'solid';
+        const url = this.router.url.split('?')[0];
+        this.showFooter = url === '/login';
       });
   }
 

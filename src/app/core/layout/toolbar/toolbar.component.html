@@ -1,11 +1,11 @@
-<mat-toolbar class="toolbar-container" [class.is-home]="variant === 'transparent'">
+<mat-toolbar *ngIf="!showToolbar" class="toolbar-container" [class.is-home]="variant === 'transparent'">
   <a class="brand" routerLink="/home" (click)="goHome()" aria-label="Home">
     <img src="assets/logo/logo-white.png" alt="bubo" />
   </a>
 
   <span class="spacer"></span>
 
-  <div class="right">
+  <div *ngIf="showButton" class="right">
     <span class="pill">Contactanos</span>
     <span class="pill" (click)="goToBroker()">Brokers • Ingresar</span>
   </div>

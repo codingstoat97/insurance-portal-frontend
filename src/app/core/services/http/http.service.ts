@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable({
@@ -12,10 +13,10 @@ export class HttpService {
   private readonly url = "http://localhost:8080/";
 
   private token: string | null = '';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getAuthHeaders(): HttpHeaders {
-    this.token = localStorage.getItem('auth_token');
+    this.token = this.authService.getToken();
     return new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

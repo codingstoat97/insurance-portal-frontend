@@ -5,7 +5,8 @@
         </div>
 
         <mat-card-header class="centered-header">
-            <mat-card-title>Bubo Brokers</mat-card-title>
+            <mat-card-title>Portal Bubo</mat-card-title>
+            <mat-card-subtitle>Control y gestión en un solo lugar</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
@@ -28,7 +29,10 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-card-actions align="end">
+                <mat-card-actions align="end" class="form-actions">
+                    <button mat-flat-button color="accent" (click)="goHome()">
+                        Cancelar
+                    </button>
                     <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
                         Ingresar
                     </button>

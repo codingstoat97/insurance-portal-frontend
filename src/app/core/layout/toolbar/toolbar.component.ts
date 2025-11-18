@@ -24,13 +24,22 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class ToolbarComponent {
   public variant: any;
+  public showButton: boolean = true;
+  public showToolbar: boolean = true;
   constructor(private router: Router, private route: ActivatedRoute) {
+    this.setToolbarForHome();
+  }
+
+  private setToolbarForHome(): void {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         let r = this.route.root;
         while (r.firstChild) r = r.firstChild;
         this.variant = (r.snapshot.data['toolbar'] as any) || 'solid';
+        const url = this.router.url.split('?')[0];
+        this.showButton = url === '/home';
+        this.showToolbar = url === '/login';
       });
   }
 
