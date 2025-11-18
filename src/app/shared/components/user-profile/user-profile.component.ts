@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared.module';
 import { Router } from '@angular/router';
 
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,7 +18,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   @Input() username: string = '';
   @Input() profilePictureURL: string = 'https://cdn-icons-png.freepik.com/512/12225/12225935.png';
   @Input() showOccupation: boolean = false;
-  constructor(private router: Router){}
+  constructor(private router: Router, private authService: AuthService){}
 
   ngOnInit(): void {
     
@@ -29,6 +30,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   goHome(): void {
     this.router.navigate(['/home']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
 }
