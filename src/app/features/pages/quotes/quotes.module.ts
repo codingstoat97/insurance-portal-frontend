@@ -16,6 +16,7 @@ import { OfferListComponent } from "./components/offer-list/offer-list.component
 import { QuotePageComponent } from './components/quote-page/quote-page.component';
 
 import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe
     QuoteOfferComponent,
     OfferListComponent,
     ClientVehicleComponent,
-    LevelLabelPipe
+    LevelLabelPipe,
+    MatDialogModule
 ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,7 +1,11 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+
+import { ImageModalComponent } from 'src/app/shared/components/image-modal/image-modal.component';
 
 import { Insurance, Plan, PlanBenefit, Region, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -21,6 +25,8 @@ export class QuotePageComponent {
   public regionData!: Region;
 
   constructor(
+    private location: Location,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private httpService: HttpService
   ) { }
@@ -71,6 +77,22 @@ export class QuotePageComponent {
     this.httpService.get<Vehicle>(PATH.vehicleGetByID + '/' + this.quotePlan?.vehicleId).subscribe(res => {
       this.vehicleData = res;
     });
+  }
+
+  openQrModal(): void {
+    console.log(this.insuranceData);
+    
+    this.dialog.open(ImageModalComponent, {
+      width: '400px',
+      data: {
+        title: 'QR del Seguro',
+        image: this.insuranceData.qrImage
+      }
+    });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

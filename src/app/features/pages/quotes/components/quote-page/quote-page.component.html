@@ -67,7 +67,7 @@
                     <mat-card-header>
                         <mat-card-title>Beneficios</mat-card-title>
                     </mat-card-header>
-                    <mat-card-content>
+                    <mat-card-content class="detail-card-content">
                         <div class="detail-row" *ngFor="let benefit of planBenefits">
                             <span class="detail-label">- {{benefit.benefitName}}</span>
                         </div>
@@ -75,9 +75,9 @@
                 </mat-card>
             </div>
         </mat-card-content>
-        <mat-card-actions align="end">
-            <button mat-button>Volver</button>
-            <button mat-button>Continuar</button>
+        <mat-card-actions class="quote-actions">
+            <button mat-button (click)="goBack()">Volver</button>
+            <button mat-button (click)="openQrModal()">Continuar</button>
         </mat-card-actions>
     </mat-card>
 </div>

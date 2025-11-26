@@ -1,0 +1,20 @@
+<div class="image-modal">
+    <mat-dialog-content>
+        <div class="modal-title">
+            <mat-icon fontIcon="image"></mat-icon>
+            <h4>{{ data.title }}</h4>
+        </div>
+        <div class="modal-image">
+            <div class="image-wrapper" *ngIf="data.image">
+                <img [src]="data.image" alt="imagen" />
+            </div>
+            <div class="no-image" *ngIf="!data.image">
+                <p>No se encontró la imagen.</p>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="closeModal()">No, gracias.</button>
+        <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Eliminar</button>
+    </mat-dialog-actions>
+</div>
