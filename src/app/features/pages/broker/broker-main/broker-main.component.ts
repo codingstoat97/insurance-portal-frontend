@@ -7,18 +7,23 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
+import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Column } from 'src/app/shared/utils/data-table-types.util';
-import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
+import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
+
 
 @Component({
   selector: 'app-broker-main',
   templateUrl: './broker-main.component.html',
-  styleUrls: ['./broker-main.component.sass']
+  styleUrls: ['./broker-main.component.sass'],
+  providers: [LevelLabelPipe, CoverageLabelPipe]
 })
 export class BrokerMainComponent implements OnInit {
 
@@ -43,18 +48,18 @@ export class BrokerMainComponent implements OnInit {
     { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
-    { id: 'level', header: 'Nivel', field: 'level' },
+    { id: 'level', header: 'Nivel', field: 'level', valueGetter: (row) => this.levelLabelPipe.transform(row.level) },
     { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
     { id: 'state', header: 'Plan Activado', field: 'state' }
   ];
 
   planRows = [];
 
-  benefitColumns = [
+  benefitColumns: Column<Benefit>[] = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'name', header: 'Nombre del Beneficio', field: 'name' },
     { id: 'description', header: 'Descripción', field: 'description' },
-    { id: 'coverage', header: 'Tipo de Cobertura', field: 'coverage' },
+    { id: 'coverage', header: 'Tipo de Cobertura', field: 'coverage', valueGetter: (row) => this.coverageLabelPipe.transform(row.coverage) },
   ];
 
   benefitRows = [];
@@ -65,7 +70,11 @@ export class BrokerMainComponent implements OnInit {
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
-  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
+  constructor(
+    private httpService: HttpService,
+    private snackbar: SnackBarService,
+    private levelLabelPipe: LevelLabelPipe,
+    private coverageLabelPipe: LevelLabelPipe) { }
 
   ngOnInit(): void {
     this.fetchPlanList();
