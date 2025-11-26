@@ -127,7 +127,11 @@ export class BrokerMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: Plan | Benefit) => {
       if (result) {
-        this.saveEntity(type, result);
+        if (entity) {
+          this.updateEntity(type, result);
+        } else {
+          this.saveEntity(type, result);
+        }
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
@@ -222,6 +226,14 @@ export class BrokerMainComponent implements OnInit {
     const path = this.getEntityPath(type) + '/add';
     this.httpService.post(path, payload).subscribe(res => {
       this.snackbar.success('Guardado con éxito');
+      this.refreshData(type);
+    })
+  }
+
+  private updateEntity(type: string, payload: Plan | Benefit): void {
+    const path = this.getEntityPath(type) + '/edit';
+    this.httpService.post(path, payload).subscribe(res => {
+      this.snackbar.success('Actualizado con éxito');
       this.refreshData(type);
     })
   }

@@ -3,4 +3,5 @@ export * from './vehicule-model';
 export * from './plan-model';
 export * from './benefit-model';
 export * from './region-model';
-export * from './insurance-model'
+export * from './insurance-model';
+export * from './plan-benefit-model';

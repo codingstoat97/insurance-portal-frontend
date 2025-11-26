@@ -30,7 +30,7 @@ export const planGetByID = 'plans/getById';
 export const planSearch = 'plans/search'
 
 export const planBenefitsPath = 'planBenefits';
-export const planBenefitsGetAllByPlan = '/planBenefits/list/byPlanId';
+export const planBenefitsGetAllByPlan = 'planBenefits/list/byPlanId';
 export const planBenefitsGetByID = 'plans/getById';
 export const planBenefitsAdd = 'planBenefits/add';
 export const planBenefitsUpdate = 'planBenefits/edit';
