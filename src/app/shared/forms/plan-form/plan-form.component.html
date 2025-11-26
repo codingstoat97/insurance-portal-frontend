@@ -81,13 +81,15 @@
                 La franquicia es obligatoria.
             </mat-error>
         </mat-form-field>
+        <button mat-button *ngIf="value" class="benefit-button" type="button" (click)="openAddBenefitsModal()">
+            Agregar Beneficios
+        </button>
         <div class="form-actions">
-            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
-                {{ submitLabel }}
-            </button>
-
             <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
                 Cancelar
+            </button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
             </button>
         </div>
     </form>
