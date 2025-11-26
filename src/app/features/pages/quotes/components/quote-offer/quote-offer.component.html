@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="quote-card">
   <mat-card-header class="centered-header">
     <mat-card-title>{{ insuranceName }}</mat-card-title>
     <mat-card-subtitle>Plan Anual</mat-card-subtitle>
@@ -9,7 +9,7 @@
     <p>Prima al contado</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary">Ver Detalles</button>
+    <button mat-raised-button color="primary" (click)="goToQuotePage()">Ver Detalles</button>
   </mat-card-actions>
 </mat-card>
 

@@ -13,11 +13,13 @@ import { VehicleFormComponent } from "src/app/shared/forms/vehicle-form/vehicle-
 import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.component";
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
 import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
+import { QuotePageComponent } from './components/quote-page/quote-page.component';
 
 @NgModule({
   declarations: [
     QuoteStepperComponent,
-    QuoteViewComponent
+    QuoteViewComponent,
+    QuotePageComponent
   ],
   imports: [
     CommonModule,

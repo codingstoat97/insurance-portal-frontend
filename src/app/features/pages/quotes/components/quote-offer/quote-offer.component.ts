@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { Plan } from 'src/app/shared/models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quote-offer',
@@ -18,4 +19,10 @@ import { Plan } from 'src/app/shared/models';
 export class QuoteOfferComponent {
   @Input() offer!: Plan;
   @Input() insuranceName!: string;
+
+  constructor(private router: Router){}
+
+  goToQuotePage() {
+    this.router.navigate(['/quotes', this.offer.id]);
+  }
 }

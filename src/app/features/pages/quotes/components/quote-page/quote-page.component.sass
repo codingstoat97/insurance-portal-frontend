@@ -1,0 +1,58 @@
+.quote-page-container
+  min-height: 80vh
+  display: flex
+  justify-content: center
+  padding-top: 24px
+
+.quote-card
+  width: 80%
+  max-width: 80%
+  margin-top: 20px
+
+  mat-card-content
+    padding: 16px 24px 24px 24px
+
+  .quote-header
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+    gap: 10px
+    margin-bottom: 24px
+
+    .left-header
+      display: flex
+      flex-direction: column
+
+    .right-header
+      display: flex
+      align-items: center
+
+  .quote-grid-content
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
+    gap: 16px
+    margin-top: 8px
+
+.detail-card-content
+  margin-top: 20px
+
+  .detail-row
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 8px 0
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06)
+
+    &:last-child
+      border-bottom: none
+
+    .detail-label
+      font-weight: 600
+      font-size: 14px
+      color: rgba(0, 0, 0, 0.72)
+
+    .detail-value
+      font-weight: 500
+      font-size: 14px
+      color: rgba(0, 0, 0, 0.87)
+      white-space: nowrap
