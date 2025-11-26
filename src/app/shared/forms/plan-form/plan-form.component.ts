@@ -1,23 +1,17 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ScrollStrategy } from '@angular/cdk/overlay';
-
 import { FormImportsModule } from '../form-imports.module';
 
-import { AddBenefitModalComponent } from '../../components/add-benefit-modal/add-benefit-modal.component';
-
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 import { Plan, Vehicle, Region, Insurance, Benefit } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
-import { forkJoin } from 'rxjs';
-import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
-
 
 type PlanLevel = 'basic' | 'gold';
+
 
 @Component({
   selector: 'app-plan-form',
@@ -38,10 +32,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() submitted = new EventEmitter<Plan>();
   @Output() cancelled = new EventEmitter<void>();
-
-  readonly dialog = inject(MatDialog);
-  public scrollStrategy: ScrollStrategy | undefined;
-  public addBenefitsDialogRef: MatDialogRef<AddBenefitModalComponent> | undefined;
 
   planForEdit: Plan | null = null;
   vehicleList: Vehicle[] = [];
@@ -72,7 +62,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
-    this.fetchBenefitList();
 
     if (this.value) {
       this.planForEdit = this.value;
@@ -107,12 +96,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  fetchBenefitList(): void {
-    this.httpService.get<Benefit[]>(PATH.benefitList).subscribe(res => {
-      this.benefitList = res;
-    });
-  }
-
   getVehicleInfo(v: Vehicle): string {
     const result = v.brand + '-' + v.model;
     return result;
@@ -142,51 +125,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     return x === 'gold' ? 'gold' : 'basic';
   }
 
-  openAddBenefitsModal() {
-    this.addBenefitsDialogRef = this.dialog.open(AddBenefitModalComponent, {
-      width: '500px',
-      scrollStrategy: this.scrollStrategy
-    });
-
-    this.addBenefitsDialogRef.afterClosed().subscribe((selectedBenefits: Benefit[] | undefined) => {
-      if (!selectedBenefits) return;
-      console.log('Seleccionados:', selectedBenefits);
-      this.savePlanBenefits(selectedBenefits);
-    });
-  }
-
-  savePlanBenefits(benefits: Benefit[]) {
-    const planId = this.planForEdit?.id ?? this.value?.id;
-
-    if (!planId) {
-      this.snackbarService.error('No existe un plan con ese ID')
-      return;
-    }
-
-    const requests = benefits.map(b => {
-      const payload = {
-        planId: planId,
-        benefitId: b.id,
-        limits: [
-          {
-            name: 'cobertura',
-            limit: 90
-          }
-        ]
-      };
-      return this.httpService.post(PATH.planBenefitsAdd, payload);
-    });
-
-    forkJoin(requests).subscribe({
-      next: res => {
-        this.snackbarService.success('Beneficios agregados correctamente');
-      },
-      error: err => {
-        this.snackbarService.error('No se pudieron añadir los beneficios');
-      }
-    });
-  }
-
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -195,7 +133,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     const payload = this.form.getRawValue() as Plan;
     this.submitted.emit(payload);
   }
-
 
   onCancel() {
     if (this.planForEdit) this.setFormFromPlan(this.planForEdit);

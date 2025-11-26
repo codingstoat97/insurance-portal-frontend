@@ -9,14 +9,18 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
+import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-modal/add-benefit-modal.component';
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Column } from 'src/app/shared/utils/data-table-types.util';
+
 import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
+
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -30,6 +34,7 @@ export class BrokerMainComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
   public infoDialogRef: MatDialogRef<InfoModalComponent> | undefined;
+  public addBenefitsDialogRef: MatDialogRef<AddBenefitModalComponent> | undefined;
   public scrollStrategy: ScrollStrategy | undefined;
 
   username: string = 'Erick Kinlock';
@@ -63,6 +68,12 @@ export class BrokerMainComponent implements OnInit {
   ];
 
   benefitRows = [];
+
+   planActions: any[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
+    { id: 'add', icon: 'add', tooltip: 'Añadir Beneficios' },
+  ];
+
 
   actions: any[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
@@ -227,8 +238,61 @@ export class BrokerMainComponent implements OnInit {
     }
   }
 
+  onPlanRowAction(type: string, e: { actionId: string; row: any }): void {
+    switch (e.actionId) {
+      case 'info': this.openInformationDialog(type, e.row); break;
+      case 'add': this.openAddBenefitsModal(e.row); break;
+    }
+  }
+
   onAddNewElement(type: string): void {
     this.openEntityDialog(type);
+  }
+  
+  openAddBenefitsModal(plan: Plan) {
+    this.addBenefitsDialogRef = this.dialog.open(AddBenefitModalComponent, {
+      data: plan,
+      width: '500px',
+      scrollStrategy: this.scrollStrategy
+    });
+
+    this.addBenefitsDialogRef.afterClosed().subscribe((selectedBenefits: Benefit[] | undefined) => {
+      if (!selectedBenefits) return;
+      console.log('Seleccionados:', selectedBenefits);
+      this.savePlanBenefits(plan, selectedBenefits);
+    });
+  }
+
+  private savePlanBenefits(plan: Plan, benefits: Benefit[]) {
+    const planId = plan?.id;
+
+    if (!planId) {
+      this.snackbar.error('No existe un plan con ese ID')
+      return;
+    }
+
+    const requests = benefits.map(b => {
+      const payload = {
+        planId: planId,
+        benefitId: b.id,
+        limits: [
+          {
+            name: 'cobertura',
+            limit: 90
+          }
+        ]
+      };
+      return this.httpService.post(PATHS.planBenefitsAdd, payload);
+    });
+
+    forkJoin(requests).subscribe({
+      next: res => {
+        this.snackbar.success('Beneficios agregados correctamente');
+      },
+      error: err => {
+        this.snackbar.error('No se pudieron añadir los beneficios');
+      }
+    });
   }
 
   private saveEntity(type: string, payload: Plan | Benefit): void {

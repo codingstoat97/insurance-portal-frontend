@@ -11,8 +11,8 @@
         <div class="tab-container">
             <mat-tab-group>
                 <mat-tab label="Planes de Cobertura">
-                    <app-data-table [rows]="planRows" [columns]="planColumns" [actions]="actions" [addElement]="true"
-                        (action)="onRowAction('Plan', $event)"
+                    <app-data-table [rows]="planRows" [columns]="planColumns" [actions]="planActions" [addElement]="true"
+                        (action)="onPlanRowAction('Plan', $event)"
                         (addNewElementAction)="onAddNewElement('Plan')"></app-data-table>
                 </mat-tab>
                 <mat-tab label="Beneficios">

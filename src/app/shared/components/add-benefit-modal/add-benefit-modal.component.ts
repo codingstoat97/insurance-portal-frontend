@@ -11,7 +11,7 @@ import { SharedModule } from '../../shared.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Benefit } from '../../models';
+import { Benefit, Plan, PlanBenefit } from '../../models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 
@@ -23,8 +23,8 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   styleUrls: ['./add-benefit-modal.component.sass']
 })
 export class AddBenefitModalComponent implements OnInit {
-
   benefitList: Benefit[] | null = [];
+  selectedBenefitIds = new Set<number>();
 
   private readonly _formBuilder = inject(FormBuilder);
   benefitsForm: FormGroup = this._formBuilder.group({})
@@ -33,32 +33,47 @@ export class AddBenefitModalComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<AddBenefitModalComponent>,
     private httpService: HttpService,
-    @Inject(MAT_DIALOG_DATA) public data: { selectedBenefitIds?: number[] }
+    @Inject(MAT_DIALOG_DATA) public data: Plan
   ) { }
 
   ngOnInit(): void {
     this.fetchBenefitList();
+    this.loadSelectedBenefits();
   }
 
   fetchBenefitList(): void {
     this.httpService.get<Benefit[]>(PATH.benefitList).subscribe(res => {
       this.benefitList = res ?? [];
       this.buildFormControls();
-      console.log(this.benefitList);
     });
   }
 
+  loadSelectedBenefits(): void {
+    this.httpService
+      .get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.data.id)
+      .subscribe(res => {
+        const list = res ?? [];
+
+        this.selectedBenefitIds = new Set(list.map(pb => pb.benefitId));
+        this.buildFormControls();
+      });
+  }
+
   private buildFormControls(): void {
-    this.benefitList?.forEach(b => {
+    if (!this.benefitList || this.benefitList.length === 0) {
+      return;
+    }
+    this.benefitsForm = this._formBuilder.group({});
+
+    this.benefitList.forEach(b => {
       const idKey = b.id.toString();
-      const isSelected = this.data?.selectedBenefitIds?.includes(b.id) ?? false;
+      const isSelected = this.selectedBenefitIds.has(b.id);
       this.benefitsForm.addControl(idKey, new FormControl(isSelected));
     });
   }
 
   onConfirm(): void {
     const formValue = this.benefitsForm.value;
-
     const selectedBenefits = this.benefitList?.filter(b => {
       const key = b.id.toString();
       return formValue[key] === true;
@@ -69,5 +84,4 @@ export class AddBenefitModalComponent implements OnInit {
   closeModal(): void {
     this.dialogRef.close();
   }
-
 }
