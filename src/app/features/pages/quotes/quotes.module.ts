@@ -8,12 +8,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 import { MatStepperModule } from '@angular/material/stepper';
 
+import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
 import { ClientFormComponent } from "src/app/shared/forms/client-form/client-form.component";
 import { VehicleFormComponent } from "src/app/shared/forms/vehicle-form/vehicle-form.component";
 import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.component";
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
-import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
 import { QuotePageComponent } from './components/quote-page/quote-page.component';
+
+import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { QuotePageComponent } from './components/quote-page/quote-page.component
     VehicleFormComponent,
     QuoteOfferComponent,
     OfferListComponent,
-    ClientVehicleComponent
+    ClientVehicleComponent,
+    LevelLabelPipe
 ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
