@@ -1,0 +1,35 @@
+<div class="add-benefit-modal">
+    <mat-dialog-content>
+        <div class="modal-title">
+            <mat-icon fontIcon="add"></mat-icon>
+            <h4>Agregar Beneficios</h4>
+        </div>
+
+        <div class="modal-list" [formGroup]="benefitsForm">
+            <section class="list-section">
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let benefit of benefitList">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <p>
+                                    <mat-checkbox [formControlName]="benefit.id.toString()">
+                                        {{ benefit.name }}
+                                    </mat-checkbox>
+                                </p>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <p>{{ benefit.description }}</p>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </section>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="closeModal()">Cancelar</button>
+        <button mat-button class="confirm-btn" (click)="onConfirm()" cdkFocusInitial>
+            Agregar
+        </button>
+    </mat-dialog-actions>
+</div>
