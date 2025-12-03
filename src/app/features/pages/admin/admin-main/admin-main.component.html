@@ -21,6 +21,10 @@
                     <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [actions]="actions" [addElement]="true"
                         (addNewElementAction)="onAddNewElement('Insurance')" (action)="onRowAction($event, 'Insurance')"></app-data-table>
                 </mat-tab>
+                <mat-tab label="Brokers">
+                    <app-data-table [rows]="brokerRows" [columns]="brokerColumns" [addElement]="true"
+                        (addNewElementAction)="onAddNewElement('Broker')" (action)="onRowAction($event, 'Broker')"></app-data-table>
+                </mat-tab>
             </mat-tab-group>
         </div>
     </mat-drawer-content>
