@@ -28,6 +28,10 @@ export class HttpService {
     });
   }
 
+  clientPost<T>(path: string, body: any): Observable<T> {
+    return this.http.post<T>(this.url + path, body);
+  }
+
   post<T>(path: string, body: any): Observable<T> {
     return this.http.post<T>(this.url + path, body, {
       headers: this.getAuthHeaders(),
