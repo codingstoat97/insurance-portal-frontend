@@ -7,7 +7,7 @@
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label>
+            <mat-label>Nombre Completo:</mat-label>
             <input matInput formControlName="name" placeholder="Ej. Erick" />
             <mat-error *ngIf="form.get('name')?.hasError('required')">
                 El nombre es obligatorio
@@ -17,12 +17,12 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Apellido</mat-label>
-            <input matInput formControlName="lastname" placeholder="Ej. Kinlock" />
-            <mat-error *ngIf="form.get('lastname')?.hasError('required')">
-                El apellido es obligatorio
+            <mat-label>CI:</mat-label>
+            <input matInput formControlName="ci" />
+            <mat-error *ngIf="form.get('ci')?.hasError('required')">
+                El número de carnet es obligatorio.
             </mat-error>
-            <mat-error *ngIf="form.get('lastname')?.hasError('minlength')">
+            <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
                 Debe tener al menos 2 caracteres
             </mat-error>
         </mat-form-field>
@@ -37,14 +37,13 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Región</mat-label>
-            <mat-select formControlName="region">
-                <mat-option *ngFor="let region of regionList" [value]="region">
-                    {{ region.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('region')?.hasError('required')">
-                Selecciona una región
+            <mat-label>Contraseña:</mat-label>
+            <input matInput formControlName="password" placeholder="*******" />
+            <mat-error *ngIf="form.get('password')?.hasError('required')">
+                Campo obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
             </mat-error>
         </mat-form-field>
 

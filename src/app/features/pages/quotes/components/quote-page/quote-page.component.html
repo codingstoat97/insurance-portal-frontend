@@ -6,11 +6,11 @@
         <mat-card-content>
             <div class="quote-header">
                 <div class="left-header">
-                    <h3>Plan de {{insuranceData.name}} Seguros - Seguro {{insuranceData.type}}</h3>
-                    <p>{{insuranceData.email}}</p>
+                    <h3>Plan de {{insuranceData?.name}} Seguros - Seguro {{insuranceData?.type}}</h3>
+                    <p>{{insuranceData?.email}}</p>
                 </div>
                 <div class="right-header">
-                    <p>Regional: {{regionData.name}}, {{regionData.country}}</p>
+                    <p>Regional: {{regionData?.name}}, {{regionData?.country}}</p>
                 </div>
             </div>
             <div class="quote-grid-content">
@@ -22,13 +22,13 @@
                         <div class="detail-row">
                             <span class="detail-label">Tipo de Vehículo:</span>
                             <span class="detail-value">
-                                {{ vehicleData.classification }}
+                                {{ vehicleData?.classification }}
                             </span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Marca/Modelo:</span>
                             <span class="detail-value">
-                                {{ vehicleData.brand }} - {{ vehicleData.model }}
+                                {{ vehicleData?.brand }} - {{ vehicleData?.model }}
                             </span>
                         </div>
                         <div class="detail-row">
@@ -77,7 +77,7 @@
         </mat-card-content>
         <mat-card-actions class="quote-actions">
             <button mat-button (click)="goBack()">Volver</button>
-            <button mat-button (click)="openQrModal()">Continuar</button>
+            <button mat-button (click)="openPurchaseDialog()">Continuar</button>
         </mat-card-actions>
     </mat-card>
 </div>

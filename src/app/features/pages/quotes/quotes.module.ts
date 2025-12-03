@@ -9,7 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MatStepperModule } from '@angular/material/stepper';
 
 import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
-import { ClientFormComponent } from "src/app/shared/forms/client-form/client-form.component";
+import { UserFormComponent } from "src/app/shared/forms/user-form/user-form.component";
 import { VehicleFormComponent } from "src/app/shared/forms/vehicle-form/vehicle-form.component";
 import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.component";
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
@@ -29,7 +29,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     QuotesRoutingModule,
     SharedModule,
     MatStepperModule,
-    ClientFormComponent,
+    UserFormComponent,
     VehicleFormComponent,
     QuoteOfferComponent,
     OfferListComponent,
