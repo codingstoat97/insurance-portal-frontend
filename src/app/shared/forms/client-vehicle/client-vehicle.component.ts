@@ -57,6 +57,7 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
     }),
     level: this.fb.control<any>(null),
     franchise: this.fb.control<any>(null),
+    isElectric: this.fb.control<boolean>(false)
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService) { }
