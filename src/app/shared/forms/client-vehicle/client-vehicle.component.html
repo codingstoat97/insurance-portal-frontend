@@ -23,7 +23,7 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Modelo</mat-label>
+            <mat-label>Modelo/Tipo</mat-label>
             <input matInput formControlName="model" placeholder="Ej. Civic" />
             <mat-error *ngIf="form.get('model')?.hasError('required')">
                 El modelo es obligatorio
@@ -41,7 +41,7 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Año:</mat-label>
+            <mat-label>Año del Vehiculo:</mat-label>
             <input matInput formControlName="year" placeholder="Ej. 1998" />
             <mat-error *ngIf="form.get('year')?.hasError('required')">
                 Ingrese el año del Vehículo
