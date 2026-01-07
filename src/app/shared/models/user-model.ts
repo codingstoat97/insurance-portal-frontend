@@ -12,7 +12,7 @@ export interface ClientPlan {
     documentType: string;
     countryOfBirth: string;
     birthdate: string;
-    cellphone: string;
+    cellphone: number;
     email: string;
     maritalStatus: string;
     countryOfResidence: string;
@@ -22,7 +22,7 @@ export interface ClientPlan {
     employmentSituation: string;
     occupation: string;
     workPlace: string;
-    salary: number;
+    salary: string;
 }
 
 export interface User {

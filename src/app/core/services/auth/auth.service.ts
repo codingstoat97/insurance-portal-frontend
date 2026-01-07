@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly ROLE_KEY = 'auth_role';
 
   constructor(private router: Router) { }
 
@@ -18,8 +19,22 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-  clearToken(): void {
+  setRole(role: string): void {
+    localStorage.setItem(this.ROLE_KEY, role);
+  }
+
+  getRole(): string | null {
+    return localStorage.getItem(this.ROLE_KEY);
+  }
+
+  hasRole(...allowedRoles: string[]): boolean {
+    const role = this.getRole();
+    return !!role && allowedRoles.includes(role);
+  }
+
+  clearSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.ROLE_KEY);
   }
 
   isLoggedIn(): boolean {
@@ -27,7 +42,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.clearToken();
+    this.clearSession();
     this.router.navigate(['/home']);
   }
 

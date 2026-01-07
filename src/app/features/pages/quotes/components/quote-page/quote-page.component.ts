@@ -87,16 +87,10 @@ export class QuotePageComponent {
 
   private saveClientPlan(clientPlan: ClientPlan): void {
     if (!clientPlan) return;
-    // this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan).subscribe(res => {
-    //   if (res) {
-    //     this.snackbarService.success('Se guardaron los datos correctamente');
-    //     this.openQrModal();
-    //   } else {
-    //     this.snackbarService.error('Hubo un problema al guardar los datos, intente nuevamente');
-    //   }
-    // });
-    this.snackbarService.success('Se guardaron los datos correctamente');
-    this.openQrModal();
+    this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan).subscribe(res => {
+      this.snackbarService.success('Se guardaron los datos correctamente');
+      this.openQrModal();
+    });
   }
 
   openQrModal(): void {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -21,17 +21,17 @@ const routes: Routes = [
   },
   {
     path: 'broker',
-    canActivate: [authGuard],
+    canActivate: [roleGuard],
+    data: { roles: ['ROLE_BROKER'] },
     loadChildren: () =>
       import('./features/pages/broker/broker.module')
         .then(m => m.BrokerModule),
   },
   {
     path: 'admin',
-    canActivate: [authGuard],
-    loadChildren: () =>
-      import('./features/pages/admin/admin.module')
-        .then(m => m.AdminModule),
+    canActivate: [roleGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+    loadChildren: () => import('./features/pages/admin/admin.module').then(m => m.AdminModule),
   },
   { path: '**', redirectTo: 'home' }
 ];

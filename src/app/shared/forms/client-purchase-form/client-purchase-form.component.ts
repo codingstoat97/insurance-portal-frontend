@@ -52,8 +52,8 @@ export class ClientPurchaseFormComponent implements OnInit, OnDestroy {
     documentType: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     countryOfBirth: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     birthdate: this.fb.nonNullable.control('', { validators: [Validators.required] }),
-    cellphone: this.fb.nonNullable.control('', {
-      validators: [Validators.required, Validators.minLength(8)]
+    cellphone: this.fb.nonNullable.control(0, {
+      validators: [Validators.required, Validators.min(0)]
     }),
     email: this.fb.nonNullable.control('', {
       validators: [Validators.required, Validators.email]
@@ -68,9 +68,7 @@ export class ClientPurchaseFormComponent implements OnInit, OnDestroy {
     employmentSituation: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     occupation: this.fb.nonNullable.control(''),
     workPlace: this.fb.nonNullable.control(''),
-    salary: this.fb.nonNullable.control(0, {
-      validators: [Validators.required, Validators.min(0)]
-    })
+    salary: this.fb.nonNullable.control(''),
   });
 
 

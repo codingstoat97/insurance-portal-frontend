@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 interface LoginResponse {
@@ -21,7 +22,7 @@ export class LoginComponent {
     password: ['', [Validators.required]],
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router, private route: ActivatedRoute, private authService: AuthService) { }
 
   onSubmit() {
     if (this.form.invalid) {
@@ -39,14 +40,32 @@ export class LoginComponent {
   private login(payload: any): void {
     this.httpService.post<LoginResponse>('auth/login', payload).subscribe({
       next: (res) => {
-        console.log('login res =>', res);
-        const token = res.token || res.token;
+        const token = res.token;
+        const role = res.role;
 
-        if (token) {
-          localStorage.setItem('auth_token', token);
-          this.router.navigate(['/admin']);
-        } else {
+        if (!token) {
           console.error('No vino token en la respuesta');
+          return;
+        }
+        if (!role) {
+          console.error('No vino role en la respuesta');
+          return;
+        }
+
+        this.authService.setToken(token);
+        this.authService.setRole(role);
+
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        if (returnUrl) {
+          this.router.navigateByUrl(returnUrl);
+          return;
+        }
+        if (role === 'ROLE_ADMIN') {
+          this.router.navigate(['/admin']);
+        } else if (role === 'ROLE_BROKER') {
+          this.router.navigate(['/broker']);
+        } else {
+          this.router.navigate(['/home']);
         }
       },
       error: (err) => {
