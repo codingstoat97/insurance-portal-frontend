@@ -2,7 +2,9 @@
 
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="assets/logo/logo-white.png" alt="bubo" class="sidebar-logo" />
+      <a routerLink="/home" aria-label="Go to home">
+        <img class="sidebar-logo" src="assets/logo/logo-white.png" alt="bubo" />
+      </a>
     </div>
 
     <nav class="step-list">
@@ -49,11 +51,8 @@
     </div>
 
     <ng-container [ngSwitch]="currentStep">
-      <app-client-vehicle *ngSwitchCase="0"
-        [showDescription]="true"
-        [showCancel]="true"
-        (submitted)="onClientVehicleSubmitted($event)"
-        (cancelled)="onCancelled()">
+      <app-client-vehicle *ngSwitchCase="0" [showDescription]="true" [showCancel]="true"
+        (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
       </app-client-vehicle>
 
       <app-offer-list *ngSwitchCase="1" [offerList]="offerList"></app-offer-list>
