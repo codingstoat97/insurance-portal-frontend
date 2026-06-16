@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -31,6 +31,12 @@ import { ResponsiveService } from '../../services/responsive/responsive.service'
 export class ToolbarComponent implements OnDestroy {
   variant: 'transparent' | 'solid' = 'solid';
   showNav = false;
+  isScrolled = false;
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.isScrolled = window.scrollY > 80;
+  }
 
   private subscription = new Subscription();
 

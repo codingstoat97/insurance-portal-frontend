@@ -1,74 +1,121 @@
 <section class="banner-container">
-    <div class="banner-content">
-        <div class="banner-text">
-            <h1>En tan solo un click</h1>
-            <p>Más simple, más rápido y más cercano a ti.</p>
-            <button mat-flat-button (click)="goToStepper()">
-                Obtén tu cotización →
-            </button>
-        </div>
+  <div class="banner-content">
+    <div class="banner-text">
+      <h1>En tan solo un click</h1>
+      <p>Más simple, más rápido y más cercano a ti.</p>
+      <button mat-flat-button (click)="goToStepper()">
+        Obtén tu cotización →
+      </button>
     </div>
+  </div>
 </section>
+
 <section class="intro-container">
-    <img class="intro-logo" src="assets/logo/logo.png" alt="bubo" />
-    <h1>LLevamos los seguros al siguiente nivel</h1>
-    <mat-grid-list cols="3" rowHeight="2:1">
-        <mat-grid-tile class="step-container">
-            <mat-card>
-                <div class="floating-avatar">
-                    <img src="assets/lapicero.svg" alt="Vehículo" />
-                </div>
-                <mat-card-header class="centered-header">
-                    <mat-card-title>
-                        <h2>Registra</h2>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <p>
-                        Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile class="step-container">
-            <mat-card>
-                <div class="floating-avatar">
-                    <img src="assets/auto.svg" alt="Vehículo" />
-                </div>
-                <mat-card-header class="centered-header">
-                    <mat-card-title>
-                        <h2>Compara</h2>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <p>
-                        Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile class="step-container">
-            <mat-card>
-                <div class="floating-avatar">
-                    <img src="assets/escudo.svg" alt="Vehículo" />
-                </div>
-                <mat-card-header class="centered-header">
-                    <mat-card-title>
-                        <h2>Elige</h2>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <p>
-                        Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </mat-grid-tile>
-    </mat-grid-list>
+  <img class="intro-logo" src="assets/logo/logo.png" alt="bubo" />
+  <h1>LLevamos los seguros al siguiente nivel</h1>
+  <mat-grid-list [cols]="isMobile ? 1 : 3" [rowHeight]="isMobile ? '400px' : '2:1'">
+    <mat-grid-tile class="step-container">
+      <mat-card>
+        <div class="floating-avatar">
+          <img src="assets/lapicero.svg" alt="Vehículo" />
+        </div>
+        <mat-card-header class="centered-header">
+          <mat-card-title>
+            <h2>Registra</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile class="step-container">
+      <mat-card>
+        <div class="floating-avatar">
+          <img src="assets/auto.svg" alt="Vehículo" />
+        </div>
+        <mat-card-header class="centered-header">
+          <mat-card-title>
+            <h2>Compara</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile class="step-container">
+      <mat-card>
+        <div class="floating-avatar">
+          <img src="assets/escudo.svg" alt="Vehículo" />
+        </div>
+        <mat-card-header class="centered-header">
+          <mat-card-title>
+            <h2>Elige</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </section>
-<section class="slogan-container">
-    <div class="slogan-content">
-        <h1>Encuentra la mejor cotización para ti</h1>
-        <p>En tan solo 2 pasos tendras a tu alcance una lista de opciones formuladas a tu medida.</p>
+
+<section class="info-section">
+  <div class="info-grid">
+
+    <div class="info-brand">
+      <div class="info-logo">
+        <img src="assets/logo/logo-white.png" alt="bubo" />
+      </div>
+      <p class="info-tagline">Seguros digitales más simples,<br />rápidos y cercanos a ti.</p>
     </div>
+
+    <div class="info-col">
+      <h4 class="info-col-title">Productos</h4>
+      <ul class="info-links">
+        <li>Automotor</li>
+        <li>Hogar</li>
+        <li>Vida</li>
+        <li>Salud</li>
+      </ul>
+    </div>
+
+    <div class="info-col">
+      <h4 class="info-col-title">Empresa</h4>
+      <ul class="info-links">
+        <li>Nosotros</li>
+        <li>Portal Bubo</li>
+        <li>Trabaja con nosotros</li>
+      </ul>
+    </div>
+
+    <div class="info-col">
+      <h4 class="info-col-title">Contacto</h4>
+      <ul class="info-links">
+        <li>+591 800 123 456</li>
+        <li><a href="mailto:hola@bubo.bo">hola&#64;bubo.bo</a></li>
+        <li>Lun-Vie &middot; 8:00–18:00</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <hr class="info-divider" />
+
+  <div class="info-bottom">
+    <span class="info-copyright">© 2026 Bubo Insurtech. Todos los derechos reservados.</span>
+    <div class="info-legal">
+      <span>Términos</span>
+      <span class="info-legal-dot">·</span>
+      <span>Privacidad</span>
+    </div>
+  </div>
 </section>

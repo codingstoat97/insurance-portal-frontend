@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 
 @Component({
   selector: 'app-home',
@@ -8,14 +9,14 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private responsiveService: ResponsiveService) { }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void { }
 
-  ngOnDestroy(): void {
-    
+  ngOnDestroy(): void { }
+
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
   }
 
   goToStepper(): void {
