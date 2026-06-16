@@ -20,6 +20,7 @@
                         [addElement]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
+                <!-- TODO: "Beneficios" tab shows the same data as "Coberturas Principales" — define separate model/endpoint -->
                 <mat-tab label="Beneficios">
                     <app-data-table [rows]="benefitRows" [columns]="benefitColumns" [actions]="actions"
                         [addElement]="true" (action)="onRowAction('Benefit', $event)"

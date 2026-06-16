@@ -1,4 +1,3 @@
-import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Component, inject, OnInit } from '@angular/core';
 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -8,14 +7,13 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
-
 import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-modal/add-benefit-modal.component';
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
-import { Column } from 'src/app/shared/utils/data-table-types.util';
+import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
 
 import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
@@ -32,13 +30,10 @@ import { forkJoin } from 'rxjs';
 export class BrokerMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
-  public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
-  public infoDialogRef: MatDialogRef<InfoModalComponent> | undefined;
-  public addBenefitsDialogRef: MatDialogRef<AddBenefitModalComponent> | undefined;
-  public scrollStrategy: ScrollStrategy | undefined;
 
+  // TODO: source username and profilePictureURL from a user-profile API endpoint once available
   username: string = 'Erick Kinlock';
-  profilePictureURL = '/assets/user-pp.jpg'
+  profilePictureURL = '/assets/user-pp.jpg';
 
   vehicleMap: Record<number, Vehicle> = {};
   regionMap: Record<number, Region> = {};
@@ -58,7 +53,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'state', header: 'Plan Activado', field: 'state' }
   ];
 
-  planRows = [];
+  planRows: Plan[] = [];
 
   benefitColumns: Column<Benefit>[] = [
     { id: 'id', header: 'ID', field: 'id' },
@@ -67,69 +62,57 @@ export class BrokerMainComponent implements OnInit {
     { id: 'coverage', header: 'Tipo de Cobertura', field: 'coverage', valueGetter: (row) => this.coverageLabelPipe.transform(row.coverage) },
   ];
 
-  benefitRows = [];
+  benefitRows: Benefit[] = [];
 
-   planActions: any[] = [
+  planActions: Action[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'add', icon: 'add', tooltip: 'Añadir Beneficios' },
   ];
 
-
-  actions: any[] = [
+  actions: Action[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
+  private readonly DEFAULT_BENEFIT_LIMITS = [{ name: 'cobertura', limit: 90 }];
+
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private levelLabelPipe: LevelLabelPipe,
-    private coverageLabelPipe: LevelLabelPipe) { }
+    private coverageLabelPipe: CoverageLabelPipe) { }
 
   ngOnInit(): void {
-    this.fetchPlanList();
     this.fetchBenefitList();
-
-    this.fetchVehicleList();
-    this.fetchRegionalList();
-    this.fetchInsuranceList();
+    forkJoin({
+      vehicles: this.httpService.get<Vehicle[]>(PATHS.vehicleList),
+      regions: this.httpService.get<Region[]>(PATHS.regionList),
+      insurances: this.httpService.get<Insurance[]>(PATHS.insuranceList),
+    }).subscribe({
+      next: ({ vehicles, regions, insurances }) => {
+        this.vehicleMap = Object.fromEntries(vehicles.map(v => [v.id, v]));
+        this.regionMap = Object.fromEntries(regions.map(r => [r.id, r]));
+        this.insuranceMap = Object.fromEntries(insurances.map(i => [i.id, i]));
+        this.fetchPlanList();
+      },
+      error: () => this.snackbar.error('Error al cargar datos de referencia.')
+    });
   }
 
   fetchPlanList(): void {
-    this.httpService.get<any>(PATHS.planList).subscribe(res => {
+    this.httpService.get<Plan[]>(PATHS.planList).subscribe(res => {
       this.planRows = res;
     });
   }
 
   fetchBenefitList(): void {
-    this.httpService.get<any>(PATHS.benefitList).subscribe(res => {
+    this.httpService.get<Benefit[]>(PATHS.benefitList).subscribe(res => {
       this.benefitRows = res;
-    })
-  }
-
-  private fetchVehicleList(): void {
-    this.httpService.get<Vehicle[]>(PATHS.vehicleList).subscribe(res => {
-      this.vehicleMap = Object.fromEntries(res.map(v => [v.id, v]));
-      if (this.planRows?.length) this.planRows = [...this.planRows];
     });
   }
 
-  private fetchRegionalList(): void {
-    this.httpService.get<Region[]>(PATHS.regionList).subscribe(res => {
-      this.regionMap = Object.fromEntries(res.map(r => [r.id, r]));
-      if (this.planRows?.length) this.planRows = [...this.planRows];
-    });
-  }
-
-  private fetchInsuranceList(): void {
-    this.httpService.get<Insurance[]>(PATHS.insuranceList).subscribe(res => {
-      this.insuranceMap = Object.fromEntries(res.map(i => [i.id, i]));
-      if (this.planRows?.length) this.planRows = [...this.planRows];
-    });
-  }
-
-  openEntityDialog(type: string, entity?: Plan | Benefit) {
+  openEntityDialog(type: string, entity?: Plan | Benefit): void {
     const dialogRef = this.getDialogRef(type);
 
     if (entity) {
@@ -153,30 +136,25 @@ export class BrokerMainComponent implements OnInit {
           this.saveEntity(type, result);
         }
       }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
+      sub1?.unsubscribe?.();
+      sub2?.unsubscribe?.();
     });
   }
 
-  private getDialogRef(type: string): any {
-    let dialogRef;
+  private getDialogRef(type: string): MatDialogRef<any> {
     switch (type) {
       case 'Plan':
-        dialogRef = this.dialog.open(PlanFormComponent, {
-          height: '600px',
-          width: '520px',
-        }); break;
+        return this.dialog.open(PlanFormComponent, { height: '600px', width: '520px' });
       case 'Benefit':
-        dialogRef = this.dialog.open(BenefitFormComponent, {
-          width: '520px',
-        }); break;
+        return this.dialog.open(BenefitFormComponent, { width: '520px' });
+      default:
+        throw new Error(`Unknown entity type: ${type}`);
     }
-    return dialogRef;
   }
 
   openInformationDialog(type: string, item: Plan | Benefit): void {
-    this.infoDialogRef = this.dialog.open(InfoModalComponent, {
+    this.dialog.open(InfoModalComponent, {
       data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
-      scrollStrategy: this.scrollStrategy
     });
   }
 
@@ -189,32 +167,26 @@ export class BrokerMainComponent implements OnInit {
   }
 
   openDeleteDialog(type: string, itemName: any, item: any): void {
-    this.deleteDialogRef = this.dialog.open(DeleteModalComponent, {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
       data: { type: type, element: itemName },
-      scrollStrategy: this.scrollStrategy
     });
 
-    this.deleteDialogRef.afterClosed().subscribe(result => {
-      if (result == true) {
-        switch (type) {
-          case 'Plan': this, this.deleteEntity(type, item.id); break;
-          case 'Benefit': this.deleteEntity(type, item.id); break;
-        }
-      } else {
-        console.error(result.error)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEntity(type, item.id);
       }
     });
   }
 
   private deleteEntity(entityType: string, entityID: string): void {
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
-    this.httpService.delete(path).subscribe(res => {
+    this.httpService.delete(path).subscribe(() => {
       this.snackbar.success('Eliminado correctamente.');
       this.refreshData(entityType);
     });
   }
 
-  private handleEditEntity(entity: Plan | Benefit, dialogRef: any) {
+  private handleEditEntity(entity: Plan | Benefit, dialogRef: MatDialogRef<any>): void {
     dialogRef.componentInstance.title = 'Editar';
     dialogRef.componentInstance.value = entity;
     dialogRef.componentInstance.showDescription = false;
@@ -222,7 +194,7 @@ export class BrokerMainComponent implements OnInit {
     dialogRef.componentInstance.showCancel = true;
   }
 
-  private handleAddNewEntity(dialogRef: any) {
+  private handleAddNewEntity(dialogRef: MatDialogRef<any>): void {
     dialogRef.componentInstance.title = 'Crear Nuevo';
     dialogRef.componentInstance.value = null;
     dialogRef.componentInstance.showDescription = false;
@@ -248,67 +220,52 @@ export class BrokerMainComponent implements OnInit {
   onAddNewElement(type: string): void {
     this.openEntityDialog(type);
   }
-  
-  openAddBenefitsModal(plan: Plan) {
-    this.addBenefitsDialogRef = this.dialog.open(AddBenefitModalComponent, {
+
+  openAddBenefitsModal(plan: Plan): void {
+    const dialogRef = this.dialog.open(AddBenefitModalComponent, {
       data: plan,
       width: '500px',
-      scrollStrategy: this.scrollStrategy
     });
 
-    this.addBenefitsDialogRef.afterClosed().subscribe((selectedBenefits: Benefit[] | undefined) => {
+    dialogRef.afterClosed().subscribe((selectedBenefits: Benefit[] | undefined) => {
       if (!selectedBenefits) return;
-      console.log('Seleccionados:', selectedBenefits);
       this.savePlanBenefits(plan, selectedBenefits);
     });
   }
 
-  private savePlanBenefits(plan: Plan, benefits: Benefit[]) {
+  private savePlanBenefits(plan: Plan, benefits: Benefit[]): void {
     const planId = plan?.id;
 
     if (!planId) {
-      this.snackbar.error('No existe un plan con ese ID')
+      this.snackbar.error('No existe un plan con ese ID');
       return;
     }
 
     const requests = benefits.map(b => {
-      const payload = {
-        planId: planId,
-        benefitId: b.id,
-        limits: [
-          {
-            name: 'cobertura',
-            limit: 90
-          }
-        ]
-      };
+      const payload = { planId, benefitId: b.id, limits: this.DEFAULT_BENEFIT_LIMITS };
       return this.httpService.post(PATHS.planBenefitsAdd, payload);
     });
 
     forkJoin(requests).subscribe({
-      next: res => {
-        this.snackbar.success('Beneficios agregados correctamente');
-      },
-      error: err => {
-        this.snackbar.error('No se pudieron añadir los beneficios');
-      }
+      next: () => this.snackbar.success('Beneficios agregados correctamente'),
+      error: () => this.snackbar.error('No se pudieron añadir los beneficios'),
     });
   }
 
   private saveEntity(type: string, payload: Plan | Benefit): void {
     const path = this.getEntityPath(type) + '/add';
-    this.httpService.post(path, payload).subscribe(res => {
+    this.httpService.post(path, payload).subscribe(() => {
       this.snackbar.success('Guardado con éxito');
       this.refreshData(type);
-    })
+    });
   }
 
   private updateEntity(type: string, payload: Plan | Benefit): void {
     const path = this.getEntityPath(type) + '/edit';
-    this.httpService.post(path, payload).subscribe(res => {
+    this.httpService.put(path, payload).subscribe(() => {
       this.snackbar.success('Actualizado con éxito');
       this.refreshData(type);
-    })
+    });
   }
 
   private getEntityPath(entityType: string): string {
@@ -325,5 +282,4 @@ export class BrokerMainComponent implements OnInit {
       case 'Benefit': this.fetchBenefitList(); break;
     }
   }
-
 }

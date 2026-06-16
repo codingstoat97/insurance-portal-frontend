@@ -4,3 +4,9 @@ export type Column<T = any> = {
   field?: keyof T & string;
   valueGetter?: (row: T) => any;
 };
+
+export type Action = {
+  id: string;
+  icon: string;
+  tooltip: string;
+};
