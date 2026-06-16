@@ -28,12 +28,10 @@ import { ToolbarService } from '../../services/toolbar/toolbar.service';
 export class ToolbarComponent implements OnDestroy {
   variant: 'transparent' | 'solid' = 'solid';
   showNav = false;
-  isVisible = true;
 
   private subscription = new Subscription();
 
   constructor(private router: Router, private authService: AuthService, toolbarService: ToolbarService) {
-    this.subscription.add(toolbarService.isVisible$.subscribe(v => (this.isVisible = v)));
     this.subscription.add(toolbarService.variant$.subscribe(v => (this.variant = v)));
     this.subscription.add(toolbarService.showNav$.subscribe(v => (this.showNav = v)));
   }

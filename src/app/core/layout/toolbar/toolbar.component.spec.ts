@@ -7,7 +7,6 @@ import { ToolbarService } from '../../services/toolbar/toolbar.service';
 import { AuthService } from '../../services/auth/auth.service';
 
 const mockToolbarService = {
-  isVisible$: of(true),
   variant$: of('solid' as const),
   showNav$: of(false),
 };
@@ -37,10 +36,6 @@ describe('ToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should reflect isVisible from the service', () => {
-    expect(component.isVisible).toBeTrue();
-  });
-
   it('should reflect variant from the service', () => {
     expect(component.variant).toBe('solid');
   });
@@ -51,13 +46,12 @@ describe('ToolbarComponent', () => {
     expect(nav).toBeNull();
   });
 
-  it('should render the toolbar when isVisible is true', () => {
+  it('should always render the mat-toolbar element', () => {
     const toolbar = fixture.nativeElement.querySelector('mat-toolbar');
     expect(toolbar).toBeTruthy();
   });
 
   it('should navigate to portal on redirectToPortal()', () => {
-    const router = TestBed.inject(RouterTestingModule as any);
     spyOn(component['router'], 'navigate');
     component.redirectToPortal();
     expect(component['router'].navigate).toHaveBeenCalledWith(['/portal/dashboard']);

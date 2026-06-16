@@ -1,8 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -17,22 +16,13 @@ import { ToolbarService } from '../../services/toolbar/toolbar.service';
 })
 export class LayoutComponent implements OnDestroy {
   toolbarVisible = true;
-  hideFooter = false;
+  footerVisible = true;
 
   private subscription = new Subscription();
 
-  constructor(private router: Router, toolbarService: ToolbarService) {
-    this.subscription.add(
-      toolbarService.isVisible$.subscribe(v => (this.toolbarVisible = v))
-    );
-    this.subscription.add(
-      this.router.events
-        .pipe(filter(e => e instanceof NavigationEnd))
-        .subscribe(() => {
-          const url = this.router.url.split('?')[0];
-          this.hideFooter = url.startsWith('/quotes');
-        })
-    );
+  constructor(toolbarService: ToolbarService) {
+    this.subscription.add(toolbarService.isVisible$.subscribe(v => (this.toolbarVisible = v)));
+    this.subscription.add(toolbarService.isFooterVisible$.subscribe(v => (this.footerVisible = v)));
   }
 
   ngOnDestroy(): void {
