@@ -1,5 +1,5 @@
 <app-toolbar></app-toolbar>
-<main class="content">
+<main class="content" [class.no-toolbar]="hideToolbar" [class.no-footer]="hideFooter">
     <router-outlet></router-outlet>
 </main>
-<app-footer></app-footer>
+<app-footer *ngIf="!hideFooter"></app-footer>

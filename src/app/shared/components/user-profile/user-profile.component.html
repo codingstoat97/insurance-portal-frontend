@@ -5,6 +5,10 @@
             <mat-card-title>{{ username }}</mat-card-title>
             <mat-card-subtitle *ngIf="showOccupation">Broker de Seguros</mat-card-subtitle>
         </div>
+        <div class="profile-options">
+            <ng-container *ngIf="profileOptions" [ngTemplateOutlet]="profileOptions">
+            </ng-container>
+        </div>
     </mat-card-content>
     <mat-card-actions>
         <button mat-fab matTooltip="Cerrar Sesión" (click)="logout()">

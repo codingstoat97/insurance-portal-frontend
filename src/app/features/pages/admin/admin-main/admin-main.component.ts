@@ -218,7 +218,7 @@ export class AdminMainComponent implements OnInit {
 
   private saveEntity(type: string, payload: Insurance | Vehicle | Region | User): void {
     let path = this.getEntityPath(type) + '/add';
-    if(type == 'Broker') {
+    if (type == 'Broker') {
       path += '/brokers';
     }
     this.httpService.post(path, payload).subscribe(res => {
@@ -252,6 +252,10 @@ export class AdminMainComponent implements OnInit {
       case 'Region': this.fetchRegionList(); break;
       case 'Broker': this.fetchBrokerList(); break;
     }
+  }
+
+  navigateTo(path: string): void {
+    
   }
 
 }

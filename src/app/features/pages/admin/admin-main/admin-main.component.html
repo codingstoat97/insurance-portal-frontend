@@ -1,6 +1,6 @@
 <mat-drawer-container class="page-container">
     <mat-drawer mode="side" opened class="drawer-container">
-        <app-user-profile [username]="username"></app-user-profile>
+        <app-user-profile [username]="username" [profileOptions]="profileOptions"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
@@ -9,23 +9,61 @@
         </div>
         <div class="tab-container">
             <mat-tab-group>
-                <mat-tab label="Regionales">
-                    <app-data-table [rows]="regionRows" [columns]="regionColumns" [actions]="actions" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('Region')" (action)="onRowAction($event, 'Region')"></app-data-table>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">directions_car</mat-icon>
+                        Vehiculos
+                    </ng-template>
+                    <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [actions]="actions"
+                        [addElement]="true" (addNewElementAction)="onAddNewElement('Vehicle')"
+                        (action)="onRowAction($event, 'Vehicle')"></app-data-table>
+                </mat-tab>                
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">business_center</mat-icon>
+                        Aseguradoras
+                    </ng-template>
+                    <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [actions]="actions"
+                        [addElement]="true" (addNewElementAction)="onAddNewElement('Insurance')"
+                        (action)="onRowAction($event, 'Insurance')"></app-data-table>
                 </mat-tab>
-                <mat-tab label="Vehículos">
-                    <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [actions]="actions" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('Vehicle')" (action)="onRowAction($event, 'Vehicle')"></app-data-table>
-                </mat-tab>
-                <mat-tab label="Aseguradoras">
-                    <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [actions]="actions" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('Insurance')" (action)="onRowAction($event, 'Insurance')"></app-data-table>
-                </mat-tab>
-                <mat-tab label="Brokers">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">person_shield</mat-icon>
+                        Brokers
+                    </ng-template>
                     <app-data-table [rows]="brokerRows" [columns]="brokerColumns" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('Broker')" (action)="onRowAction($event, 'Broker')"></app-data-table>
+                        (addNewElementAction)="onAddNewElement('Broker')"
+                        (action)="onRowAction($event, 'Broker')"></app-data-table>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">map</mat-icon>
+                        Regionales
+                    </ng-template>
+                    <app-data-table [rows]="regionRows" [columns]="regionColumns" [actions]="actions"
+                        [addElement]="true" (addNewElementAction)="onAddNewElement('Region')"
+                        (action)="onRowAction($event, 'Region')"></app-data-table>
                 </mat-tab>
             </mat-tab-group>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
+
+<ng-template #profileOptions>
+    <mat-list>
+        <mat-list-item (click)="navigateTo('entities')">
+            <mat-icon matListItemIcon>work</mat-icon>
+            <div matListItemTitle>Administrar Entidades</div>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon matListItemIcon>assignment</mat-icon>
+            <div matListItemTitle>Administrar Planes</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item (click)="navigateTo('entities')">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>Editar Perfil</div>
+        </mat-list-item>
+    </mat-list>
+</ng-template>

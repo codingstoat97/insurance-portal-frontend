@@ -32,6 +32,17 @@ export class AuthService {
     return !!role && allowedRoles.includes(role);
   }
 
+  getRedirectionPath(): string {
+    const role = this.getRole();
+    if(role == 'ROLE_ADMIN') {
+      return '/admin';
+    } else if (role == 'ROLE_BROKER') {
+      return '/broker';
+    } else {
+      return '/login';
+    }
+  }
+
   clearSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.ROLE_KEY);

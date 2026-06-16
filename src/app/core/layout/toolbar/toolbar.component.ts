@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon'
 
 import { filter } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -26,7 +27,7 @@ export class ToolbarComponent {
   public variant: any;
   public showButton: boolean = true;
   public showToolbar: boolean = true;
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) {
     this.setToolbarForHome();
   }
 
@@ -39,7 +40,7 @@ export class ToolbarComponent {
         this.variant = (r.snapshot.data['toolbar'] as any) || 'solid';
         const url = this.router.url.split('?')[0];
         this.showButton = url === '/home';
-        this.showToolbar = url === '/login';
+        this.showToolbar = url === '/login' || url.startsWith('/quotes');
       });
   }
 
@@ -47,8 +48,9 @@ export class ToolbarComponent {
     this.router.navigate(['/home']);
   }
 
-  goToBroker(): void {
-    this.router.navigate(['/broker']);
+  redirectToPortal(): void {
+    const path = this.authService.getRedirectionPath();
+    this.router.navigate([path]);
   }
 
 }

@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatStepper } from '@angular/material/stepper';
+import { Component } from '@angular/core';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 import { ClientVehicle } from 'src/app/shared/models';
@@ -14,40 +13,36 @@ export class QuoteStepperComponent {
 
   constructor(private httpService: HttpService) { }
 
-  @ViewChild('stepper') stepper!: MatStepper;
+  currentStep = 0;
 
   clientVehicleData: ClientVehicle | undefined;
-  clientVehicleDone = false;
-
   offerList: any[] = [];
+
+  get progressPercent(): number {
+    return Math.round(((this.currentStep + 1) / 3) * 100);
+  }
 
   onClientVehicleSubmitted(clientVehicle: ClientVehicle) {
     this.clientVehicleData = clientVehicle;
-    this.clientVehicleDone = true;
     this.sendForm();
-    this.stepper.next();
+    this.currentStep++;
   }
 
   sendForm(): void {
     const params = this.buildParams();
     this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
-      console.log('im on stepper', res);
-
       this.offerList = res;
     });
   }
 
   buildParams() {
-    const payload = {
-      ...this.clientVehicleData,
-    };
-    console.log(payload);
-
-    return payload;
+    return { ...this.clientVehicleData };
   }
 
   onCancelled() {
-    this.stepper.previous();
+    if (this.currentStep > 0) {
+      this.currentStep--;
+    }
   }
 
 }

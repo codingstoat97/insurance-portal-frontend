@@ -1,0 +1,76 @@
+.form-container
+  max-width: 900px
+
+.form-title
+  margin-bottom: 28px
+
+  h2
+    font-size: 28px
+    font-weight: 700
+    color: #1a1a1a
+    margin: 0 0 8px 0
+
+  p
+    font-size: 15px
+    color: #666
+    margin: 0
+
+.field-container
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+.field-label
+  display: block
+  font-size: 14px
+  font-weight: 500
+  color: #333
+  margin-bottom: 4px
+
+.field-full
+  width: 100%
+
+  mat-form-field
+    width: 100%
+
+.field-row
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 24px
+
+.field-half
+  mat-form-field
+    width: 100%
+
+mat-checkbox
+  margin-top: 4px
+  font-size: 14px
+
+.form-actions
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-top: 24px
+
+  .btn-back
+    font-size: 15px
+    color: #555
+    padding: 8px 0
+
+    &:hover
+      color: #222
+
+  .btn-next
+    background-color: var(--kin-accent)
+    color: white
+    font-weight: 700
+    font-size: 15px
+    border-radius: 8px
+    padding: 8px 32px
+    height: 48px
+
+    &:hover:not(:disabled)
+      background-color: var(--kin-accent-dark)
+
+    &:disabled
+      opacity: 0.5

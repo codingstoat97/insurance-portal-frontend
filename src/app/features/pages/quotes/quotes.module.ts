@@ -6,7 +6,7 @@ import { QuoteStepperComponent } from './pages/quote-stepper/quote-stepper.compo
 import { QuoteViewComponent } from './pages/quote-view/quote-view.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
 import { UserFormComponent } from "src/app/shared/forms/user-form/user-form.component";
@@ -28,7 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     CommonModule,
     QuotesRoutingModule,
     SharedModule,
-    MatStepperModule,
+    MatProgressBarModule,
     UserFormComponent,
     VehicleFormComponent,
     QuoteOfferComponent,

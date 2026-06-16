@@ -60,13 +60,8 @@ export class LoginComponent {
           this.router.navigateByUrl(returnUrl);
           return;
         }
-        if (role === 'ROLE_ADMIN') {
-          this.router.navigate(['/admin']);
-        } else if (role === 'ROLE_BROKER') {
-          this.router.navigate(['/broker']);
-        } else {
-          this.router.navigate(['/home']);
-        }
+        const path = this.authService.getRedirectionPath();
+        this.router.navigate([path]);
       },
       error: (err) => {
         console.error('Error en login', err);

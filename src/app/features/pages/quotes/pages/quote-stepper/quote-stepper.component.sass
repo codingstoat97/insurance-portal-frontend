@@ -1,5 +1,141 @@
-.stepper-container
-    margin: 50px
+.page-container
+  display: flex
+  min-height: 100vh
 
+// ── Sidebar ──────────────────────────────────────────────────────────────────
+.sidebar
+  width: 280px
+  min-width: 280px
+  background: linear-gradient(180deg, var(--kin-primary) 0%, var(--kin-secondary) 100%)
+  display: flex
+  flex-direction: column
+  padding: 32px 24px
+  color: white
 
+.sidebar-header
+  margin-bottom: 48px
+  .sidebar-logo
+    height: 32px
+    width: auto
 
+// ── Step list ────────────────────────────────────────────────────────────────
+.step-list
+  flex: 1
+
+.step-item
+  display: flex
+  align-items: flex-start
+  gap: 16px
+
+  .step-circle
+    width: 36px
+    height: 36px
+    min-width: 36px
+    border-radius: 50%
+    border: 2px solid rgba(255, 255, 255, 0.5)
+    display: flex
+    align-items: center
+    justify-content: center
+    font-weight: 600
+    font-size: 14px
+    color: rgba(255, 255, 255, 0.6)
+
+  .step-info
+    display: flex
+    flex-direction: column
+    padding-top: 6px
+
+    .step-title
+      font-size: 14px
+      font-weight: 600
+      color: rgba(255, 255, 255, 0.6)
+
+    .step-sub
+      font-size: 12px
+      color: rgba(255, 255, 255, 0.4)
+      margin-top: 2px
+
+  &.active
+    .step-circle
+      background-color: var(--kin-accent)
+      border-color: var(--kin-accent)
+      color: white
+
+    .step-title
+      color: white
+
+    .step-sub
+      color: rgba(255, 255, 255, 0.75)
+
+  &.done
+    .step-circle
+      background-color: rgba(255, 255, 255, 0.2)
+      border-color: rgba(255, 255, 255, 0.4)
+      color: white
+
+    .step-title
+      color: rgba(255, 255, 255, 0.8)
+
+.step-connector
+  width: 2px
+  height: 32px
+  background-color: rgba(255, 255, 255, 0.2)
+  margin-left: 17px
+  margin-top: 4px
+  margin-bottom: 4px
+
+// ── Help card ────────────────────────────────────────────────────────────────
+.help-card
+  background-color: rgba(255, 255, 255, 0.1)
+  border-radius: 12px
+  padding: 16px
+  margin-top: 32px
+
+  .help-title
+    font-weight: 700
+    font-size: 14px
+    margin: 0 0 6px 0
+
+  .help-text
+    font-size: 13px
+    color: rgba(255, 255, 255, 0.8)
+    margin: 0
+
+// ── Main content ─────────────────────────────────────────────────────────────
+.content
+  flex: 1
+  padding: 40px 48px
+  background: #f8f9fa
+  overflow-y: auto
+
+// ── Progress header ───────────────────────────────────────────────────────────
+.progress-header
+  margin-bottom: 32px
+
+  .progress-labels
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 8px
+
+    .progress-step
+      font-size: 13px
+      font-weight: 700
+      color: var(--kin-secondary)
+      letter-spacing: 0.5px
+
+    .progress-pct
+      font-size: 13px
+      color: #999
+
+  mat-progress-bar
+    height: 4px
+    border-radius: 2px
+    --mdc-linear-progress-active-indicator-color: var(--kin-accent)
+    --mdc-linear-progress-track-color: #e0e0e0
+
+.placeholder-step
+  padding: 48px
+  text-align: center
+  color: #999
+  font-size: 18px
