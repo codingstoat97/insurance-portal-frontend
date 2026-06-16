@@ -24,6 +24,7 @@ export class ToolbarService {
   private update(): void {
     const url = this.router.url.split('?')[0];
     this._isVisible.next(url !== '/login' && !url.startsWith('/quotes'));
+    this._isFooterVisible.next(url !== '/login' && !url.startsWith('/quotes'));
     this._showNav.next(url === '/home');
 
     let r = this.route.root;
