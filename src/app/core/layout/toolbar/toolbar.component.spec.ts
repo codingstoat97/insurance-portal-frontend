@@ -1,18 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { ToolbarComponent } from './toolbar.component';
 import { ToolbarService } from '../../services/toolbar/toolbar.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { ResponsiveService } from '../../services/responsive/responsive.service';
+
+const showNav$ = new BehaviorSubject(false);
 
 const mockToolbarService = {
   variant$: of('solid' as const),
-  showNav$: of(false),
+  showNav$: showNav$.asObservable(),
 };
 
 const mockAuthService = {
   getRedirectionPath: () => '/portal/dashboard',
+};
+
+const mockResponsiveService = {
+  isPhonePortrait: false,
 };
 
 describe('ToolbarComponent', () => {
@@ -20,11 +27,14 @@ describe('ToolbarComponent', () => {
   let fixture: ComponentFixture<ToolbarComponent>;
 
   beforeEach(() => {
+    showNav$.next(false);
+    mockResponsiveService.isPhonePortrait = false;
     TestBed.configureTestingModule({
       imports: [ToolbarComponent, RouterTestingModule],
       providers: [
         { provide: ToolbarService, useValue: mockToolbarService },
         { provide: AuthService, useValue: mockAuthService },
+        { provide: ResponsiveService, useValue: mockResponsiveService },
       ],
     });
     fixture = TestBed.createComponent(ToolbarComponent);
@@ -40,15 +50,40 @@ describe('ToolbarComponent', () => {
     expect(component.variant).toBe('solid');
   });
 
-  it('should hide nav links when showNav is false', () => {
-    expect(component.showNav).toBeFalse();
-    const nav = fixture.nativeElement.querySelector('.right');
-    expect(nav).toBeNull();
+  it('should always render the mat-toolbar element', () => {
+    expect(fixture.nativeElement.querySelector('mat-toolbar')).toBeTruthy();
   });
 
-  it('should always render the mat-toolbar element', () => {
-    const toolbar = fixture.nativeElement.querySelector('mat-toolbar');
-    expect(toolbar).toBeTruthy();
+  describe('desktop (isPhonePortrait = false)', () => {
+    beforeEach(() => {
+      mockResponsiveService.isPhonePortrait = false;
+      showNav$.next(true);
+      fixture.detectChanges();
+    });
+
+    it('should show desktop nav links', () => {
+      expect(fixture.nativeElement.querySelector('.right')).toBeTruthy();
+    });
+
+    it('should not show hamburger button', () => {
+      expect(fixture.nativeElement.querySelector('.menu-btn')).toBeNull();
+    });
+  });
+
+  describe('mobile (isPhonePortrait = true)', () => {
+    beforeEach(() => {
+      mockResponsiveService.isPhonePortrait = true;
+      showNav$.next(true);
+      fixture.detectChanges();
+    });
+
+    it('should show hamburger button', () => {
+      expect(fixture.nativeElement.querySelector('.menu-btn')).toBeTruthy();
+    });
+
+    it('should not show desktop nav links', () => {
+      expect(fixture.nativeElement.querySelector('.right')).toBeNull();
+    });
   });
 
   it('should navigate to portal on redirectToPortal()', () => {

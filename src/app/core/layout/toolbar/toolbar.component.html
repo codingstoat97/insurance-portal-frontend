@@ -5,11 +5,29 @@
 
   <span class="spacer"></span>
 
-  <div *ngIf="showNav" class="right">
+  <!-- Desktop navigation -->
+  <div *ngIf="showNav && !isMobile" class="right">
     <!-- TODO: add routerLink to each item once section routes are defined -->
     <span class="nav-link">Coberturas</span>
     <span class="nav-link">Nosotros</span>
     <span class="nav-link">Contáctanos</span>
     <span class="portal-btn" (click)="redirectToPortal()">Portal Bubo</span>
   </div>
+
+  <!-- Mobile hamburger -->
+  <button *ngIf="showNav && isMobile"
+          mat-icon-button
+          class="menu-btn"
+          [matMenuTriggerFor]="mobileMenu"
+          aria-label="Open navigation menu">
+    <mat-icon>menu</mat-icon>
+  </button>
 </mat-toolbar>
+
+<mat-menu #mobileMenu="matMenu">
+  <!-- TODO: add routerLink to each item once section routes are defined -->
+  <button mat-menu-item>Coberturas</button>
+  <button mat-menu-item>Nosotros</button>
+  <button mat-menu-item>Contáctanos</button>
+  <button mat-menu-item (click)="redirectToPortal()">Portal Bubo</button>
+</mat-menu>
