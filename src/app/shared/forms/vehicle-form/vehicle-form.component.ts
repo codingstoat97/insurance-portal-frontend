@@ -62,8 +62,6 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private applyValueToForm(v?: any | null) {
-    console.log(v);
-    
     if (v) {
       const cls = (v.classifications ?? null) as string | null;
       if (cls && this.vehicleClassificationList.length && !this.vehicleClassificationList.includes(cls)) {

@@ -37,6 +37,10 @@
   --font-body: "Futura Now Headline", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
   --font-head: "Futura MD BT", var(--font-body)
 
+.centered-header
+  justify-content: center
+  text-align: center
+
 button
   font-family: var(--font-body)
 
@@ -45,15 +49,36 @@ button
 .mat-mdc-header-cell
   font-family: var(--font-body)
 
-.mat-mdc-table td.no-data 
+.mat-mdc-table td.no-data
   font-family: var(--font-body)
-
 
 h1, h2, h3, p .headline
   font-family: var(--font-head)
 
 h1
   font-variation-settings: "wght" 750
+
+.floating-avatar
+    position: absolute
+    top: 0
+    left: 50%
+    transform: translate(-50%, -50%)
+    width: 50px
+    height: 50px
+    border-radius: 50%
+    overflow: hidden
+    display: flex
+    align-items: center
+    justify-content: center
+    background: var(--mat-card-background, white)
+    border: 2px solid var(--mat-card-background, var(--kin-primary))
+    box-shadow: 0 2px 8px rgba(0,0,0,.2)
+
+    img
+        width: 80%
+        height: 80%
+        object-fit: fill
+        display: block
 
 
 html, body

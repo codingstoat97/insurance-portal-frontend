@@ -30,7 +30,7 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
 
   vehicleClassificationList: string[] = [];
   regionalList: Region[] = [];
-  description = "Con esta información podremos mostrarte planes adaptados al modelo, año y características de tu vehículo. Así evitamos ofrecerte opciones que no se ajusten a lo que realmente necesitas."
+  description = "Cuéntanos sobre tu auto para encontrar la mejor cobertura."
 
   form = this.fb.group({
     brand: this.fb.control<string>('', {
@@ -57,11 +57,15 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
     }),
     level: this.fb.control<any>(null),
     franchise: this.fb.control<any>(null),
+    isElectric: this.fb.control<boolean>(false)
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
+    if (this.value) {
+      this.form.patchValue(this.value);
+    }
     this.getVehiculeClassificationList();
     this.getRegionalList();
   }

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminMainComponent } from './admin-main/admin-main.component';
 
 const routes: Routes = [
-  { path: '', component: AdminMainComponent, title: 'Administrator | Kinlock Insurtech' }
+  { path: '', component: AdminMainComponent, title: 'Bubo | Administrador' }
 ];
 
 @NgModule({

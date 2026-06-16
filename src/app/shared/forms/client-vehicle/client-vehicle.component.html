@@ -1,67 +1,89 @@
 <div class="form-container">
     <div class="form-title">
-        <h3>{{title}}</h3>
+        <h2>{{title}}</h2>
         <p *ngIf="showDescription">{{ description }}</p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Clasificación:</mat-label>
-            <mat-select formControlName="classification">
-                <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
-                    {{ c }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('classification')?.hasError('required')">
-                Selecciona una clase
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Marca</mat-label>
-            <input matInput formControlName="brand" placeholder="Ej. Honda" />
-            <mat-error *ngIf="form.get('brand')?.hasError('required')">
-                La marca del vehiculo es obligatoria
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Modelo</mat-label>
-            <input matInput formControlName="model" placeholder="Ej. Civic" />
-            <mat-error *ngIf="form.get('model')?.hasError('required')">
-                El modelo es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Regional:</mat-label>
-            <mat-select formControlName="regional">
-                <mat-option *ngFor="let r of regionalList" [value]="r.id">
-                    {{ r.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('regional')?.hasError('required')">
-                Selecciona una Regional
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Año:</mat-label>
-            <input matInput formControlName="year" placeholder="Ej. 1998" />
-            <mat-error *ngIf="form.get('year')?.hasError('required')">
-                Ingrese el año del Vehículo
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Valor de Vehículo (Bs.):</mat-label>
-            <input matInput formControlName="vehicleValue" placeholder="Ej. 20000" />
-            <mat-error *ngIf="form.get('vehicleValue')?.hasError('required')">
-                Ingrese el valor del Vehículo
-            </mat-error>
-        </mat-form-field>
+
+        <div class="field-full">
+            <label class="field-label">Clasificación *</label>
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="classification" placeholder="Selecciona una clasificación">
+                    <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
+                        {{ c }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('classification')?.hasError('required')">
+                    Selecciona una clase
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="field-row">
+            <div class="field-half">
+                <label class="field-label">Marca *</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="brand" placeholder="Ej. Toyota" />
+                    <mat-error *ngIf="form.get('brand')?.hasError('required')">
+                        La marca del vehículo es obligatoria
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="field-half">
+                <label class="field-label">Modelo / Tipo *</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="model" placeholder="Ej. Corolla XEI" />
+                    <mat-error *ngIf="form.get('model')?.hasError('required')">
+                        El modelo es obligatorio
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="field-full">
+            <label class="field-label">Regional *</label>
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="regional" placeholder="Selecciona tu regional">
+                    <mat-option *ngFor="let r of regionalList" [value]="r.name">
+                        {{ r.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('regional')?.hasError('required')">
+                    Selecciona una Regional
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="field-row">
+            <div class="field-half">
+                <label class="field-label">Año del vehículo *</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="year" placeholder="Ej. 2022" />
+                    <mat-error *ngIf="form.get('year')?.hasError('required')">
+                        Ingrese el año del vehículo
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="field-half">
+                <label class="field-label">Valor del vehículo (Bs.) *</label>
+                <mat-form-field appearance="outline">
+                    <input matInput formControlName="vehicleValue" placeholder="Ej. 85.000" />
+                    <mat-error *ngIf="form.get('vehicleValue')?.hasError('required')">
+                        Ingrese el valor del vehículo
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-checkbox formControlName="isElectric">Es eléctrico</mat-checkbox>
 
         <div class="form-actions">
-            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
-                {{ submitLabel }}
+            <button *ngIf="showCancel" mat-flat-button type="button" class="btn-back" (click)="onCancel()">
+                ← Atrás
             </button>
-
-            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
-                Cancelar
+            <span *ngIf="!showCancel"></span>
+            <button mat-flat-button type="submit" class="btn-next" [disabled]="form.invalid">
+                {{ submitLabel }} →
             </button>
         </div>
     </form>

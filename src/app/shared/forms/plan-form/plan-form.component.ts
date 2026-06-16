@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 
 import { FormImportsModule } from '../form-imports.module';
 
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 import { Plan, Vehicle, Region, Insurance, Benefit } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 type PlanLevel = 'basic' | 'gold';
+
 
 @Component({
   selector: 'app-plan-form',
@@ -35,6 +37,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   vehicleList: Vehicle[] = [];
   regionList: Region[] = [];
   insuranceList: Insurance[] = [];
+  benefitList: Benefit[] = [];
 
   form = this.fb.group({
     vehicleId: this.fb.control<number | null>(null, { validators: [] }),
@@ -52,11 +55,10 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private httpService: HttpService) { }
+    private httpService: HttpService,
+    private snackbarService: SnackBarService) { }
 
   ngOnInit(): void {
-    console.log(this.value);
-
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
@@ -120,7 +122,7 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private toLevel(x: any): PlanLevel {
-    return x === 'gold' ? 'gold' : 'basic'; // fallback seguro
+    return x === 'gold' ? 'gold' : 'basic';
   }
 
   onSubmit() {
@@ -131,7 +133,6 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     const payload = this.form.getRawValue() as Plan;
     this.submitted.emit(payload);
   }
-
 
   onCancel() {
     if (this.planForEdit) this.setFormFromPlan(this.planForEdit);

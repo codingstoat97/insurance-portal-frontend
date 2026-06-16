@@ -1,13 +1,72 @@
-<div class="stepper-container">
-    <mat-stepper linear #stepper>
-        <mat-step>
-            <ng-template matStepLabel>Ingresa los datos de tu Vehículo</ng-template>
-            <app-client-vehicle (submitted)="onClientVehicleSubmitted($event)"
-                (cancelled)="onCancelled()"></app-client-vehicle>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>Elige tu cotización</ng-template>
-            <app-offer-list [offerList]="offerList"></app-offer-list>
-        </mat-step>
-    </mat-stepper>
+<div class="page-container">
+
+  <aside class="sidebar" *ngIf="!isMobile">
+    <div class="sidebar-header">
+      <a routerLink="/home" aria-label="Go to home">
+        <img class="sidebar-logo" src="assets/logo/logo-white.png" alt="bubo" />
+      </a>
+    </div>
+
+    <nav class="step-list">
+      <div class="step-item" [class.active]="currentStep === 0" [class.done]="currentStep > 0">
+        <div class="step-circle">1</div>
+        <div class="step-info">
+          <span class="step-title">Datos del vehículo</span>
+          <span class="step-sub">Paso 1 de 3</span>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" [class.active]="currentStep === 1" [class.done]="currentStep > 1">
+        <div class="step-circle">2</div>
+        <div class="step-info">
+          <span class="step-title">Coberturas</span>
+          <span class="step-sub">Elige tu plan</span>
+        </div>
+      </div>
+      <div class="step-connector"></div>
+
+      <div class="step-item" [class.active]="currentStep === 2">
+        <div class="step-circle">3</div>
+        <div class="step-info">
+          <span class="step-title">Resumen y pago</span>
+          <span class="step-sub">Contrata online</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="help-card">
+      <p class="help-title">¿Necesitas ayuda?</p>
+      <p class="help-text">Escríbenos al +591 800 123 456</p>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div class="mobile-header" *ngIf="isMobile">
+      <a routerLink="/home" aria-label="Go to home">
+        <img class="mobile-logo" src="assets/logo/logo.png" alt="bubo" />
+      </a>
+    </div>
+
+    <div class="progress-header">
+      <div class="progress-labels">
+        <span class="progress-step">PASO {{ currentStep + 1 }} DE 3</span>
+        <span class="progress-pct">{{ progressPercent }}% completado</span>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="progressPercent"></mat-progress-bar>
+    </div>
+
+    <ng-container [ngSwitch]="currentStep">
+      <app-client-vehicle *ngSwitchCase="0" [value]="clientVehicleData" [showDescription]="true" [showCancel]="true"
+        (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
+      </app-client-vehicle>
+
+      <app-offer-list *ngSwitchCase="1" [offerList]="offerList"></app-offer-list>
+
+      <div *ngSwitchCase="2" class="placeholder-step">Resumen y pago</div>
+    </ng-container>
+
+  </main>
+
 </div>

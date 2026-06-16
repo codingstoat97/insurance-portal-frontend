@@ -7,12 +7,15 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
-import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 
-import { Insurance, Region, Vehicle } from 'src/app/shared/models';
+import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
+import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+
+import { Insurance, Region, User, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
+import { UserFormComponent } from 'src/app/shared/forms/user-form/user-form.component';
 
 
 @Component({
@@ -24,13 +27,14 @@ export class AdminMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   public deleteDialogRef: MatDialogRef<DeleteModalComponent> | undefined;
+  public infoDialogRef: MatDialogRef<InfoModalComponent> | undefined;
   public scrollStrategy: ScrollStrategy | undefined;
   username: string = 'Admin';
 
   regionColumns = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'name', header: 'Regional', field: 'name' },
-    { id: 'country', header: 'Pais', field: 'country' }
+    { id: 'country', header: 'País', field: 'country' }
   ];
 
   regionRows = [];
@@ -41,7 +45,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'classifications', header: 'Clasificación', field: 'classifications' },
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'highEnd', header: 'Es Alta Gama', field: 'highEnd' },
-    { id: 'isElectric', header: 'Es Eléctrico', field: 'isElectric'}
+    { id: 'isElectric', header: 'Es Eléctrico', field: 'isElectric' }
   ];
 
   vehicleRows = [];
@@ -55,7 +59,16 @@ export class AdminMainComponent implements OnInit {
 
   insuranceRows = [];
 
+  brokerColumns = [
+    { id: 'ci', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' },
+    { id: 'email', header: 'Correo Electrónico', field: 'email' }
+  ];
+
+  brokerRows = [];
+
   actions: any[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
@@ -68,23 +81,30 @@ export class AdminMainComponent implements OnInit {
     this.fetchRegionList();
     this.fetchVehicleList();
     this.fetchInsuranceList();
+    this.fetchBrokerList();
   }
 
-  fetchInsuranceList() {
+  private fetchInsuranceList() {
     this.httpService.get<any>(PATH.insuranceList).subscribe(res => {
       this.insuranceRows = res;
     })
   }
 
-  fetchRegionList() {
+  private fetchRegionList() {
     this.httpService.get<any>(PATH.regionList).subscribe(res => {
       this.regionRows = res;
     })
   }
 
-  fetchVehicleList() {
+  private fetchVehicleList() {
     this.httpService.get<any>(PATH.vehicleList).subscribe(res => {
       this.vehicleRows = res;
+    })
+  }
+
+  private fetchBrokerList() {
+    this.httpService.get<any>(PATH.brokerList).subscribe(res => {
+      this.brokerRows = res;
     })
   }
 
@@ -105,7 +125,23 @@ export class AdminMainComponent implements OnInit {
     });
   }
 
-  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region) {
+  openInformationDialog(type: string, item: Vehicle | Region | Insurance): void {
+    this.infoDialogRef = this.dialog.open(InfoModalComponent, {
+      data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
+      scrollStrategy: this.scrollStrategy
+    });
+  }
+
+  private getInformationColumns(type: string): any[] {
+    switch (type) {
+      case 'Insurance': return this.insuranceColumns;
+      case 'Region': return this.regionColumns;
+      case 'Vehicle': return this.vehicleColumns;
+      default: return [];
+    }
+  }
+
+  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region | User) {
     const dialogRef = this.getDialogRef(type);
 
     if (entity) {
@@ -121,7 +157,7 @@ export class AdminMainComponent implements OnInit {
       dialogRef.close();
     });
 
-    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region) => {
+    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User) => {
       if (result) {
         this.saveEntity(type, result);
       }
@@ -144,11 +180,15 @@ export class AdminMainComponent implements OnInit {
         dialogRef = this.dialog.open(RegionFormComponent, {
           width: '520px',
         }); break;
+      case 'Broker':
+        dialogRef = this.dialog.open(UserFormComponent, {
+          width: '520px',
+        }); break;
     }
     return dialogRef;
   }
 
-  private handleEditEntity(entity: Vehicle | Insurance | Region, dialogRef: any) {
+  private handleEditEntity(entity: Vehicle | Insurance | Region | User, dialogRef: any) {
     dialogRef.componentInstance.title = 'Editar';
     dialogRef.componentInstance.value = entity;
     dialogRef.componentInstance.showDescription = false;
@@ -170,13 +210,17 @@ export class AdminMainComponent implements OnInit {
 
   onRowAction(e: { actionId: string; row: any }, type: string): void {
     switch (e.actionId) {
+      case 'info': this.openInformationDialog(type, e.row); break;
       case 'edit': this.openEntityDialog(type, e.row); break;
       case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
     }
   }
 
-  private saveEntity(type: string, payload: Insurance | Vehicle | Region): void {
-    const path = this.getEntityPath(type) + '/add';
+  private saveEntity(type: string, payload: Insurance | Vehicle | Region | User): void {
+    let path = this.getEntityPath(type) + '/add';
+    if (type == 'Broker') {
+      path += '/brokers';
+    }
     this.httpService.post(path, payload).subscribe(res => {
       this.snackbar.success('Guardado con éxito');
       this.refreshData(type);
@@ -184,8 +228,6 @@ export class AdminMainComponent implements OnInit {
   }
 
   private deleteEntity(entityType: string, entityID: string): void {
-    console.log(entityType,entityID);
-    
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
     this.httpService.delete(path).subscribe(res => {
       this.snackbar.success('Eliminado correctamente.');
@@ -198,6 +240,7 @@ export class AdminMainComponent implements OnInit {
       case 'Vehicle': return PATH.vehiclePath;
       case 'Insurance': return PATH.insurancePath;
       case 'Region': return PATH.regionPath;
+      case 'Broker': return PATH.adminPath;
       default: return '';
     }
   }
@@ -207,7 +250,12 @@ export class AdminMainComponent implements OnInit {
       case 'Insurance': this.fetchInsuranceList(); break;
       case 'Vehicle': this.fetchVehicleList(); break;
       case 'Region': this.fetchRegionList(); break;
+      case 'Broker': this.fetchBrokerList(); break;
     }
+  }
+
+  navigateTo(path: string): void {
+    
   }
 
 }

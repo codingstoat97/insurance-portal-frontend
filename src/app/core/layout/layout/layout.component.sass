@@ -1,5 +1,5 @@
 $toolbar-h: 64px
-$footer-h: 64px
+$footer-h: 60px
 
 :host
   display: flex
@@ -7,10 +7,12 @@ $footer-h: 64px
   min-height: 100vh
 
 .content
-  height: calc(100vh - #{$toolbar-h} - #{$footer-h})
-  padding: $toolbar-h 0 $footer-h 0
+  flex: 1
   min-height: 0
+  padding: $toolbar-h 0 $footer-h 0
 
+  &.no-toolbar
+    padding-top: 0
 
-
-
+  &.no-footer
+    padding-bottom: 0

@@ -31,7 +31,7 @@
             <ng-container *ngIf="actions.length" matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let row">
-                    <div>
+                    <div class="action-buttons">
                         <button mat-icon-button *ngFor="let a of actions" [disabled]="a.disabled?.(row)"
                             [color]="a.color" (click)="onAction(a, row, $event)" [matTooltip]="a.tooltip">
                             <mat-icon>{{ a.icon }}</mat-icon>

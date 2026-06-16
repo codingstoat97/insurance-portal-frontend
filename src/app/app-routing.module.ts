@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { roleGuard } from './core/guards/role.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: 'login',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then(m => m.AuthModule)
+  },
   {
     path: 'home',
     loadChildren: () =>
@@ -16,15 +21,17 @@ const routes: Routes = [
   },
   {
     path: 'broker',
+    canActivate: [roleGuard],
+    data: { roles: ['ROLE_BROKER'] },
     loadChildren: () =>
       import('./features/pages/broker/broker.module')
         .then(m => m.BrokerModule),
   },
   {
     path: 'admin',
-    loadChildren: () =>
-      import('./features/pages/admin/admin.module')
-        .then(m => m.AdminModule),
+    canActivate: [roleGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+    loadChildren: () => import('./features/pages/admin/admin.module').then(m => m.AdminModule),
   },
   { path: '**', redirectTo: 'home' }
 ];

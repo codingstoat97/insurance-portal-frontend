@@ -1,4 +1,7 @@
 $toolbar-h: 64px
+$mobile-bp: 599px
+
+// ── Banner ────────────────────────────────────────────────────────────────────
 
 .banner-container
   margin: 0
@@ -9,10 +12,8 @@ $toolbar-h: 64px
   align-items: center
   justify-content: center
   text-align: center
-
   margin-top: -$toolbar-h
   min-height: calc(65vh + #{$toolbar-h})
-
   width: 100%
 
 .banner-content
@@ -24,14 +25,18 @@ $toolbar-h: 64px
 
   .banner-text
     margin-top: 50px
-
+    font-size: 30px
     > button
       margin-top: 50px
       background-color: var(--kin-accent)
       border-radius: 50px !important
-      color: var(--kin-white)
-      font-size: 15px
-      font-weight: bold
+      color: white
+      font-size: 20px
+      font-weight: 700
+      padding: 10px 36px
+      height: auto
+
+// ── Intro ─────────────────────────────────────────────────────────────────────
 
 .intro-container
   text-align: center
@@ -53,9 +58,6 @@ $toolbar-h: 64px
     border-radius: 12px
     box-shadow: none
 
-    border: 1px solid var(--kin-gray-300)
-    border-radius: 12px
-
     .centered-header
       justify-content: center
       text-align: center
@@ -72,56 +74,140 @@ $toolbar-h: 64px
     height: 24px
     line-height: 24px
 
+// ── Info section ──────────────────────────────────────────────────────────────
 
-.slogan-container
-  background: url('/assets/example-banner.jpg') center/cover no-repeat
-  position: relative
+.info-section
+  background-color: var(--kin-primary)
+  color: var(--kin-white)
+  padding: 48px 64px 84px
+  border-radius: 16px 16px 0 0
+  margin-top: 48px
+  margin-bottom: -60px
+
+.info-grid
+  display: grid
+  grid-template-columns: 2fr 1fr 1fr 1fr
+  gap: 40px
+  margin-bottom: 40px
+
+.info-brand
+  .info-logo
+    margin-bottom: 16px
+    img
+      height: 36px
+      width: auto
+
+  .info-tagline
+    font-size: 14px
+    color: rgba(255, 255, 255, 0.7)
+    line-height: 1.7
+    margin: 0
+
+.info-col
+  .info-col-title
+    font-size: 15px
+    font-weight: 700
+    color: var(--kin-white)
+    margin: 0 0 16px 0
+
+  .info-links
+    list-style: none
+    padding: 0
+    margin: 0
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+    li
+      font-size: 14px
+      color: rgba(255, 255, 255, 0.7)
+      cursor: pointer
+      transition: color 0.15s ease
+      &:hover
+        color: var(--kin-white)
+
+      a
+        color: inherit
+        text-decoration: none
+
+.info-divider
+  border: none
+  border-top: 1px solid rgba(255, 255, 255, 0.15)
+  margin: 0 0 20px 0
+
+.info-bottom
   display: flex
   align-items: center
-  justify-content: center
-  min-height: calc(20vh + #{$toolbar-h})
+  justify-content: space-between
 
-  width: 100%
-  margin-left: calc(50% - 50vw)
-  margin-right: calc(50% - 50vw)
+  .info-copyright
+    font-size: 13px
+    color: rgba(255, 255, 255, 0.5)
 
-  .slogan-content
-    margin: 0
-    padding: 0
-    text-align: center
-    max-width: 960px
-    > h1, p
-      color: var(--kin-white)
-      text-shadow: 0 1px 2px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35)
-
-    > button
-      margin-top: 20px
-      border-radius: 50px !important
-      background-color: var(--kin-secondary)
-      color: var(--kin-white)
-      text-shadow: 0 1px 2px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.35)
-      font-size: 15px
-      font-weight: bold
-
-.floating-avatar
-    position: absolute
-    top: 0
-    left: 50%
-    transform: translate(-50%, -50%)
-    width: 50px
-    height: 50px
-    border-radius: 50%
-    overflow: hidden
+  .info-legal
     display: flex
     align-items: center
-    justify-content: center
-    background: var(--mat-card-background, #fff)
-    border: 2px solid var(--mat-card-background, var(--kin-primary))
-    box-shadow: 0 2px 8px rgba(0,0,0,.2)
+    gap: 8px
+    font-size: 13px
+    color: rgba(255, 255, 255, 0.5)
 
-    img
-      width: 80%
-      height: 80%
-      object-fit: fill
-      display: block
-    
+    .info-legal-dot
+      opacity: 0.4
+
+    span:not(.info-legal-dot)
+      cursor: pointer
+      &:hover
+        color: var(--kin-white)
+
+// ── Mobile ────────────────────────────────────────────────────────────────────
+
+@media (max-width: #{$mobile-bp})
+  .banner-container
+    min-height: calc(55vh + #{$toolbar-h})
+
+  .banner-content
+    padding: 0 24px
+    .banner-text
+      margin-top: 32px
+      font-size: 18px
+      h1
+        font-size: 28px
+      p
+        font-size: 16px
+      > button
+        font-size: 16px
+        padding: 8px 24px
+        margin-top: 32px
+
+  .intro-container
+    h1
+      font-size: 20px
+      padding: 0 16px
+    .intro-logo
+      height: 70px
+
+  .step-container
+    mat-card
+      width: 90%
+      height: auto
+    .floating-avatar img
+      max-height: 48px
+      width: auto
+
+  .info-section
+    padding: 36px 24px 80px
+    border-radius: 12px 12px 0 0
+    margin-top: 32px
+    margin-bottom: -60px
+
+  .info-grid
+    grid-template-columns: 1fr 1fr
+    gap: 28px
+
+    .info-brand
+      grid-column: 1 / -1
+
+  .info-bottom
+    flex-direction: column
+    align-items: flex-start
+    gap: 12px

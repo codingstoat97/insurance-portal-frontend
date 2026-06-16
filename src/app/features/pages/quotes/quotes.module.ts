@@ -6,29 +6,36 @@ import { QuoteStepperComponent } from './pages/quote-stepper/quote-stepper.compo
 import { QuoteViewComponent } from './pages/quote-view/quote-view.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-import { ClientFormComponent } from "src/app/shared/forms/client-form/client-form.component";
+import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
+import { UserFormComponent } from "src/app/shared/forms/user-form/user-form.component";
 import { VehicleFormComponent } from "src/app/shared/forms/vehicle-form/vehicle-form.component";
 import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.component";
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
-import { ClientVehicleComponent } from "src/app/shared/forms/client-vehicle/client-vehicle.component";
+import { QuotePageComponent } from './components/quote-page/quote-page.component';
+
+import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     QuoteStepperComponent,
-    QuoteViewComponent
+    QuoteViewComponent,
+    QuotePageComponent
   ],
   imports: [
     CommonModule,
     QuotesRoutingModule,
     SharedModule,
-    MatStepperModule,
-    ClientFormComponent,
+    MatProgressBarModule,
+    UserFormComponent,
     VehicleFormComponent,
     QuoteOfferComponent,
     OfferListComponent,
-    ClientVehicleComponent
+    ClientVehicleComponent,
+    LevelLabelPipe,
+    MatDialogModule
 ],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

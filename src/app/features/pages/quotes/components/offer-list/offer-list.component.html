@@ -1,7 +1,8 @@
 <div *ngIf="offerList.length > 0" class="offer-list-container">
-    <app-quote-offer></app-quote-offer>
+    <app-quote-offer *ngFor="let offer of offerList; trackBy: trackById" [offer]="offer"
+        [insuranceName]="insuranceMap.get(offer.insuranceId) || 'Sin nombre'"></app-quote-offer>
 </div>
 
-<div *ngIf="offerList.length == 0" class="empty-list">
+<div *ngIf="offerList.length === 0" class="empty-list">
     <h2>No se encontraron ofertas disponibles.</h2>
 </div>

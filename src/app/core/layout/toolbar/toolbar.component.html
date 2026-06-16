@@ -1,12 +1,33 @@
-<mat-toolbar class="toolbar-container" [class.is-home]="variant === 'transparent'">
-  <a class="brand" routerLink="/home" (click)="goHome()" aria-label="Home">
+<mat-toolbar class="toolbar-container" [class.is-home]="variant === 'transparent' && !isScrolled">
+  <a class="brand" routerLink="/home" aria-label="Go to home">
     <img src="assets/logo/logo-white.png" alt="bubo" />
   </a>
 
   <span class="spacer"></span>
 
-  <div class="right">
-    <span class="pill">Contactanos</span>
-    <span class="pill" (click)="goToBroker()">Brokers • Ingresar</span>
+  <!-- Desktop navigation -->
+  <div *ngIf="showNav && !isMobile" class="right">
+    <!-- TODO: add routerLink to each item once section routes are defined -->
+    <span class="nav-link">Coberturas</span>
+    <span class="nav-link">Nosotros</span>
+    <span class="nav-link">Contáctanos</span>
+    <span class="portal-btn" (click)="redirectToPortal()">Portal Bubo</span>
   </div>
+
+  <!-- Mobile hamburger -->
+  <button *ngIf="showNav && isMobile"
+          mat-icon-button
+          class="menu-btn"
+          [matMenuTriggerFor]="mobileMenu"
+          aria-label="Open navigation menu">
+    <mat-icon>menu</mat-icon>
+  </button>
 </mat-toolbar>
+
+<mat-menu #mobileMenu="matMenu">
+  <!-- TODO: add routerLink to each item once section routes are defined -->
+  <button mat-menu-item>Coberturas</button>
+  <button mat-menu-item>Nosotros</button>
+  <button mat-menu-item>Contáctanos</button>
+  <button mat-menu-item (click)="redirectToPortal()">Portal Bubo</button>
+</mat-menu>

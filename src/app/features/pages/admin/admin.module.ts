@@ -8,9 +8,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { UserProfileComponent } from 'src/app/shared/components/user-profile/user-profile.component';
+import { CdkTableModule } from "@angular/cdk/table";
+
 
 @NgModule({
   declarations: [
@@ -24,7 +28,10 @@ import { UserProfileComponent } from 'src/app/shared/components/user-profile/use
     MatDialogModule,
     MatButtonModule,
     MatTabsModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    CdkTableModule
   ]
 })
 export class AdminModule { }

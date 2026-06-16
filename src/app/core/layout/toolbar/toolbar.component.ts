@@ -1,45 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'
-
-import { filter } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { AuthService } from '../../services/auth/auth.service';
+import { ToolbarService } from '../../services/toolbar/toolbar.service';
+import { ResponsiveService } from '../../services/responsive/responsive.service';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
     MatTooltipModule
   ],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.sass']
 })
-export class ToolbarComponent {
-  public variant: any;
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        let r = this.route.root;
-        while (r.firstChild) r = r.firstChild;
-        this.variant = (r.snapshot.data['toolbar'] as any) || 'solid';
-      });
+export class ToolbarComponent implements OnDestroy {
+  variant: 'transparent' | 'solid' = 'solid';
+  showNav = false;
+  isScrolled = false;
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.isScrolled = window.scrollY > 80;
   }
 
-  goHome(): void {
-    this.router.navigate(['/home']);
+  private subscription = new Subscription();
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private responsiveService: ResponsiveService,
+    toolbarService: ToolbarService
+  ) {
+    this.subscription.add(toolbarService.variant$.subscribe(v => (this.variant = v)));
+    this.subscription.add(toolbarService.showNav$.subscribe(v => (this.showNav = v)));
   }
 
-  goToBroker(): void {
-    this.router.navigate(['/broker']);
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  redirectToPortal(): void {
+    const path = this.authService.getRedirectionPath();
+    this.router.navigate([path]);
+  }
 }

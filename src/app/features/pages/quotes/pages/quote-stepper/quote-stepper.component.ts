@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatStepper } from '@angular/material/stepper';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 
 import { ClientVehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -10,43 +12,61 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   templateUrl: './quote-stepper.component.html',
   styleUrls: ['./quote-stepper.component.sass']
 })
-export class QuoteStepperComponent {
+export class QuoteStepperComponent implements OnInit {
 
-  constructor(private httpService: HttpService) { }
+  constructor(
+    private router: Router,
+    private httpService: HttpService,
+    private stepperService: QuoteStepperService,
+    private responsiveService: ResponsiveService
+  ) { }
 
-  @ViewChild('stepper') stepper!: MatStepper;
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
 
-  clientVehicleData: ClientVehicle | undefined;
-  clientVehicleDone = false;
-
+  currentStep = 0;
+  clientVehicleData: ClientVehicle | null = null;
   offerList: any[] = [];
 
-  onClientVehicleSubmitted(clientVehicle: ClientVehicle) {
-    console.log(clientVehicle);
+  get progressPercent(): number {
+    return Math.round(((this.currentStep + 1) / 3) * 100);
+  }
+
+  ngOnInit(): void {
+    this.currentStep = this.stepperService.currentStep;
+    this.clientVehicleData = this.stepperService.clientVehicleData;
+    this.offerList = this.stepperService.offerList;
+  }
+
+  onClientVehicleSubmitted(clientVehicle: ClientVehicle): void {
     this.clientVehicleData = clientVehicle;
-    this.clientVehicleDone = true;
+    this.stepperService.clientVehicleData = clientVehicle;
     this.sendForm();
-    this.stepper.next();
+    this.currentStep++;
+    this.stepperService.currentStep = this.currentStep;
   }
 
   sendForm(): void {
     const params = this.buildParams();
     this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
       this.offerList = res;
-      console.log(this.offerList);
-      
-    })
+      this.stepperService.offerList = res;
+    });
   }
 
   buildParams() {
-    const payload = {
-      ...this.clientVehicleData,
-    };
-    return payload;
+    return { ...this.clientVehicleData };
   }
 
-  onCancelled() {
-    this.stepper.previous();
+  onCancelled(): void {
+    if (this.currentStep === 0) {
+      this.stepperService.reset();
+      this.router.navigate(['/home']);
+    } else {
+      this.currentStep--;
+      this.stepperService.currentStep = this.currentStep;
+    }
   }
 
 }

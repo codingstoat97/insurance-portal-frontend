@@ -8,14 +8,13 @@
   z-index: 1001
   color: var(--kin-white)
   font-size: 20px
+  padding-inline: 12px
+  transition: background-color 0.3s ease, box-shadow 0.3s ease
 
   &.is-home
     background: transparent !important
     box-shadow: none !important
 
-.toolbar-container
-  cursor: pointer
-  padding-inline: 12px
   .brand
     margin-left: 15px
     display: inline-flex
@@ -23,32 +22,41 @@
     gap: 8px
     text-decoration: none
     color: inherit
+    cursor: pointer
     img
       height: 28px
       width: auto
     .brand-text
       font-weight: 600
-  .spacer
-    flex: 1 1 auto
 
 .spacer
   flex: 1 1 auto
 
 .right
   margin-right: 20px
+  display: flex
+  align-items: center
+  gap: 24px
 
-.right > span
+.nav-link
   font-size: 16px
-  font-weight: lighter
-
-.right > span:hover
+  font-weight: 300
+  color: white
   cursor: pointer
+  &:hover
+    opacity: 0.8
 
-.right > span.pill
-  &:hover,
-  &:focus-visible
-    background-color: rgba(255,255,255,.12)
-    transform: translateY(-1px)
+.portal-btn
+  font-size: 16px
+  font-weight: 700
+  color: white
+  border: 2px solid white
+  border-radius: 24px
+  padding: 6px 20px
+  cursor: pointer
+  &:hover
+    background-color: rgba(255, 255, 255, 0.15)
 
-.right > span + span
-  margin-left: 16px
+.menu-btn
+  color: white
+  margin-right: 4px

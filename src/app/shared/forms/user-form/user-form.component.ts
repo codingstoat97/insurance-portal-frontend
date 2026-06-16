@@ -2,41 +2,41 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Client, Region } from 'src/app/shared/models';
+import { User, Region } from 'src/app/shared/models';
 
 import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
 @Component({
-  selector: 'app-client-form',
+  selector: 'app-user-form',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormImportsModule
   ],
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.sass']
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.sass']
 })
-export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
+export class UserFormComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() value?: Client | null;
+  @Input() value?: User | null;
   @Input() title?: string | null = 'Tus Datos';
   @Input() submitLabel?: string | null = 'Siguiente';
   @Input() showCancel = false;
   @Input() showDescription: boolean = false;
 
-  @Output() submitted = new EventEmitter<Client>();
+  @Output() submitted = new EventEmitter<User>();
   @Output() cancelled = new EventEmitter<void>();
 
   regionList: Region[] = [];
   description = "No compartiremos tu información con terceros — la usamos únicamente para ayudarte a encontrar el mejor seguro";
 
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    lastname: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    region: ['', [Validators.required]],
+    name: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(2)]),
+    ci: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(2)]),
+    email: this.fb.control<string | null>(null, [Validators.required, Validators.email]),
+    password: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(2)]),
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService) { }
@@ -57,7 +57,7 @@ export class ClientFormComponent implements OnInit, OnChanges, OnDestroy {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.value as Client;
+    const payload = this.form.value as User;
     this.submitted.emit(payload);
   }
 

@@ -14,7 +14,7 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Descripcion:</mat-label>
+            <mat-label>Descripción:</mat-label>
             <input matInput formControlName="description" placeholder="Ej. Servicio de grua." />
             <mat-error *ngIf="form.get('description')?.hasError('required')">
                 Ingrese la descripción.
