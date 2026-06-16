@@ -63,6 +63,9 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private httpService: HttpService) { }
 
   ngOnInit(): void {
+    if (this.value) {
+      this.form.patchValue(this.value);
+    }
     this.getVehiculeClassificationList();
     this.getRegionalList();
   }

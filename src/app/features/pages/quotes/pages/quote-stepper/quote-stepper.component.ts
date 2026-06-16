@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 
 import { ClientVehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -9,29 +12,46 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   templateUrl: './quote-stepper.component.html',
   styleUrls: ['./quote-stepper.component.sass']
 })
-export class QuoteStepperComponent {
+export class QuoteStepperComponent implements OnInit {
 
-  constructor(private httpService: HttpService) { }
+  constructor(
+    private router: Router,
+    private httpService: HttpService,
+    private stepperService: QuoteStepperService,
+    private responsiveService: ResponsiveService
+  ) { }
+
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
 
   currentStep = 0;
-
-  clientVehicleData: ClientVehicle | undefined;
+  clientVehicleData: ClientVehicle | null = null;
   offerList: any[] = [];
 
   get progressPercent(): number {
     return Math.round(((this.currentStep + 1) / 3) * 100);
   }
 
-  onClientVehicleSubmitted(clientVehicle: ClientVehicle) {
+  ngOnInit(): void {
+    this.currentStep = this.stepperService.currentStep;
+    this.clientVehicleData = this.stepperService.clientVehicleData;
+    this.offerList = this.stepperService.offerList;
+  }
+
+  onClientVehicleSubmitted(clientVehicle: ClientVehicle): void {
     this.clientVehicleData = clientVehicle;
+    this.stepperService.clientVehicleData = clientVehicle;
     this.sendForm();
     this.currentStep++;
+    this.stepperService.currentStep = this.currentStep;
   }
 
   sendForm(): void {
     const params = this.buildParams();
     this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
       this.offerList = res;
+      this.stepperService.offerList = res;
     });
   }
 
@@ -39,9 +59,13 @@ export class QuoteStepperComponent {
     return { ...this.clientVehicleData };
   }
 
-  onCancelled() {
-    if (this.currentStep > 0) {
+  onCancelled(): void {
+    if (this.currentStep === 0) {
+      this.stepperService.reset();
+      this.router.navigate(['/home']);
+    } else {
       this.currentStep--;
+      this.stepperService.currentStep = this.currentStep;
     }
   }
 

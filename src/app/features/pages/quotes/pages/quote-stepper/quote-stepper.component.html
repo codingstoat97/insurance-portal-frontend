@@ -1,6 +1,6 @@
 <div class="page-container">
 
-  <aside class="sidebar">
+  <aside class="sidebar" *ngIf="!isMobile">
     <div class="sidebar-header">
       <a routerLink="/home" aria-label="Go to home">
         <img class="sidebar-logo" src="assets/logo/logo-white.png" alt="bubo" />
@@ -42,6 +42,13 @@
   </aside>
 
   <main class="content">
+
+    <div class="mobile-header" *ngIf="isMobile">
+      <a routerLink="/home" aria-label="Go to home">
+        <img class="mobile-logo" src="assets/logo/logo.png" alt="bubo" />
+      </a>
+    </div>
+
     <div class="progress-header">
       <div class="progress-labels">
         <span class="progress-step">PASO {{ currentStep + 1 }} DE 3</span>
@@ -51,7 +58,7 @@
     </div>
 
     <ng-container [ngSwitch]="currentStep">
-      <app-client-vehicle *ngSwitchCase="0" [showDescription]="true" [showCancel]="true"
+      <app-client-vehicle *ngSwitchCase="0" [value]="clientVehicleData" [showDescription]="true" [showCancel]="true"
         (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
       </app-client-vehicle>
 
@@ -59,6 +66,7 @@
 
       <div *ngSwitchCase="2" class="placeholder-step">Resumen y pago</div>
     </ng-container>
+
   </main>
 
 </div>
