@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'
-
-import { filter } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { AuthService } from '../../services/auth/auth.service';
+import { ToolbarService } from '../../services/toolbar/toolbar.service';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -23,34 +25,25 @@ import { AuthService } from '../../services/auth/auth.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.sass']
 })
-export class ToolbarComponent {
-  public variant: any;
-  public showButton: boolean = true;
-  public showToolbar: boolean = true;
-  constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) {
-    this.setToolbarForHome();
+export class ToolbarComponent implements OnDestroy {
+  variant: 'transparent' | 'solid' = 'solid';
+  showNav = false;
+  isVisible = true;
+
+  private subscription = new Subscription();
+
+  constructor(private router: Router, private authService: AuthService, toolbarService: ToolbarService) {
+    this.subscription.add(toolbarService.isVisible$.subscribe(v => (this.isVisible = v)));
+    this.subscription.add(toolbarService.variant$.subscribe(v => (this.variant = v)));
+    this.subscription.add(toolbarService.showNav$.subscribe(v => (this.showNav = v)));
   }
 
-  private setToolbarForHome(): void {
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        let r = this.route.root;
-        while (r.firstChild) r = r.firstChild;
-        this.variant = (r.snapshot.data['toolbar'] as any) || 'solid';
-        const url = this.router.url.split('?')[0];
-        this.showButton = url === '/home';
-        this.showToolbar = url === '/login' || url.startsWith('/quotes');
-      });
-  }
-
-  goHome(): void {
-    this.router.navigate(['/home']);
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   redirectToPortal(): void {
     const path = this.authService.getRedirectionPath();
     this.router.navigate([path]);
   }
-
 }

@@ -1,11 +1,12 @@
-<mat-toolbar *ngIf="!showToolbar" class="toolbar-container" [class.is-home]="variant === 'transparent'">
-  <a class="brand" routerLink="/home" (click)="goHome()" aria-label="Home">
+<mat-toolbar *ngIf="isVisible" class="toolbar-container" [class.is-home]="variant === 'transparent'">
+  <a class="brand" routerLink="/home" aria-label="Go to home">
     <img src="assets/logo/logo-white.png" alt="bubo" />
   </a>
 
   <span class="spacer"></span>
 
-  <div *ngIf="showButton" class="right">
+  <div *ngIf="showNav" class="right">
+    <!-- TODO: add routerLink to each item once section routes are defined -->
     <span class="nav-link">Coberturas</span>
     <span class="nav-link">Nosotros</span>
     <span class="nav-link">Contáctanos</span>
