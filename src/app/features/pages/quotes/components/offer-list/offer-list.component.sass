@@ -1,5 +1,14 @@
+$mobile-bp: 599px
+
 .offer-list-container
     padding: 20px
     display: flex
     flex-wrap: wrap
     gap: 16px
+    justify-content: center
+
+@media (max-width: #{$mobile-bp})
+  .offer-list-container
+    flex-direction: column
+    align-items: center
+    padding: 12px

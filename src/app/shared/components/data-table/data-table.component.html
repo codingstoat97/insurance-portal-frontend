@@ -10,13 +10,15 @@
             </mat-form-field>
         </div>
         <div class="toolbar-right">
-            <button *ngIf="addElement" mat-icon-button matTooltip="Crear Nuevo" (click)="onAddNewElement()">
+            <button *ngIf="addElement" mat-stroked-button (click)="onAddNewElement()">
                 <mat-icon>add</mat-icon>
+                Crear Nuevo
             </button>
         </div>
     </div>
 
     <div class="mat-elevation-z8">
+        <div class="table-scroll-wrapper">
         <table mat-table [dataSource]="dataSource">
             <ng-container *ngFor="let col of columns" [matColumnDef]="col.id">
                 <th mat-header-cell *matHeaderCellDef>
@@ -48,6 +50,7 @@
             </tr>
         </table>
 
+        </div>
         <mat-paginator panelClass="paginator-panel" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
     </div>
 </div>

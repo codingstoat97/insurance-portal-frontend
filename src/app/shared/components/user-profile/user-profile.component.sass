@@ -1,3 +1,4 @@
+$mobile-bp: 599px
 
 :host
     display: block
@@ -43,12 +44,30 @@
     background-size: cover
 
 .profile-card mat-card-actions
-    margin-top: 200px
+    margin-top: auto
     display: flex
     justify-content: center
     gap: 8px
     button
         background-color: var(--kin-accent)
 
-.profile-card .profile-options 
+.profile-card .profile-options
     margin-top: 20px
+
+@media (max-width: #{$mobile-bp})
+    .profile-card mat-card-content
+        margin-top: 16px
+
+    .profile-card [mat-card-avatar]
+        width: 72px
+        height: 72px
+
+    .profile-card .profile-header
+        gap: 6px
+        padding-bottom: 10px
+
+    .profile-card .profile-options
+        margin-top: 12px
+
+    .profile-card mat-card-actions
+        padding-bottom: 16px

@@ -1,10 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
+
+import { catchError, EMPTY } from 'rxjs';
 
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { Vehicle } from '../../models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
@@ -20,7 +23,7 @@ import * as PATHS from 'src/app/shared/utils/request-paths.util'
   templateUrl: './vehicle-form.component.html',
   styleUrls: ['./vehicle-form.component.sass']
 })
-export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
+export class VehicleFormComponent implements OnInit, OnChanges {
 
   @Input() value?: Vehicle | null;
   @Input() title?: string | null = "Datos del Vehículo";
@@ -44,7 +47,8 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private httpService: HttpService) { }
+    private httpService: HttpService,
+    private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.getVehiculeClassificationList();
@@ -55,10 +59,6 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
     if ('value' in changes) {
       this.applyValueToForm(changes['value'].currentValue);
     }
-  }
-
-  ngOnDestroy(): void {
-
   }
 
   private applyValueToForm(v?: any | null) {
@@ -104,15 +104,16 @@ export class VehicleFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getVehiculeClassificationList(): void {
-    this.httpService.get<any>(PATHS.vehicleClassificationList).subscribe(res => {
-      this.vehicleClassificationList = this.normalizeClassifications(res);
-      const v = this.value?.classification ?? null;
-      if (v && !this.vehicleClassificationList.includes(v)) {
-        this.vehicleClassificationList = [...this.vehicleClassificationList, v];
-      }
-
-      if (this.value) this.applyValueToForm(this.value);
-    });
+    this.httpService.get<any>(PATHS.vehicleClassificationList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las clasificaciones de vehículo.'); return EMPTY; }))
+      .subscribe(res => {
+        this.vehicleClassificationList = this.normalizeClassifications(res);
+        const v = this.value?.classification ?? null;
+        if (v && !this.vehicleClassificationList.includes(v)) {
+          this.vehicleClassificationList = [...this.vehicleClassificationList, v];
+        }
+        if (this.value) this.applyValueToForm(this.value);
+      });
   }
 
   onSubmit() {

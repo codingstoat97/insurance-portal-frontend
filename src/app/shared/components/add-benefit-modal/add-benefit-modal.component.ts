@@ -9,7 +9,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FormImportsModule } from '../../forms/form-imports.module';
 import { SharedModule } from '../../shared.module';
 
+import { catchError, EMPTY } from 'rxjs';
+
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { Benefit, Plan, PlanBenefit } from '../../models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -33,6 +36,7 @@ export class AddBenefitModalComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<AddBenefitModalComponent>,
     private httpService: HttpService,
+    private snackbar: SnackBarService,
     @Inject(MAT_DIALOG_DATA) public data: Plan
   ) { }
 
@@ -42,18 +46,19 @@ export class AddBenefitModalComponent implements OnInit {
   }
 
   fetchBenefitList(): void {
-    this.httpService.get<Benefit[]>(PATH.benefitList).subscribe(res => {
-      this.benefitList = res ?? [];
-      this.buildFormControls();
-    });
+    this.httpService.get<Benefit[]>(PATH.benefitList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los beneficios.'); return EMPTY; }))
+      .subscribe(res => {
+        this.benefitList = res ?? [];
+        this.buildFormControls();
+      });
   }
 
   loadSelectedBenefits(): void {
-    this.httpService
-      .get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.data.id)
+    this.httpService.get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.data.id)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los beneficios del plan.'); return EMPTY; }))
       .subscribe(res => {
         const list = res ?? [];
-
         this.selectedBenefitIds = new Set(list.map(pb => pb.benefitId));
         this.buildFormControls();
       });

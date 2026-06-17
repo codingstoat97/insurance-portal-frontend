@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -21,7 +21,7 @@ import { Region } from '../../models';
   templateUrl: './region-form.component.html',
   styleUrls: ['./region-form.component.sass']
 })
-export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
+export class RegionFormComponent implements OnInit, OnChanges {
 
   @Input() value?: Region | null;
   @Input() title?: string | null = 'Datos de la Región';
@@ -47,8 +47,6 @@ export class RegionFormComponent implements OnInit, OnChanges, OnDestroy {
       this.applyValueToForm(changes['value'].currentValue);
     }
   }
-
-  ngOnDestroy(): void { }
 
   private applyValueToForm(v: Region | null | undefined) {
     if (v) {

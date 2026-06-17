@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 interface LoginResponse {
   token?: string;
@@ -22,7 +23,7 @@ export class LoginComponent {
     password: ['', [Validators.required]],
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router, private route: ActivatedRoute, private authService: AuthService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router, private route: ActivatedRoute, private authService: AuthService, private snackbar: SnackBarService) { }
 
   onSubmit() {
     if (this.form.invalid) {
@@ -63,8 +64,8 @@ export class LoginComponent {
         const path = this.authService.getRedirectionPath();
         this.router.navigate([path]);
       },
-      error: (err) => {
-        console.error('Error en login', err);
+      error: () => {
+        this.snackbar.error('Error al iniciar sesión. Verifica tus credenciales.');
       }
     });
   }

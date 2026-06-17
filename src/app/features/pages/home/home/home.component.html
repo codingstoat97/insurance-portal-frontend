@@ -13,22 +13,17 @@
 <section class="intro-container">
   <img class="intro-logo" src="assets/logo/logo.png" alt="bubo" />
   <h2>Llevamos los seguros al siguiente nivel</h2>
-  <mat-grid-list [cols]="isMobile ? 1 : 3" [rowHeight]="isMobile ? '400px' : '2:1'">
+  <!-- Desktop: grid layout -->
+  <mat-grid-list *ngIf="!isMobile" cols="3" rowHeight="2:1">
     <mat-grid-tile class="step-container">
       <mat-card>
         <div class="floating-avatar">
           <img src="assets/lapicero.svg" alt="Registro" />
         </div>
         <mat-card-header class="centered-header">
-          <mat-card-title>
-            <h3>Registra</h3>
-          </mat-card-title>
+          <mat-card-title><h3>Registra</h3></mat-card-title>
         </mat-card-header>
-        <mat-card-content>
-          <p>
-            Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.
-          </p>
-        </mat-card-content>
+        <mat-card-content><p>Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.</p></mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile class="step-container">
@@ -37,15 +32,9 @@
           <img src="assets/auto.svg" alt="Vehículo" />
         </div>
         <mat-card-header class="centered-header">
-          <mat-card-title>
-            <h3>Compara</h3>
-          </mat-card-title>
+          <mat-card-title><h3>Compara</h3></mat-card-title>
         </mat-card-header>
-        <mat-card-content>
-          <p>
-            Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.
-          </p>
-        </mat-card-content>
+        <mat-card-content><p>Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.</p></mat-card-content>
       </mat-card>
     </mat-grid-tile>
     <mat-grid-tile class="step-container">
@@ -54,18 +43,43 @@
           <img src="assets/escudo.svg" alt="Protección" />
         </div>
         <mat-card-header class="centered-header">
-          <mat-card-title>
-            <h3>Elige</h3>
-          </mat-card-title>
+          <mat-card-title><h3>Elige</h3></mat-card-title>
         </mat-card-header>
-        <mat-card-content>
-          <p>
-            Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.
-          </p>
-        </mat-card-content>
+        <mat-card-content><p>Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.</p></mat-card-content>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
+
+  <!-- Mobile: flex column, content-height cards -->
+  <div *ngIf="isMobile" class="mobile-step-list">
+    <mat-card class="step-container">
+      <div class="floating-avatar">
+        <img src="assets/lapicero.svg" alt="Registro" />
+      </div>
+      <mat-card-header class="centered-header">
+        <mat-card-title><h3>Registra</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content><p>Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.</p></mat-card-content>
+    </mat-card>
+    <mat-card class="step-container">
+      <div class="floating-avatar">
+        <img src="assets/auto.svg" alt="Vehículo" />
+      </div>
+      <mat-card-header class="centered-header">
+        <mat-card-title><h3>Compara</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content><p>Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.</p></mat-card-content>
+    </mat-card>
+    <mat-card class="step-container">
+      <div class="floating-avatar">
+        <img src="assets/escudo.svg" alt="Protección" />
+      </div>
+      <mat-card-header class="centered-header">
+        <mat-card-title><h3>Elige</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content><p>Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.</p></mat-card-content>
+    </mat-card>
+  </div>
 </section>
 
 <section class="info-section">

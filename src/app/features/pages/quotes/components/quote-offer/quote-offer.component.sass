@@ -1,6 +1,13 @@
-.quote-card 
+$mobile-bp: 599px
+
+.quote-card
   max-width: 300px
   margin: 20px
+
+@media (max-width: #{$mobile-bp})
+  .quote-card
+    width: 280px
+    margin: 0
 
 .center
     text-align: center

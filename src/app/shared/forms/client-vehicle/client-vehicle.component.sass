@@ -78,3 +78,23 @@ mat-checkbox
 
     &:disabled
       opacity: 0.5
+
+$mobile-bp: 599px
+
+@media (max-width: #{$mobile-bp})
+  .form-title
+    margin-bottom: 20px
+
+    h2
+      font-size: 22px
+
+  .field-row
+    grid-template-columns: 1fr
+    gap: 0
+
+  .form-actions
+    flex-direction: column
+    gap: 12px
+
+    .btn-back, .btn-next
+      width: 100%

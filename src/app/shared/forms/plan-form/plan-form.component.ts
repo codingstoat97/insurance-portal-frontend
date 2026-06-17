@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { FormImportsModule } from '../form-imports.module';
+
+import { catchError, EMPTY } from 'rxjs';
 
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
@@ -24,7 +26,7 @@ type PlanLevel = 'basic' | 'gold';
   templateUrl: './plan-form.component.html',
   styleUrls: ['./plan-form.component.sass']
 })
-export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
+export class PlanFormComponent implements OnInit, OnChanges {
   @Input() value?: Plan;
   @Input() title?: string | null = 'Datos del Plan';
   @Input() submitLabel?: string | null = 'Guardar';
@@ -76,24 +78,22 @@ export class PlanFormComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void { }
-
   fetchVehicleList(): void {
-    this.httpService.get<Vehicle[]>(PATH.vehicleList).subscribe(res => {
-      this.vehicleList = res;
-    });
+    this.httpService.get<Vehicle[]>(PATH.vehicleList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los vehículos.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleList = res; });
   }
 
   fetchRegionalList(): void {
-    this.httpService.get<Region[]>(PATH.regionList).subscribe(res => {
-      this.regionList = res;
-    });
+    this.httpService.get<Region[]>(PATH.regionList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar las regionales.'); return EMPTY; }))
+      .subscribe(res => { this.regionList = res; });
   }
 
   fetchInsuranceList(): void {
-    this.httpService.get<Insurance[]>(PATH.insuranceList).subscribe(res => {
-      this.insuranceList = res;
-    });
+    this.httpService.get<Insurance[]>(PATH.insuranceList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar las aseguradoras.'); return EMPTY; }))
+      .subscribe(res => { this.insuranceList = res; });
   }
 
   getVehicleInfo(v: Vehicle): string {

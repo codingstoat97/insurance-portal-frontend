@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -17,7 +17,7 @@ import { Inject } from '@angular/core';
   templateUrl: './client-purchase-form.component.html',
   styleUrls: ['./client-purchase-form.component.sass']
 })
-export class ClientPurchaseFormComponent implements OnInit, OnDestroy {
+export class ClientPurchaseFormComponent implements OnInit {
   planId!: number;
   @Input() value?: ClientPlan | null;
   @Input() title?: string | null = 'Formulario de Compra de Poliza';
@@ -78,8 +78,6 @@ export class ClientPurchaseFormComponent implements OnInit, OnDestroy {
     console.log(this.data);
     this.planId = this.data.planId;
   }
-
-  ngOnDestroy(): void { }
 
   onSubmit(): void {
     if (this.form.invalid) {

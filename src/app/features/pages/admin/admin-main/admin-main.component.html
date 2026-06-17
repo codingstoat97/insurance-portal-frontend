@@ -1,11 +1,24 @@
 <mat-drawer-container class="page-container">
-    <mat-drawer mode="side" opened class="drawer-container">
+    <mat-drawer *ngIf="!isMobile" mode="side" opened class="drawer-container">
         <app-user-profile [username]="username" [profileOptions]="profileOptions"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
-            <h2> Hola, {{ username }} </h2>
-            <p> El acceso a todas las entidades se encuentra en esta sección. </p>
+            <h2>Hola, {{ username }}</h2>
+            <div class="mobile-profile" *ngIf="isMobile">
+                <img class="mobile-avatar" [src]="profilePictureURL" alt="Foto de perfil" />
+                <button mat-stroked-button [matMenuTriggerFor]="mobileMenu">
+                    <mat-icon>account_circle</mat-icon>
+                    Mi Perfil
+                </button>
+                <mat-menu #mobileMenu>
+                    <button mat-menu-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        Cerrar Sesión
+                    </button>
+                </mat-menu>
+            </div>
+            <p>El acceso a todas las entidades se encuentra en esta sección.</p>
         </div>
         <div class="tab-container">
             <mat-tab-group>
@@ -17,7 +30,7 @@
                     <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [actions]="actions"
                         [addElement]="true" (addNewElementAction)="onAddNewElement('Vehicle')"
                         (action)="onRowAction($event, 'Vehicle')"></app-data-table>
-                </mat-tab>                
+                </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <mat-icon class="tab-icon">business_center</mat-icon>

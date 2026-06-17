@@ -10,6 +10,8 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 import { ImageModalComponent } from 'src/app/shared/components/image-modal/image-modal.component';
 import { ClientPurchaseFormComponent } from 'src/app/shared/forms/client-purchase-form/client-purchase-form.component';
 
+import { catchError, EMPTY } from 'rxjs';
+
 import { ClientPlan, Insurance, Plan, PlanBenefit, Region, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
@@ -48,49 +50,53 @@ export class QuotePageComponent {
   }
 
   private loadQuote(): void {
-    this.httpService.get<Plan>(PATH.planGetByID + '/' + this.quoteId).subscribe(res => {
-      this.quotePlan = res;
-      this.fetchPlanBenefits();
-      this.fetchInsuranceData();
-      this.fetchRegionData();
-      this.fetchVehicleData();
-    });
+    this.httpService.get<Plan>(PATH.planGetByID + '/' + this.quoteId)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar el plan.'); return EMPTY; }))
+      .subscribe(res => {
+        this.quotePlan = res;
+        this.fetchPlanBenefits();
+        this.fetchInsuranceData();
+        this.fetchRegionData();
+        this.fetchVehicleData();
+      });
   }
 
   private fetchPlanBenefits(): void {
     if (!this.quotePlan) return;
-    this.httpService.get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.quotePlan?.id).subscribe(res => {
-      this.planBenefits = res;
-    });
+    this.httpService.get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.quotePlan?.id)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los beneficios del plan.'); return EMPTY; }))
+      .subscribe(res => { this.planBenefits = res; });
   }
 
   private fetchInsuranceData(): void {
     if (!this.quotePlan) return;
-    this.httpService.get<Insurance>(PATH.insuranceGetByID + '/' + this.quotePlan?.insuranceId).subscribe(res => {
-      this.insuranceData = res;
-    });
+    this.httpService.get<Insurance>(PATH.insuranceGetByID + '/' + this.quotePlan?.insuranceId)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los datos de la aseguradora.'); return EMPTY; }))
+      .subscribe(res => { this.insuranceData = res; });
   }
 
   private fetchRegionData(): void {
     if (!this.quotePlan) return;
-    this.httpService.get<Region>(PATH.regionGetByID + '/' + this.quotePlan?.regionalId).subscribe(res => {
-      this.regionData = res;
-    });
+    this.httpService.get<Region>(PATH.regionGetByID + '/' + this.quotePlan?.regionalId)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los datos de la regional.'); return EMPTY; }))
+      .subscribe(res => { this.regionData = res; });
   }
 
   private fetchVehicleData(): void {
     if (!this.quotePlan) return;
-    this.httpService.get<Vehicle>(PATH.vehicleGetByID + '/' + this.quotePlan?.vehicleId).subscribe(res => {
-      this.vehicleData = res;
-    });
+    this.httpService.get<Vehicle>(PATH.vehicleGetByID + '/' + this.quotePlan?.vehicleId)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los datos del vehículo.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleData = res; });
   }
 
   private saveClientPlan(clientPlan: ClientPlan): void {
     if (!clientPlan) return;
-    this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan).subscribe(res => {
-      this.snackbarService.success('Se guardaron los datos correctamente');
-      this.openQrModal();
-    });
+    this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan)
+      .pipe(catchError(() => { this.snackbarService.error('Error al guardar los datos del cliente.'); return EMPTY; }))
+      .subscribe(() => {
+        this.snackbarService.success('Se guardaron los datos correctamente');
+        this.openQrModal();
+      });
   }
 
   openQrModal(): void {

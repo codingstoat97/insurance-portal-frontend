@@ -5,5 +5,24 @@
   margin: 0
   padding: 0
 
+$mobile-bp: 599px
+
+@media (max-width: #{$mobile-bp})
+  .page-header
+    text-align: center
+
+.mobile-profile
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 12px
+  margin-top: 16px
+
+.mobile-avatar
+  width: 80px
+  height: 80px
+  border-radius: 50%
+  object-fit: cover
+
 
 

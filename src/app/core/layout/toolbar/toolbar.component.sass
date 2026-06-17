@@ -60,3 +60,12 @@
 .menu-btn
   color: white
   margin-right: 4px
+
+$mobile-bp: 599px
+
+@media (max-width: #{$mobile-bp})
+  .brand
+    position: absolute
+    left: 50%
+    transform: translateX(-50%)
+    margin-left: 0

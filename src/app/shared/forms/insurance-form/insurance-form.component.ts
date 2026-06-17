@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
@@ -23,7 +23,7 @@ import { Insurance } from '../../models';
   templateUrl: './insurance-form.component.html',
   styleUrls: ['./insurance-form.component.sass']
 })
-export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
+export class InsuranceFormComponent implements OnInit, OnChanges {
 
   @Input() value?: Insurance | null;
   @Input() title?: string | null = 'Datos de la Aseguradora';
@@ -51,8 +51,6 @@ export class InsuranceFormComponent implements OnInit, OnChanges, OnDestroy {
       this.applyValueToForm(changes['value'].currentValue);
     }
   }
-
-  ngOnDestroy(): void { }
 
   onSubmit() {
     if (this.form.invalid) {

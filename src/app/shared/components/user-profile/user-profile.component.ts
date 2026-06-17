@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../../shared.module';
@@ -14,20 +14,12 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.sass']
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent {
   @Input() username: string = '';
   @Input() profilePictureURL: string = 'https://cdn-icons-png.freepik.com/512/12225/12225935.png';
   @Input() showOccupation: boolean = false;
   @Input() profileOptions?: TemplateRef<any>;
   constructor(private router: Router, private authService: AuthService) { }
-
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {
-
-  }
 
   goHome(): void {
     this.router.navigate(['/home']);

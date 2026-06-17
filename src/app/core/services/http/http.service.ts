@@ -1,53 +1,39 @@
 import { Injectable } from '@angular/core';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 
+import { environment } from '../../../../environments/environment';
+import { SKIP_AUTH } from '../../interceptors/auth.interceptor';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  private readonly url = "http://localhost:8080/";
+  private readonly baseUrl = environment.apiUrl;
 
-  private token: string | null = '';
-  constructor(private http: HttpClient, private authService: AuthService) { }
-
-  private getAuthHeaders(): HttpHeaders {
-    this.token = this.authService.getToken();
-    return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   get<T>(path: string): Observable<T> {
-    return this.http.get<T>(this.url + path, {
-      headers: this.getAuthHeaders(),
+    return this.http.get<T>(this.baseUrl + path);
+  }
+
+  /** Public endpoint — no Bearer token, no global error handling. */
+  clientPost<T>(path: string, body: unknown): Observable<T> {
+    return this.http.post<T>(this.baseUrl + path, body, {
+      context: new HttpContext().set(SKIP_AUTH, true),
     });
   }
 
-  clientPost<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(this.url + path, body);
+  post<T>(path: string, body: unknown): Observable<T> {
+    return this.http.post<T>(this.baseUrl + path, body);
   }
 
-  post<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(this.url + path, body, {
-      headers: this.getAuthHeaders(),
-    });
-  }
-
-  put<T>(path: string, body: any): Observable<T> {
-    return this.http.put<T>(this.url + path, body, {
-      headers: this.getAuthHeaders(),
-    });
+  put<T>(path: string, body: unknown): Observable<T> {
+    return this.http.put<T>(this.baseUrl + path, body);
   }
 
   delete<T>(path: string): Observable<T> {
-    return this.http.delete<T>(this.url + path, {
-      headers: this.getAuthHeaders(),
-    });
+    return this.http.delete<T>(this.baseUrl + path);
   }
-
 }

@@ -1,4 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -18,7 +21,7 @@ import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
 import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
 
-import { forkJoin } from 'rxjs';
+import { catchError, EMPTY, forkJoin } from 'rxjs';
 
 
 @Component({
@@ -30,6 +33,7 @@ import { forkJoin } from 'rxjs';
 export class BrokerMainComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
   // TODO: source username and profilePictureURL from a user-profile API endpoint once available
   username: string = 'Erick Kinlock';
@@ -77,11 +81,21 @@ export class BrokerMainComponent implements OnInit {
 
   private readonly DEFAULT_BENEFIT_LIMITS = [{ name: 'cobertura', limit: 90 }];
 
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
+
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private levelLabelPipe: LevelLabelPipe,
-    private coverageLabelPipe: CoverageLabelPipe) { }
+    private coverageLabelPipe: CoverageLabelPipe,
+    private responsiveService: ResponsiveService,
+    private authService: AuthService) { }
+
+  logout(): void {
+    this.authService.logout();
+  }
 
   ngOnInit(): void {
     this.fetchBenefitList();
@@ -89,7 +103,7 @@ export class BrokerMainComponent implements OnInit {
       vehicles: this.httpService.get<Vehicle[]>(PATHS.vehicleList),
       regions: this.httpService.get<Region[]>(PATHS.regionList),
       insurances: this.httpService.get<Insurance[]>(PATHS.insuranceList),
-    }).subscribe({
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: ({ vehicles, regions, insurances }) => {
         this.vehicleMap = Object.fromEntries(vehicles.map(v => [v.id, v]));
         this.regionMap = Object.fromEntries(regions.map(r => [r.id, r]));
@@ -101,15 +115,21 @@ export class BrokerMainComponent implements OnInit {
   }
 
   fetchPlanList(): void {
-    this.httpService.get<Plan[]>(PATHS.planList).subscribe(res => {
-      this.planRows = res;
-    });
+    this.httpService.get<Plan[]>(PATHS.planList)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al cargar los planes.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(res => { this.planRows = res; });
   }
 
   fetchBenefitList(): void {
-    this.httpService.get<Benefit[]>(PATHS.benefitList).subscribe(res => {
-      this.benefitRows = res;
-    });
+    this.httpService.get<Benefit[]>(PATHS.benefitList)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al cargar los beneficios.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(res => { this.benefitRows = res; });
   }
 
   openEntityDialog(type: string, entity?: Plan | Benefit): void {
@@ -180,10 +200,15 @@ export class BrokerMainComponent implements OnInit {
 
   private deleteEntity(entityType: string, entityID: string): void {
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
-    this.httpService.delete(path).subscribe(() => {
-      this.snackbar.success('Eliminado correctamente.');
-      this.refreshData(entityType);
-    });
+    this.httpService.delete(path)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al eliminar.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.snackbar.success('Eliminado correctamente.');
+        this.refreshData(entityType);
+      });
   }
 
   private handleEditEntity(entity: Plan | Benefit, dialogRef: MatDialogRef<any>): void {
@@ -246,7 +271,7 @@ export class BrokerMainComponent implements OnInit {
       return this.httpService.post(PATHS.planBenefitsAdd, payload);
     });
 
-    forkJoin(requests).subscribe({
+    forkJoin(requests).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.snackbar.success('Beneficios agregados correctamente'),
       error: () => this.snackbar.error('No se pudieron añadir los beneficios'),
     });
@@ -254,18 +279,28 @@ export class BrokerMainComponent implements OnInit {
 
   private saveEntity(type: string, payload: Plan | Benefit): void {
     const path = this.getEntityPath(type) + '/add';
-    this.httpService.post(path, payload).subscribe(() => {
-      this.snackbar.success('Guardado con éxito');
-      this.refreshData(type);
-    });
+    this.httpService.post(path, payload)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al guardar.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.snackbar.success('Guardado con éxito');
+        this.refreshData(type);
+      });
   }
 
   private updateEntity(type: string, payload: Plan | Benefit): void {
     const path = this.getEntityPath(type) + '/edit';
-    this.httpService.put(path, payload).subscribe(() => {
-      this.snackbar.success('Actualizado con éxito');
-      this.refreshData(type);
-    });
+    this.httpService.put(path, payload)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al actualizar.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.snackbar.success('Actualizado con éxito');
+        this.refreshData(type);
+      });
   }
 
   private getEntityPath(entityType: string): string {

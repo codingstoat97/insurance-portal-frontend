@@ -1,12 +1,25 @@
 <mat-drawer-container class="page-container">
-    <mat-drawer mode="side" opened class="drawer-container">
+    <mat-drawer *ngIf="!isMobile" #drawer mode="side" opened class="drawer-container">
         <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL"
             [showOccupation]="true"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
-            <h2> Hola, {{ username }} </h2>
-            <p> Administra tus planes de seguro en esta sección. </p>
+            <h2>Hola, {{ username }}</h2>
+            <div class="mobile-profile" *ngIf="isMobile">
+                <img class="mobile-avatar" [src]="profilePictureURL" alt="Foto de perfil" />
+                <button mat-stroked-button [matMenuTriggerFor]="mobileMenu">
+                    <mat-icon>account_circle</mat-icon>
+                    Mi Perfil
+                </button>
+                <mat-menu #mobileMenu>
+                    <button mat-menu-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        Cerrar Sesión
+                    </button>
+                </mat-menu>
+            </div>
+            <p>Administra tus planes de seguro en esta sección.</p>
         </div>
         <div class="tab-container">
             <mat-tab-group>
@@ -20,15 +33,12 @@
                         [addElement]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
-                <!-- TODO: "Beneficios" tab shows the same data as "Coberturas Principales" — define separate model/endpoint -->
                 <mat-tab label="Beneficios">
                     <app-data-table [rows]="benefitRows" [columns]="benefitColumns" [actions]="actions"
                         [addElement]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
-                
             </mat-tab-group>
         </div>
-
     </mat-drawer-content>
 </mat-drawer-container>

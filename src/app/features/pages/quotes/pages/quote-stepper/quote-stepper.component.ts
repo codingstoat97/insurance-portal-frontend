@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError, EMPTY } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 
@@ -17,6 +19,7 @@ export class QuoteStepperComponent implements OnInit {
   constructor(
     private router: Router,
     private httpService: HttpService,
+    private snackbar: SnackBarService,
     private stepperService: QuoteStepperService,
     private responsiveService: ResponsiveService
   ) { }
@@ -49,10 +52,12 @@ export class QuoteStepperComponent implements OnInit {
 
   sendForm(): void {
     const params = this.buildParams();
-    this.httpService.post<any>(PATH.planSearch, params).subscribe(res => {
-      this.offerList = res;
-      this.stepperService.offerList = res;
-    });
+    this.httpService.post<any>(PATH.planSearch, params)
+      .pipe(catchError(() => { this.snackbar.error('Error al buscar planes disponibles.'); return EMPTY; }))
+      .subscribe(res => {
+        this.offerList = res;
+        this.stepperService.offerList = res;
+      });
   }
 
   buildParams() {

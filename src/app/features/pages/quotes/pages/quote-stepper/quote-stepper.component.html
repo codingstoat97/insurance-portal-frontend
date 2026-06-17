@@ -22,6 +22,9 @@
         <div class="step-info">
           <span class="step-title">Coberturas</span>
           <span class="step-sub">Elige tu plan</span>
+          <button *ngIf="currentStep === 1" class="back-btn" (click)="onCancelled()">
+            Volver al formulario
+          </button>
         </div>
       </div>
       <div class="step-connector"></div>
@@ -62,7 +65,12 @@
         (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
       </app-client-vehicle>
 
-      <app-offer-list *ngSwitchCase="1" [offerList]="offerList"></app-offer-list>
+      <div *ngSwitchCase="1">
+        <button *ngIf="isMobile" class="back-btn mobile-back-btn" (click)="onCancelled()">
+          Volver al formulario
+        </button>
+        <app-offer-list [offerList]="offerList"></app-offer-list>
+      </div>
 
       <div *ngSwitchCase="2" class="placeholder-step">Resumen y pago</div>
     </ng-container>

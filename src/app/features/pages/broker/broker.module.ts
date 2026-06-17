@@ -7,6 +7,8 @@ import { BrokerMainComponent } from './broker-main/broker-main.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -21,6 +23,8 @@ import { UserProfileComponent } from 'src/app/shared/components/user-profile/use
   imports: [
     CommonModule,
     SharedModule,
+    MatIconModule,
+    MatMenuModule,
     MatSidenavModule,
     MatDialogModule,
     MatButtonModule,

@@ -5,6 +5,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
@@ -12,6 +14,8 @@ import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-for
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+
+import { catchError, EMPTY } from 'rxjs';
 
 import { Insurance, Region, User, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
@@ -73,9 +77,21 @@ export class AdminMainComponent implements OnInit {
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
+  profilePictureURL = '/assets/user-pp.jpg';
+
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
+
   constructor(
     private httpService: HttpService,
-    private snackbar: SnackBarService) { }
+    private snackbar: SnackBarService,
+    private responsiveService: ResponsiveService,
+    private authService: AuthService) { }
+
+  logout(): void {
+    this.authService.logout();
+  }
 
   ngOnInit(): void {
     this.fetchRegionList();
@@ -85,27 +101,27 @@ export class AdminMainComponent implements OnInit {
   }
 
   private fetchInsuranceList() {
-    this.httpService.get<any>(PATH.insuranceList).subscribe(res => {
-      this.insuranceRows = res;
-    })
+    this.httpService.get<any>(PATH.insuranceList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las aseguradoras.'); return EMPTY; }))
+      .subscribe(res => { this.insuranceRows = res; });
   }
 
   private fetchRegionList() {
-    this.httpService.get<any>(PATH.regionList).subscribe(res => {
-      this.regionRows = res;
-    })
+    this.httpService.get<any>(PATH.regionList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las regionales.'); return EMPTY; }))
+      .subscribe(res => { this.regionRows = res; });
   }
 
   private fetchVehicleList() {
-    this.httpService.get<any>(PATH.vehicleList).subscribe(res => {
-      this.vehicleRows = res;
-    })
+    this.httpService.get<any>(PATH.vehicleList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los vehículos.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleRows = res; });
   }
 
   private fetchBrokerList() {
-    this.httpService.get<any>(PATH.brokerList).subscribe(res => {
-      this.brokerRows = res;
-    })
+    this.httpService.get<any>(PATH.brokerList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los brokers.'); return EMPTY; }))
+      .subscribe(res => { this.brokerRows = res; });
   }
 
   openDeleteDialog(type: string, itemName: any, item: any): void {
@@ -221,18 +237,22 @@ export class AdminMainComponent implements OnInit {
     if (type == 'Broker') {
       path += '/brokers';
     }
-    this.httpService.post(path, payload).subscribe(res => {
-      this.snackbar.success('Guardado con éxito');
-      this.refreshData(type);
-    })
+    this.httpService.post(path, payload)
+      .pipe(catchError(() => { this.snackbar.error('Error al guardar.'); return EMPTY; }))
+      .subscribe(() => {
+        this.snackbar.success('Guardado con éxito');
+        this.refreshData(type);
+      });
   }
 
   private deleteEntity(entityType: string, entityID: string): void {
     const path = this.getEntityPath(entityType) + '/delete/' + entityID;
-    this.httpService.delete(path).subscribe(res => {
-      this.snackbar.success('Eliminado correctamente.');
-      this.refreshData(entityType);
-    });
+    this.httpService.delete(path)
+      .pipe(catchError(() => { this.snackbar.error('Error al eliminar.'); return EMPTY; }))
+      .subscribe(() => {
+        this.snackbar.success('Eliminado correctamente.');
+        this.refreshData(entityType);
+      });
   }
 
   private getEntityPath(entityType: string): string {

@@ -1,7 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { catchError, EMPTY } from 'rxjs';
+
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { QuoteOfferComponent } from "../quote-offer/quote-offer.component";
@@ -20,28 +23,26 @@ import * as PATHS from 'src/app/shared/utils/request-paths.util'
   templateUrl: './offer-list.component.html',
   styleUrls: ['./offer-list.component.sass']
 })
-export class OfferListComponent implements OnInit, OnDestroy {
+export class OfferListComponent implements OnInit {
 
   @Input() offerList: any[] = [];
   insuranceMap = new Map<number, string>();
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.loadInsurances();
   }
-
-  ngOnDestroy(): void { }
 
   trackById(index: number, item: any) {
     return item.id;
   }
 
   private loadInsurances(): void {
-    this.httpService.get<any>(PATHS.insuranceList).subscribe(res => {
-      this.insuranceMap = new Map(
-        res.map((i: any) => [i.id, i.name])
-      );
-    });
+    this.httpService.get<any>(PATHS.insuranceList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las aseguradoras.'); return EMPTY; }))
+      .subscribe(res => {
+        this.insuranceMap = new Map(res.map((i: any) => [i.id, i.name]));
+      });
   }
 
 }

@@ -10,6 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { DataTableComponent } from 'src/app/shared/components/data-table/data-table.component';
 import { UserProfileComponent } from 'src/app/shared/components/user-profile/user-profile.component';
@@ -31,6 +32,7 @@ import { CdkTableModule } from "@angular/cdk/table";
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    MatMenuModule,
     CdkTableModule
   ]
 })

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../../shared.module';
@@ -28,7 +28,7 @@ import { Column } from 'src/app/shared/utils/data-table-types.util';
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.sass']
 })
-export class DataTableComponent implements AfterViewInit {
+export class DataTableComponent implements AfterViewInit, OnDestroy {
   @Input() rows: any[] = [];
   @Input() columns: Column[] = [];
   @Input() actions: any[] = [];
@@ -53,6 +53,13 @@ export class DataTableComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
     this.setupSortingAccessor();
     this.setupFilterPredicate();
+  }
+
+  ngOnDestroy(): void {
+    this.dataSource.sortingDataAccessor = null!;
+    this.dataSource.filterPredicate = null!;
+    this.dataSource.data = [];
+    this.dataSource.disconnect();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

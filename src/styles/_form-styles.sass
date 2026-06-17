@@ -1,3 +1,4 @@
+$mobile-bp: 599px
 
 .form-container
     margin: 40px auto
@@ -28,3 +29,21 @@
     font-size: 14px
     font-weight: 200
     color: var(--kin-gray-600)
+
+@media (max-width: #{$mobile-bp})
+  .form-container
+    width: 100%
+    margin: 16px auto
+    min-width: unset
+    box-sizing: border-box
+    padding: 0 16px
+
+  .form-actions
+    flex-direction: column
+
+    button, a
+      width: 100%
+
+  .form-title
+    h3
+      font-size: 20px

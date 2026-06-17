@@ -25,7 +25,7 @@ export const planPath = 'plans';
 export const planList = 'plans/list';
 export const planAdd = 'plans/add';
 export const planUpdate = 'plans/edit';
-export const planDelete = 'pland/delete';
+export const planDelete = 'plans/delete';
 export const planGetByID = 'plans/getById';
 export const planSearch = 'plans/search'
 

@@ -1,10 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { catchError, EMPTY } from 'rxjs';
 
 import { FormImportsModule } from '../form-imports.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { ClientVehicle, Region } from '../../models';
 
@@ -18,7 +21,7 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   styleUrls: ['./client-vehicle.component.sass']
 })
 
-export class ClientVehicleComponent implements OnInit, OnDestroy {
+export class ClientVehicleComponent implements OnInit {
   @Input() value?: ClientVehicle | null;
   @Input() title?: string | null = "Datos del Vehículo";
   @Input() submitLabel: string | null = 'Siguiente';
@@ -60,7 +63,7 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
     isElectric: this.fb.control<boolean>(false)
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     if (this.value) {
@@ -70,16 +73,16 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
     this.getRegionalList();
   }
 
-  ngOnDestroy(): void { }
-
   private getVehiculeClassificationList(): void {
-    this.httpService.get<any>(PATH.vehicleClassificationList).subscribe(res => {
-      this.vehicleClassificationList = this.normalizeClassifications(res);
-      const v = this.value?.classification ?? null;
-      if (v && !this.vehicleClassificationList.includes(v)) {
-        this.vehicleClassificationList = [...this.vehicleClassificationList, v];
-      }
-    });
+    this.httpService.get<any>(PATH.vehicleClassificationList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las clasificaciones de vehículo.'); return EMPTY; }))
+      .subscribe(res => {
+        this.vehicleClassificationList = this.normalizeClassifications(res);
+        const v = this.value?.classification ?? null;
+        if (v && !this.vehicleClassificationList.includes(v)) {
+          this.vehicleClassificationList = [...this.vehicleClassificationList, v];
+        }
+      });
   }
 
   private normalizeClassifications(res: any): string[] {
@@ -91,9 +94,9 @@ export class ClientVehicleComponent implements OnInit, OnDestroy {
   }
 
   private getRegionalList(): void {
-    this.httpService.get<any>(PATH.regionList).subscribe(res => {
-      this.regionalList = res;
-    });
+    this.httpService.get<any>(PATH.regionList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las regionales.'); return EMPTY; }))
+      .subscribe(res => { this.regionalList = res; });
   }
 
   onSubmit() {

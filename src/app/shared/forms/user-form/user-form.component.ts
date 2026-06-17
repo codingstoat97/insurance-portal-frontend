@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { User, Region } from 'src/app/shared/models';
 
+import { catchError, EMPTY } from 'rxjs';
+
 import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-user-form',
@@ -18,7 +21,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.sass']
 })
-export class UserFormComponent implements OnInit, OnChanges, OnDestroy {
+export class UserFormComponent implements OnInit {
 
   @Input() value?: User | null;
   @Input() title?: string | null = 'Tus Datos';
@@ -39,17 +42,10 @@ export class UserFormComponent implements OnInit, OnChanges, OnDestroy {
     password: this.fb.control<string | null>(null, [Validators.required, Validators.minLength(2)]),
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.fetchRegionList();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-  }
-
-  ngOnDestroy(): void {
-
   }
 
   onSubmit() {
@@ -62,9 +58,9 @@ export class UserFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private fetchRegionList(): void {
-    this.httpService.get<any>('regionals/list').subscribe(res => {
-      this.regionList = res;
-    });
+    this.httpService.get<any>('regionals/list')
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las regionales.'); return EMPTY; }))
+      .subscribe(res => { this.regionList = res; });
   }
 
   onCancel() {

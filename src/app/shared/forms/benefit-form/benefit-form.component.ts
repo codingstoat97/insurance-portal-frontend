@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
+import { catchError, EMPTY } from 'rxjs';
+
 import { FormImportsModule } from '../form-imports.module';
 import { SharedModule } from '../../shared.module';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
+import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { Benefit } from '../../models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
@@ -36,7 +39,7 @@ export class BenefitFormComponent {
     coverage: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(80)] }),
   });
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.getCoverageTypeList();
@@ -49,19 +52,17 @@ export class BenefitFormComponent {
     }
   }
 
-  ngOnDestroy(): void {
-
-  }
-
   private getCoverageTypeList(): void {
-    this.httpService.get<any>(PATHS.benefitGetCoverageTypeList).subscribe(res => {
-      this.coverageTypeList = this.normalizeList(res);
-      const v = this.value?.coverage ?? null;
-      if (v && !this.coverageTypeList.includes(v)) {
-        this.coverageTypeList = [...this.coverageTypeList, v];
-      }
-      if (this.value) this.applyValueToForm(this.value);
-    });
+    this.httpService.get<any>(PATHS.benefitGetCoverageTypeList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de cobertura.'); return EMPTY; }))
+      .subscribe(res => {
+        this.coverageTypeList = this.normalizeList(res);
+        const v = this.value?.coverage ?? null;
+        if (v && !this.coverageTypeList.includes(v)) {
+          this.coverageTypeList = [...this.coverageTypeList, v];
+        }
+        if (this.value) this.applyValueToForm(this.value);
+      });
   }
 
   private normalizeList(res: any): string[] {
