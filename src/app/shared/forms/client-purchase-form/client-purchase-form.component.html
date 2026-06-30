@@ -14,7 +14,7 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Placa del Vehiculo:</mat-label>
+            <mat-label>Placa del Vehículo:</mat-label>
             <input matInput formControlName="vehiclePlate" placeholder="Ej. RSCA1508" />
             <mat-error *ngIf="form.get('vehiclePlate')?.hasError('required')">
                 Campo obligatorio
@@ -73,7 +73,7 @@
             <input matInput formControlName="maternalSurname" placeholder="Ej. de Inchauste" />
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Genero:</mat-label>
+            <mat-label>Género:</mat-label>
             <mat-select formControlName="gender">
                 <mat-option [value]="'male'">
                     Masculino
@@ -83,7 +83,7 @@
                 </mat-option>
             </mat-select>
             <mat-error *ngIf="form.get('gender')?.hasError('required')">
-                Selecciona un genero
+                Selecciona un género
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -141,7 +141,7 @@
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Area:</mat-label>
+            <mat-label>Área:</mat-label>
             <input matInput formControlName="area" placeholder="Cochabamba" />
             <mat-error *ngIf="form.get('area')?.hasError('required')">
                 Campo obligatorio
@@ -157,7 +157,7 @@
         <mat-divider></mat-divider>
         <mat-form-field appearance="outline">
             <mat-label>Profesión:</mat-label>
-            <input matInput formControlName="profession" placeholder="Licenciado en Enfermeria" />
+            <input matInput formControlName="profession" placeholder="Licenciado en Enfermería" />
             <mat-error *ngIf="form.get('profession')?.hasError('required')">
                 Campo obligatorio
             </mat-error>
@@ -181,14 +181,14 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Ocupación:</mat-label>
-            <input matInput formControlName="occupation" placeholder="Jefe de Enfermeria" />
+            <input matInput formControlName="occupation" placeholder="Jefe de Enfermería" />
             <mat-error *ngIf="form.get('occupation')?.hasError('required')">
                 Campo obligatorio
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Lugar de Trabajo:</mat-label>
-            <input matInput formControlName="workPlace" placeholder="Clinica San Felix" />
+            <input matInput formControlName="workPlace" placeholder="Clínica San Félix" />
             <mat-error *ngIf="form.get('workPlace')?.hasError('required')">
                 Campo obligatorio
             </mat-error>

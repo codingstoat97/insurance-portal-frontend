@@ -5,7 +5,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
         <mat-form-field appearance="outline">
             <mat-label>Nombre del Beneficio:</mat-label>
-            <input matInput formControlName="name" placeholder="Ej. Grua" />
+            <input matInput formControlName="name" placeholder="Ej. Grúa" />
             <mat-error *ngIf="form.get('name')?.hasError('required')">
                 El nombre es obligatorio
             </mat-error>
@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Descripción:</mat-label>
-            <input matInput formControlName="description" placeholder="Ej. Servicio de grua." />
+            <input matInput formControlName="description" placeholder="Ej. Servicio de grúa." />
             <mat-error *ngIf="form.get('description')?.hasError('required')">
                 Ingrese la descripción.
             </mat-error>

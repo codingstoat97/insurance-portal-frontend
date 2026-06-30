@@ -159,6 +159,41 @@ $mobile-bp: 599px
       &:hover
         color: var(--kin-white)
 
+// ── Tablet ────────────────────────────────────────────────────────────────────
+
+@media (min-width: 600px) and (max-width: 1024px)
+  .banner-content
+    padding: 0 32px
+    .banner-text
+      font-size: 24px
+
+  .mobile-step-list
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-auto-rows: auto
+    align-items: start
+    gap: 24px
+    padding: 16px 32px 32px
+
+  .mobile-step-list .step-container
+    width: 100%
+    max-width: unset
+    text-align: center
+    color: var(--kin-gray-600)
+    border: 2px solid var(--kin-primary) !important
+    border-radius: 12px
+    box-shadow: none
+
+  .info-section
+    padding: 40px 32px 80px
+
+  .info-grid
+    grid-template-columns: 1fr 1fr
+    gap: 28px
+
+    .info-brand
+      grid-column: 1 / -1
+
 // ── Mobile ────────────────────────────────────────────────────────────────────
 
 @media (max-width: #{$mobile-bp})

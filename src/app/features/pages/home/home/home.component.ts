@@ -15,6 +15,10 @@ export class HomeComponent {
     return this.responsiveService.isPhonePortrait;
   }
 
+  get isTablet(): boolean {
+    return this.responsiveService.isTablet;
+  }
+
   goToStepper(): void {
     this.router.navigate(['/quotes']);
   }

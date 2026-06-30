@@ -19,7 +19,7 @@
             <mat-label>Marca</mat-label>
             <input matInput formControlName="brand" placeholder="Ej. Honda" />
             <mat-error *ngIf="form.get('brand')?.hasError('required')">
-                La marca del vehiculo es obligatoria
+                La marca del vehículo es obligatoria
             </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -33,7 +33,7 @@
             <mat-label>Alta Gama:</mat-label>
             <mat-select formControlName="highEnd">
                 <mat-option [value]="true">
-                    Si
+                    Sí
                 </mat-option>
                 <mat-option [value]="false">
                     No
@@ -41,10 +41,10 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Electrico:</mat-label>
+            <mat-label>Eléctrico:</mat-label>
             <mat-select formControlName="isElectric">
                 <mat-option [value]="true">
-                    Si
+                    Sí
                 </mat-option>
                 <mat-option [value]="false">
                     No
