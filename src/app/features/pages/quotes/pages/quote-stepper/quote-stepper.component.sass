@@ -105,7 +105,7 @@
 .content
   flex: 1
   padding: 40px 48px
-  background: #f8f9fa
+  background: var(--kin-bg)
   overflow-y: auto
 
 // ── Progress header ───────────────────────────────────────────────────────────
@@ -126,18 +126,18 @@
 
     .progress-pct
       font-size: 13px
-      color: #999
+      color: var(--kin-gray-600)
 
   mat-progress-bar
     height: 4px
     border-radius: 2px
     --mdc-linear-progress-active-indicator-color: var(--kin-accent)
-    --mdc-linear-progress-track-color: #e0e0e0
+    --mdc-linear-progress-track-color: var(--kin-gray-200)
 
 .placeholder-step
   padding: 48px
   text-align: center
-  color: #999
+  color: var(--kin-gray-600)
   font-size: 18px
 
 // ── Back button ───────────────────────────────────────────────────────────────

@@ -7,6 +7,13 @@
 
   <!-- Desktop navigation -->
   <div *ngIf="showNav && !isMobile" class="right">
+    <button
+      mat-icon-button
+      class="theme-toggle"
+      (click)="themeService.toggle()"
+      [matTooltip]="(themeService.isDark$ | async) ? 'Modo claro' : 'Modo oscuro'">
+      <mat-icon>{{ (themeService.isDark$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
     <!-- TODO: add routerLink to each item once section routes are defined -->
     <span class="nav-link">Coberturas</span>
     <span class="nav-link">Nosotros</span>

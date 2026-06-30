@@ -86,3 +86,33 @@ html, body
   height: 100%
   margin: 0
   padding: 0
+
+// Modern discrete scrollbar for modals and overlays
+mat-dialog-content,
+.cdk-overlay-pane,
+.mat-mdc-dialog-content
+  scrollbar-width: thin
+  scrollbar-color: var(--kin-gray-600) transparent
+
+  &::-webkit-scrollbar
+    width: 6px
+
+  &::-webkit-scrollbar-track
+    background: transparent
+
+  &::-webkit-scrollbar-thumb
+    background-color: var(--kin-gray-200)
+    border-radius: 3px
+    transition: background-color 0.2s ease
+
+  &::-webkit-scrollbar-thumb:hover
+    background-color: var(--kin-gray-600)
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active
+  -webkit-box-shadow: 0 0 0px 1000px var(--kin-white) inset !important
+  box-shadow: 0 0 0px 1000px var(--kin-white) inset !important
+  -webkit-text-fill-color: var(--kin-text) !important
+  transition: background-color 9999s ease-in-out 0s !important

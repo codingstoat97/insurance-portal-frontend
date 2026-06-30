@@ -12,6 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToolbarService } from '../../services/toolbar/toolbar.service';
 import { ResponsiveService } from '../../services/responsive/responsive.service';
+import { ThemeService } from '../../services/theme/theme.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -44,7 +45,8 @@ export class ToolbarComponent implements OnDestroy {
     private router: Router,
     private authService: AuthService,
     private responsiveService: ResponsiveService,
-    toolbarService: ToolbarService
+    toolbarService: ToolbarService,
+    public themeService: ThemeService
   ) {
     this.subscription.add(toolbarService.variant$.subscribe(v => (this.variant = v)));
     this.subscription.add(toolbarService.showNav$.subscribe(v => (this.showNav = v)));
