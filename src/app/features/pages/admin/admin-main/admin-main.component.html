@@ -1,6 +1,6 @@
 <mat-drawer-container class="page-container">
     <mat-drawer *ngIf="!isMobile" mode="side" opened class="drawer-container">
-        <app-user-profile [username]="username" [profileOptions]="profileOptions"></app-user-profile>
+        <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL" [profileOptions]="profileOptions"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
@@ -69,7 +69,7 @@
             <mat-icon matListItemIcon>work</mat-icon>
             <div matListItemTitle>Administrar Entidades</div>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item (click)="navigateToPlans()">
             <mat-icon matListItemIcon>assignment</mat-icon>
             <div matListItemTitle>Administrar Planes</div>
         </mat-list-item>

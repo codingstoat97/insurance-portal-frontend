@@ -10,6 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 
@@ -26,6 +27,7 @@ import { UserProfileComponent } from 'src/app/shared/components/user-profile/use
     MatIconModule,
     MatMenuModule,
     MatSidenavModule,
+    MatListModule,
     MatDialogModule,
     MatButtonModule,
     MatTabsModule,

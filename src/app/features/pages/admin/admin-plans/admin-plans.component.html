@@ -1,7 +1,7 @@
 <mat-drawer-container class="page-container">
-    <mat-drawer *ngIf="!isMobile" #drawer mode="side" opened class="drawer-container">
+    <mat-drawer *ngIf="!isMobile" mode="side" opened class="drawer-container">
         <app-user-profile [username]="username" [profilePictureURL]="profilePictureURL"
-            [showOccupation]="true" [profileOptions]="profileOptions"></app-user-profile>
+            [profileOptions]="profileOptions"></app-user-profile>
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
@@ -13,9 +13,9 @@
                     Mi Perfil
                 </button>
                 <mat-menu #mobileMenu>
-                    <button mat-menu-item (click)="openEditProfileDialog()">
-                        <mat-icon>person</mat-icon>
-                        Editar Perfil
+                    <button mat-menu-item (click)="navigateToEntities()">
+                        <mat-icon>work</mat-icon>
+                        Administrar Entidades
                     </button>
                     <button mat-menu-item (click)="logout()">
                         <mat-icon>logout</mat-icon>
@@ -49,7 +49,16 @@
 
 <ng-template #profileOptions>
     <mat-list>
-        <mat-list-item (click)="openEditProfileDialog()">
+        <mat-list-item (click)="navigateToEntities()">
+            <mat-icon matListItemIcon>work</mat-icon>
+            <div matListItemTitle>Administrar Entidades</div>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-icon matListItemIcon>assignment</mat-icon>
+            <div matListItemTitle>Administrar Planes</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
             <mat-icon matListItemIcon>person</mat-icon>
             <div matListItemTitle>Editar Perfil</div>
         </mat-list-item>

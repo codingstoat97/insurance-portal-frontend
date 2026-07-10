@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ScrollStrategy } from '@angular/cdk/overlay';
 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -77,7 +78,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
-  profilePictureURL = '/assets/user-pp.jpg';
+  profilePictureURL = '/assets/admin-pp.jpg';
 
   get isMobile(): boolean {
     return this.responsiveService.isPhonePortrait;
@@ -87,7 +88,8 @@ export class AdminMainComponent implements OnInit {
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private responsiveService: ResponsiveService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private router: Router) { }
 
   logout(): void {
     this.authService.logout();
@@ -275,7 +277,11 @@ export class AdminMainComponent implements OnInit {
   }
 
   navigateTo(path: string): void {
-    
+
+  }
+
+  navigateToPlans(): void {
+    this.router.navigateByUrl('/admin/plans');
   }
 
 }

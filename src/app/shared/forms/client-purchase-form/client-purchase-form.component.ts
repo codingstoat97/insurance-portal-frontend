@@ -50,6 +50,9 @@ export class ClientPurchaseFormComponent implements OnInit {
     }),
     marriedName: this.fb.nonNullable.control(''),
     documentType: this.fb.nonNullable.control('', { validators: [Validators.required] }),
+    documentNumber: this.fb.nonNullable.control(0, {
+      validators: [Validators.required, Validators.min(1)]
+    }),
     countryOfBirth: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     birthdate: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     cellphone: this.fb.nonNullable.control(0, {

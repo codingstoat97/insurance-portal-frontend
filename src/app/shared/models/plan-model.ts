@@ -12,6 +12,7 @@ export interface Plan {
     level: string;
     franchise: number;
     state: boolean;
+    createdBy: string;
     benefits: Benefit[];
 }
 

@@ -46,10 +46,11 @@ export const insuranceGetByID = 'insurances/getById';
 export const clientPlanPath = 'clientPlans';
 export const clientPlanAdd = 'clientPlans/add';
 
-export const brokerPath = 'brokers';
-export const brokerList = 'brokers/list';
-export const brokerGetByID = 'brokers/getBrokerInfo';
-export const brokerGetPlans = 'brokers/getPlansByBroker';
+export const brokerPath = 'broker';
+export const brokerList = 'broker/list';
+export const brokerGetByID = 'broker/getBrokerInfo';
+export const brokerGetPlans = 'broker/getPlansByBroker';
+export const brokerUpdate = 'broker/edit';
 
 export const adminPath = 'admin';
 export const adminAddBroker = 'admin/add/brokers';

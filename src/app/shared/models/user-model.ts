@@ -10,6 +10,7 @@ export interface ClientPlan {
     maternalSurname: string;
     marriedName: string;
     documentType: string;
+    documentNumber: number;
     countryOfBirth: string;
     birthdate: string;
     cellphone: number;

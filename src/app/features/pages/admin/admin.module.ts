@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminMainComponent } from './admin-main/admin-main.component';
+import { AdminPlansComponent } from './admin-plans/admin-plans.component';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +20,8 @@ import { CdkTableModule } from "@angular/cdk/table";
 
 @NgModule({
   declarations: [
-    AdminMainComponent
+    AdminMainComponent,
+    AdminPlansComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,52 @@
+<div class="form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre Completo:</mat-label>
+            <input matInput formControlName="name" placeholder="Ej. Erick" />
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+                El nombre es obligatorio
+            </mat-error>
+            <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>CI:</mat-label>
+            <input matInput formControlName="ci" />
+            <mat-error *ngIf="form.get('ci')?.hasError('required')">
+                El número de carnet es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
+                Debe tener al menos 2 caracteres
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Correo electrónico:</mat-label>
+            <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Nueva Contraseña:</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="Dejar en blanco para no cambiarla" />
+            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+                Debe tener al menos 6 caracteres
+            </mat-error>
+        </mat-form-field>
+        <div class="file-field">
+            <mat-label>Logo:</mat-label>
+            <img *ngIf="logoPreview" [src]="logoPreview" alt="Logo" class="logo-preview" />
+            <input id="fileUpload" type="file" accept="image/*" (change)="onFileSelected($event)" />
+        </div>
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

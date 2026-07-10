@@ -5,3 +5,4 @@ export * from './benefit-model';
 export * from './region-model';
 export * from './insurance-model';
 export * from './plan-benefit-model';
+export * from './broker-model';

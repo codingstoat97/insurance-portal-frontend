@@ -107,6 +107,13 @@
                 Selecciona una opción
             </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Número de Documento:</mat-label>
+            <input matInput formControlName="documentNumber" placeholder="Ej. 8523147" />
+            <mat-error *ngIf="form.get('documentNumber')?.hasError('required')">
+                Campo obligatorio
+            </mat-error>
+        </mat-form-field>
         <mat-divider></mat-divider>
         <mat-form-field appearance="outline">
             <mat-label>Número de Celular:</mat-label>

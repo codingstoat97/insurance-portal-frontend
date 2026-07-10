@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,8 +14,7 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
 import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-modal/add-benefit-modal.component';
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
-import { BrokerFormComponent } from 'src/app/shared/forms/broker-form/broker-form.component';
-import { Benefit, Broker, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
+import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
@@ -26,19 +26,18 @@ import { catchError, EMPTY, forkJoin } from 'rxjs';
 
 
 @Component({
-  selector: 'app-broker-main',
-  templateUrl: './broker-main.component.html',
-  styleUrls: ['./broker-main.component.sass'],
+  selector: 'app-admin-plans',
+  templateUrl: './admin-plans.component.html',
+  styleUrls: ['./admin-plans.component.sass'],
   providers: [LevelLabelPipe, CoverageLabelPipe]
 })
-export class BrokerMainComponent implements OnInit {
+export class AdminPlansComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
 
-  username: string = 'Erick Kinlock';
-  profilePictureURL = '/assets/user-pp.jpg';
-  broker?: Broker;
+  username: string = 'Admin';
+  profilePictureURL = '/assets/admin-pp.jpg';
 
   vehicleMap: Record<number, Vehicle> = {};
   regionMap: Record<number, Region> = {};
@@ -55,7 +54,8 @@ export class BrokerMainComponent implements OnInit {
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
     { id: 'level', header: 'Nivel', field: 'level', valueGetter: (row) => this.levelLabelPipe.transform(row.level) },
     { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
-    { id: 'state', header: 'Plan Activado', field: 'state' }
+    { id: 'state', header: 'Plan Activado', field: 'state' },
+    { id: 'createdBy', header: 'Broker', field: 'createdBy' }
   ];
 
   planRows: Plan[] = [];
@@ -92,14 +92,18 @@ export class BrokerMainComponent implements OnInit {
     private levelLabelPipe: LevelLabelPipe,
     private coverageLabelPipe: CoverageLabelPipe,
     private responsiveService: ResponsiveService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private router: Router) { }
 
   logout(): void {
     this.authService.logout();
   }
 
+  navigateToEntities(): void {
+    this.router.navigateByUrl('/admin');
+  }
+
   ngOnInit(): void {
-    this.fetchBrokerInfo();
     this.fetchBenefitList();
     forkJoin({
       vehicles: this.httpService.get<Vehicle[]>(PATHS.vehicleList),
@@ -123,54 +127,6 @@ export class BrokerMainComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(res => { this.planRows = res; });
-  }
-
-  fetchBrokerInfo(): void {
-    this.httpService.get<Broker>(PATHS.brokerGetByID)
-      .pipe(
-        catchError(() => { this.snackbar.error('Error al cargar tu perfil.'); return EMPTY; }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(res => {
-        this.broker = res;
-        this.username = res.name;
-        this.profilePictureURL = res.logo || '/assets/user-pp.jpg';
-      });
-  }
-
-  openEditProfileDialog(): void {
-    const dialogRef = this.dialog.open(BrokerFormComponent, { width: '520px' });
-    dialogRef.componentInstance.title = 'Editar Perfil';
-    dialogRef.componentInstance.value = this.broker;
-    dialogRef.componentInstance.submitLabel = 'Guardar Cambios';
-    dialogRef.componentInstance.showCancel = true;
-
-    const sub1 = dialogRef.componentInstance.submitted.subscribe((payload: Broker) => {
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe((result?: Broker) => {
-      if (result) {
-        this.updateProfile(result);
-      }
-      sub1.unsubscribe();
-      sub2.unsubscribe();
-    });
-  }
-
-  private updateProfile(payload: Broker): void {
-    this.httpService.put(PATHS.brokerUpdate, payload)
-      .pipe(
-        catchError(() => { this.snackbar.error('Error al actualizar tu perfil.'); return EMPTY; }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-        this.snackbar.success('Perfil actualizado con éxito');
-        this.fetchBrokerInfo();
-      });
   }
 
   fetchBenefitList(): void {
