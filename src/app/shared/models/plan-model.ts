@@ -13,6 +13,7 @@ export interface Plan {
     franchise: number;
     state: boolean;
     createdBy: string;
+    brokerId?: number;
     benefits: Benefit[];
 }
 

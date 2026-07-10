@@ -169,8 +169,11 @@ export class AdminPlansComponent implements OnInit {
 
   private getDialogRef(type: string): MatDialogRef<any> {
     switch (type) {
-      case 'Plan':
-        return this.dialog.open(PlanFormComponent, { height: '600px', width: '520px' });
+      case 'Plan': {
+        const dialogRef = this.dialog.open(PlanFormComponent, { height: '600px', width: '520px' });
+        dialogRef.componentInstance.showBrokerSelect = true;
+        return dialogRef;
+      }
       case 'Benefit':
         return this.dialog.open(BenefitFormComponent, { width: '520px' });
       default:

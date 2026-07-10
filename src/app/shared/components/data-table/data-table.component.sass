@@ -1,18 +1,37 @@
 $mobile-bp: 599px
 
+:host
+  display: block
+  height: 100%
+
 .table-container
   max-width: 90%
   margin: 0 auto
   padding: 16px
-  flex: 1 1 auto
+  height: 100%
+  box-sizing: border-box
+  display: flex
+  flex-direction: column
 
 .table-container .mat-elevation-z8
   border-radius: 10px
   overflow: hidden
+  flex: 1 1 auto
+  min-height: 0
+  display: flex
+  flex-direction: column
+
+.table-toolbar
+  flex: 0 0 auto
 
 .table-scroll-wrapper
-  overflow-x: auto
+  flex: 1 1 auto
+  min-height: 0
+  overflow: auto
   -webkit-overflow-scrolling: touch
+
+mat-paginator
+  flex: 0 0 auto
 
 .table-title
   text-align: center
@@ -39,6 +58,12 @@ th.mat-mdc-header-cell,
 td.mat-mdc-cell
   text-align: center
   vertical-align: middle
+
+th.mat-mdc-header-cell
+  position: sticky
+  top: 0
+  z-index: 2
+  background-color: var(--mat-table-background-color, #fff)
 
 td.mat-mdc-cell > div
   display: flex

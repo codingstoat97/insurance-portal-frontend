@@ -81,6 +81,15 @@
                 La franquicia es obligatoria.
             </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="showBrokerSelect">
+            <mat-label>Broker:</mat-label>
+            <mat-select formControlName="brokerId">
+                <mat-option [value]="null">Sin asignar</mat-option>
+                <mat-option *ngFor="let b of brokerList" [value]="b.id">
+                    {{ b.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
         <div class="form-actions">
             <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
                 Cancelar

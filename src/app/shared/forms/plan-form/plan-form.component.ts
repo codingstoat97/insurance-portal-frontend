@@ -9,7 +9,7 @@ import { catchError, EMPTY } from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Plan, Vehicle, Region, Insurance, Benefit } from 'src/app/shared/models';
+import { Plan, Vehicle, Region, Insurance, Benefit, Broker } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 type PlanLevel = 'basic' | 'gold';
@@ -31,6 +31,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
   @Input() title?: string | null = 'Datos del Plan';
   @Input() submitLabel?: string | null = 'Guardar';
   @Input() showCancel = false;
+  @Input() showBrokerSelect = false;
 
   @Output() submitted = new EventEmitter<Plan>();
   @Output() cancelled = new EventEmitter<void>();
@@ -40,6 +41,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
   regionList: Region[] = [];
   insuranceList: Insurance[] = [];
   benefitList: Benefit[] = [];
+  brokerList: Broker[] = [];
 
   form = this.fb.group({
     vehicleId: this.fb.control<number | null>(null, { validators: [] }),
@@ -52,6 +54,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
     level: this.fb.nonNullable.control<PlanLevel>('basic', [Validators.required]),
     franchise: this.fb.control<number | null>(null),
     state: this.fb.control<boolean | true>(true),
+    brokerId: this.fb.control<number | null>(null),
     benefits: this.fb.nonNullable.control<Benefit[]>([]),
   });
 
@@ -64,6 +67,9 @@ export class PlanFormComponent implements OnInit, OnChanges {
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
+    if (this.showBrokerSelect) {
+      this.fetchBrokerList();
+    }
 
     if (this.value) {
       this.planForEdit = this.value;
@@ -96,6 +102,12 @@ export class PlanFormComponent implements OnInit, OnChanges {
       .subscribe(res => { this.insuranceList = res; });
   }
 
+  fetchBrokerList(): void {
+    this.httpService.get<Broker[]>(PATH.brokerList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los brokers.'); return EMPTY; }))
+      .subscribe(res => { this.brokerList = res; });
+  }
+
   getVehicleInfo(v: Vehicle): string {
     const result = v.brand + '-' + v.model;
     return result;
@@ -113,6 +125,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
       level: this.toLevel(this.value?.level),
       franchise: plan.franchise ?? null,
       state: plan.state ?? true,
+      brokerId: plan.brokerId ?? null,
       benefits: [...(plan.benefits ?? [])],
     }, { emitEvent: false });
 
