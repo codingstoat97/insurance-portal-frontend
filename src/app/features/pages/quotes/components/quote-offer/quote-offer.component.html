@@ -1,4 +1,4 @@
-<mat-card class="quote-card">
+<mat-card class="quote-card" [class.selected]="selected">
   <mat-card-header class="centered-header">
     <mat-card-title>{{ insuranceName }}</mat-card-title>
     <mat-card-subtitle>Plan {{ offer.level | levelLabel }}
@@ -6,11 +6,20 @@
   </mat-card-header>
   <img mat-card-image src="https://oferta.bisaseguros.com/hs-fs/hubfs/LOGO%20BISA%20PNG%205-1.png?width=2000&height=1349&name=LOGO%20BISA%20PNG%205-1.png">
   <mat-card-content class="center">
-    <h1>{{offer.minimumPremium}} Bs.</h1>
+    <h1>{{offer.minimumPremium | number:'1.0-0'}} Bs.</h1>
     <p>Prima al contado</p>
+    <div class="quick-facts">
+      <span class="fact-chip">Franquicia {{ offer.franchise | number:'1.0-0' }} Bs.</span>
+      <span class="fact-chip">Descuento {{ offer.discount | number:'1.0-0' }}%</span>
+      <span class="fact-chip">Tasa {{ offer.rate | number:'1.0-0' }}%</span>
+    </div>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions class="card-actions">
     <button mat-raised-button color="primary" (click)="goToQuotePage()">Ver Detalles</button>
+    <mat-checkbox class="compare-checkbox" [checked]="selected" [disabled]="compareDisabled"
+      (change)="compareToggled.emit()">
+      Comparar
+    </mat-checkbox>
   </mat-card-actions>
 </mat-card>
 

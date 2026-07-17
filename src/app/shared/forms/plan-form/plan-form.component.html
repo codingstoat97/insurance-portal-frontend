@@ -1,95 +1,128 @@
-<div class="form-container">
+<div class="form-container dialog-form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Vehículo:</mat-label>
-            <mat-select formControlName="vehicleId">
-                <mat-option *ngFor="let v of vehicleList" [value]="v.id">
-                    {{ getVehicleInfo(v) }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('vehicleId')?.hasError('required')">
-                Selecciona un vehículo.
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Región:</mat-label>
-            <mat-select formControlName="regionalId">
-                <mat-option *ngFor="let r of regionList" [value]="r.id">
-                    {{ r.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('regionalId')?.hasError('required')">
-                Selecciona una clase
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Aseguradora:</mat-label>
-            <mat-select formControlName="insuranceId">
-                <mat-option *ngFor="let i of insuranceList" [value]="i.id">
-                    {{ i.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('insuranceId')?.hasError('required')">
-                Selecciona una aseguradora.
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Prima:</mat-label>
-            <input matInput formControlName="minimumPremium" placeholder="Ej. 2000" />
-            <mat-error *ngIf="form.get('minimumPremium')?.hasError('required')">
-                La cantidad de prima es obligatoria
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Rate:</mat-label>
-            <input matInput formControlName="rate" placeholder="Ej. 2.4" />
-            <mat-error *ngIf="form.get('rate')?.hasError('required')">
-                El total es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Límite de Años:</mat-label>
-            <input matInput formControlName="ageLimit" placeholder="Ej. 20" />
-            <mat-error *ngIf="form.get('ageLimit')?.hasError('required')">
-                El límite es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Descuento:</mat-label>
-            <input matInput formControlName="discount" placeholder="Ej. 20%" />
-            <mat-error *ngIf="form.get('discount')?.hasError('required')">
-                El porcentaje de descuento es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Nivel:</mat-label>
-            <mat-select formControlName="level">
-                <mat-option value="basic">Básico</mat-option>
-                <mat-option value="gold">Premium</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('level')?.hasError('required')">
-                Selecciona un nivel.
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Franquicia:</mat-label>
-            <input matInput formControlName="franchise" placeholder="Ej. 150" />
-            <mat-error *ngIf="form.get('franchise')?.hasError('required')">
-                La franquicia es obligatoria.
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" *ngIf="showBrokerSelect">
-            <mat-label>Broker:</mat-label>
-            <mat-select formControlName="brokerId">
-                <mat-option [value]="null">Sin asignar</mat-option>
-                <mat-option *ngFor="let b of brokerList" [value]="b.id">
-                    {{ b.name }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>directions_car</mat-icon>
+                Vehículo y Cobertura
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Vehículo:</mat-label>
+                    <mat-select formControlName="vehicleId">
+                        <mat-option *ngFor="let v of vehicleList" [value]="v.id">
+                            {{ getVehicleInfo(v) }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('vehicleId')?.hasError('required')">
+                        Selecciona un vehículo.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Región:</mat-label>
+                    <mat-select formControlName="regionalId">
+                        <mat-option *ngFor="let r of regionList" [value]="r.id">
+                            {{ r.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('regionalId')?.hasError('required')">
+                        Selecciona una clase
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="span-2">
+                    <mat-label>Aseguradora:</mat-label>
+                    <mat-select formControlName="insuranceId">
+                        <mat-option *ngFor="let i of insuranceList" [value]="i.id">
+                            {{ i.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('insuranceId')?.hasError('required')">
+                        Selecciona una aseguradora.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>payments</mat-icon>
+                Precios y Condiciones
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Prima (Bs.):</mat-label>
+                    <input matInput formControlName="minimumPremium" placeholder="Ej. 2000" />
+                    <mat-error *ngIf="form.get('minimumPremium')?.hasError('required')">
+                        La cantidad de prima es obligatoria
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tasa (%):</mat-label>
+                    <input matInput formControlName="rate" placeholder="Ej. 2.4" />
+                    <mat-error *ngIf="form.get('rate')?.hasError('required')">
+                        El total es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Descuento (%):</mat-label>
+                    <input matInput formControlName="discount" placeholder="Ej. 20" />
+                    <mat-error *ngIf="form.get('discount')?.hasError('required')">
+                        El porcentaje de descuento es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Franquicia (Bs.):</mat-label>
+                    <input matInput formControlName="franchise" placeholder="Ej. 150" />
+                    <mat-error *ngIf="form.get('franchise')?.hasError('required')">
+                        La franquicia es obligatoria.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Límite de Años:</mat-label>
+                    <input matInput formControlName="ageLimit" placeholder="Ej. 20" />
+                    <mat-error *ngIf="form.get('ageLimit')?.hasError('required')">
+                        El límite es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Nivel:</mat-label>
+                    <mat-select formControlName="level">
+                        <mat-option value="basic">Básico</mat-option>
+                        <mat-option value="gold">Premium</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('level')?.hasError('required')">
+                        Selecciona un nivel.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <ng-container *ngIf="showBrokerSelect">
+            <mat-divider></mat-divider>
+            <div class="form-section">
+                <h4 class="section-title">
+                    <mat-icon>person_shield</mat-icon>
+                    Asignación
+                </h4>
+                <div class="form-grid">
+                    <mat-form-field appearance="outline" class="span-2">
+                        <mat-label>Broker:</mat-label>
+                        <mat-select formControlName="brokerId">
+                            <mat-option [value]="null">Sin asignar</mat-option>
+                            <mat-option *ngFor="let b of brokerList" [value]="b.id">
+                                {{ b.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
+
         <div class="form-actions">
             <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
                 Cancelar

@@ -1,28 +1,36 @@
-<div class="form-container">
+<div class="form-container dialog-form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Region/Departamento:</mat-label>
-            <input matInput formControlName="name" placeholder="Ej. Cochabamba" />
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-                El nombre es obligatorio
-            </mat-error>
-            <mat-error *ngIf="form.get('name')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>País:</mat-label>
-            <input matInput formControlName="country" placeholder="Ej. Bolivia" />
-            <mat-error *ngIf="form.get('country')?.hasError('required')">
-                Ingrese el País
-            </mat-error>
-            <mat-error *ngIf="form.get('country')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>map</mat-icon>
+                Datos de la Región
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Region/Departamento:</mat-label>
+                    <input matInput formControlName="name" placeholder="Ej. Cochabamba" />
+                    <mat-error *ngIf="form.get('name')?.hasError('required')">
+                        El nombre es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>País:</mat-label>
+                    <input matInput formControlName="country" placeholder="Ej. Bolivia" />
+                    <mat-error *ngIf="form.get('country')?.hasError('required')">
+                        Ingrese el País
+                    </mat-error>
+                    <mat-error *ngIf="form.get('country')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
 
         <div class="form-actions">
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">

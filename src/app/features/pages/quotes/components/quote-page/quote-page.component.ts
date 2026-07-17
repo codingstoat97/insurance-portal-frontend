@@ -1,18 +1,15 @@
 import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
-
-import { ImageModalComponent } from 'src/app/shared/components/image-modal/image-modal.component';
-import { ClientPurchaseFormComponent } from 'src/app/shared/forms/client-purchase-form/client-purchase-form.component';
+import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 
 import { catchError, EMPTY } from 'rxjs';
 
-import { ClientPlan, Insurance, Plan, PlanBenefit, Region, Vehicle } from 'src/app/shared/models';
+import { Insurance, Plan, PlanBenefit, Region, Vehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 @Component({
@@ -33,10 +30,10 @@ export class QuotePageComponent {
 
   constructor(
     private location: Location,
-    private dialog: MatDialog,
     private route: ActivatedRoute,
     private httpService: HttpService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private planPurchaseService: PlanPurchaseService
   ) { }
 
   ngOnInit(): void {
@@ -89,47 +86,9 @@ export class QuotePageComponent {
       .subscribe(res => { this.vehicleData = res; });
   }
 
-  private saveClientPlan(clientPlan: ClientPlan): void {
-    if (!clientPlan) return;
-    this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan)
-      .pipe(catchError(() => { this.snackbarService.error('Error al guardar los datos del cliente.'); return EMPTY; }))
-      .subscribe(() => {
-        this.snackbarService.success('Se guardaron los datos correctamente');
-        this.openQrModal();
-      });
-  }
-
-  openQrModal(): void {
-    this.dialog.open(ImageModalComponent, {
-      width: '400px',
-      data: {
-        title: 'QR del Seguro',
-        image: this.insuranceData?.qrImage
-      }
-    });
-  }
-
-  openPurchaseDialog() {
-    const dialogRef = this.dialog.open(ClientPurchaseFormComponent, {
-      width: '520px',
-      maxHeight: '80vh',
-      autoFocus: false,
-      data: { planID: this.quotePlan?.id }
-    });
-    const sub1 = dialogRef.componentInstance.submitted?.subscribe((payload: any) => {
-      dialogRef.close(payload);
-    });
-    const sub2 = dialogRef.componentInstance.cancelled?.subscribe(() => {
-      dialogRef.close();
-    });
-
-    dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        const clientPlan = res;
-        this.saveClientPlan(clientPlan);
-      }
-      sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
-    });
+  openPurchaseDialog(): void {
+    if (!this.quotePlan) return;
+    this.planPurchaseService.openPurchaseDialog(this.quotePlan.id, this.insuranceData?.qrImage);
   }
 
   goBack(): void {

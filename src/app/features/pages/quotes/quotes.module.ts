@@ -17,6 +17,7 @@ import { QuotePageComponent } from './components/quote-page/quote-page.component
 
 import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     LevelLabelPipe,
     MatDialogModule
 ],
+providers: [PlanPurchaseService],
 schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class QuotesModule { }

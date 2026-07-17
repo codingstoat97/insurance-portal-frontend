@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="form-container dialog-form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
         <p *ngIf="showDescription">
@@ -6,46 +6,54 @@
         </p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Nombre Completo:</mat-label>
-            <input matInput formControlName="name" placeholder="Ej. Erick" />
-            <mat-error *ngIf="form.get('name')?.hasError('required')">
-                El nombre es obligatorio
-            </mat-error>
-            <mat-error *ngIf="form.get('name')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>CI:</mat-label>
-            <input matInput formControlName="ci" />
-            <mat-error *ngIf="form.get('ci')?.hasError('required')">
-                El número de carnet es obligatorio.
-            </mat-error>
-            <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Correo electrónico</mat-label>
-            <input matInput formControlName="email" placeholder="ejemplo@correo.com" type="email" />
-            <mat-error *ngIf="form.get('email')?.hasError('required')">
-                El correo es obligatorio
-            </mat-error>
-            <mat-error *ngIf="form.get('email')?.hasError('email')">
-                Correo inválido
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Contraseña:</mat-label>
-            <input matInput formControlName="password" placeholder="*******" />
-            <mat-error *ngIf="form.get('password')?.hasError('required')">
-                Campo obligatorio
-            </mat-error>
-            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
-                Debe tener al menos 2 caracteres
-            </mat-error>
-        </mat-form-field>
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>person_add</mat-icon>
+                Datos del Broker
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nombre Completo:</mat-label>
+                    <input matInput formControlName="name" placeholder="Ej. Erick" />
+                    <mat-error *ngIf="form.get('name')?.hasError('required')">
+                        El nombre es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>CI:</mat-label>
+                    <input matInput formControlName="ci" />
+                    <mat-error *ngIf="form.get('ci')?.hasError('required')">
+                        El número de carnet es obligatorio.
+                    </mat-error>
+                    <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input matInput formControlName="email" placeholder="ejemplo@correo.com" type="email" />
+                    <mat-error *ngIf="form.get('email')?.hasError('required')">
+                        El correo es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('email')?.hasError('email')">
+                        Correo inválido
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Contraseña:</mat-label>
+                    <input matInput formControlName="password" placeholder="*******" />
+                    <mat-error *ngIf="form.get('password')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
 
         <div class="form-actions">
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">

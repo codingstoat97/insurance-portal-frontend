@@ -1,6 +1,12 @@
+<app-plan-comparison *ngIf="selectedOffers.length > 0" [offers]="selectedOffers" [insuranceMap]="insuranceMap"
+    (removeOffer)="removeFromComparison($event)" (closePanel)="clearSelection()"></app-plan-comparison>
+
 <div *ngIf="offerList.length > 0" class="offer-list-container">
     <app-quote-offer *ngFor="let offer of offerList; trackBy: trackById" [offer]="offer"
-        [insuranceName]="insuranceMap.get(offer.insuranceId) || 'Sin nombre'"></app-quote-offer>
+        [insuranceName]="insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre'"
+        [selected]="selectedIds.has(offer.id)"
+        [compareDisabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
+        (compareToggled)="toggleCompare(offer.id)"></app-quote-offer>
 </div>
 
 <div *ngIf="offerList.length === 0" class="empty-list">

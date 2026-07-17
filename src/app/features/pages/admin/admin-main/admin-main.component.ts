@@ -188,19 +188,19 @@ export class AdminMainComponent implements OnInit {
     switch (type) {
       case 'Vehicle':
         dialogRef = this.dialog.open(VehicleFormComponent, {
-          width: '520px',
+          width: '680px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
       case 'Insurance':
         dialogRef = this.dialog.open(InsuranceFormComponent, {
-          width: '520px',
+          width: '680px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
       case 'Region':
         dialogRef = this.dialog.open(RegionFormComponent, {
-          width: '520px',
+          width: '560px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
       case 'Broker':
         dialogRef = this.dialog.open(UserFormComponent, {
-          width: '520px',
+          width: '620px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
     }
     return dialogRef;

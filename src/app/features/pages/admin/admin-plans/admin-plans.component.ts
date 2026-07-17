@@ -71,6 +71,7 @@ export class AdminPlansComponent implements OnInit {
 
   planActions: Action[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
+    { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'add', icon: 'add', tooltip: 'Añadir Beneficios' },
   ];
 
@@ -157,7 +158,7 @@ export class AdminPlansComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: Plan | Benefit) => {
       if (result) {
         if (entity) {
-          this.updateEntity(type, result);
+          this.updateEntity(type, result, entity.id);
         } else {
           this.saveEntity(type, result);
         }
@@ -170,12 +171,12 @@ export class AdminPlansComponent implements OnInit {
   private getDialogRef(type: string): MatDialogRef<any> {
     switch (type) {
       case 'Plan': {
-        const dialogRef = this.dialog.open(PlanFormComponent, { height: '600px', width: '520px' });
+        const dialogRef = this.dialog.open(PlanFormComponent, { width: '760px', maxWidth: '95vw', maxHeight: '90vh' });
         dialogRef.componentInstance.showBrokerSelect = true;
         return dialogRef;
       }
       case 'Benefit':
-        return this.dialog.open(BenefitFormComponent, { width: '520px' });
+        return this.dialog.open(BenefitFormComponent, { width: '620px', maxWidth: '95vw', maxHeight: '90vh' });
       default:
         throw new Error(`Unknown entity type: ${type}`);
     }
@@ -247,6 +248,7 @@ export class AdminPlansComponent implements OnInit {
   onPlanRowAction(type: string, e: { actionId: string; row: any }): void {
     switch (e.actionId) {
       case 'info': this.openInformationDialog(type, e.row); break;
+      case 'edit': this.openEntityDialog(type, e.row); break;
       case 'add': this.openAddBenefitsModal(e.row); break;
     }
   }
@@ -299,8 +301,8 @@ export class AdminPlansComponent implements OnInit {
       });
   }
 
-  private updateEntity(type: string, payload: Plan | Benefit): void {
-    const path = this.getEntityPath(type) + '/edit';
+  private updateEntity(type: string, payload: Plan | Benefit, id: number | string): void {
+    const path = this.getEntityPath(type) + '/edit/' + id;
     this.httpService.put(path, payload)
       .pipe(
         catchError(() => { this.snackbar.error('Error al actualizar.'); return EMPTY; }),

@@ -1,56 +1,64 @@
-<div class="form-container">
+<div class="form-container dialog-form-container">
     <div class="form-title">
         <h3>{{title}}</h3>
         <p *ngIf="showDescription">{{ description }}</p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Clasificación:</mat-label>
-            <mat-select formControlName="classification">
-                <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
-                    {{ c }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('classification')?.hasError('required')">
-                Selecciona una clase
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Marca</mat-label>
-            <input matInput formControlName="brand" placeholder="Ej. Honda" />
-            <mat-error *ngIf="form.get('brand')?.hasError('required')">
-                La marca del vehículo es obligatoria
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Modelo</mat-label>
-            <input matInput formControlName="model" placeholder="Ej. Civic" />
-            <mat-error *ngIf="form.get('model')?.hasError('required')">
-                El modelo es obligatorio
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Alta Gama:</mat-label>
-            <mat-select formControlName="highEnd">
-                <mat-option [value]="true">
-                    Sí
-                </mat-option>
-                <mat-option [value]="false">
-                    No
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Eléctrico:</mat-label>
-            <mat-select formControlName="isElectric">
-                <mat-option [value]="true">
-                    Sí
-                </mat-option>
-                <mat-option [value]="false">
-                    No
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>directions_car</mat-icon>
+                Datos del Vehículo
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline" class="span-2">
+                    <mat-label>Clasificación:</mat-label>
+                    <mat-select formControlName="classification">
+                        <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
+                            {{ c }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('classification')?.hasError('required')">
+                        Selecciona una clase
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Marca</mat-label>
+                    <input matInput formControlName="brand" placeholder="Ej. Honda" />
+                    <mat-error *ngIf="form.get('brand')?.hasError('required')">
+                        La marca del vehículo es obligatoria
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Modelo</mat-label>
+                    <input matInput formControlName="model" placeholder="Ej. Civic" />
+                    <mat-error *ngIf="form.get('model')?.hasError('required')">
+                        El modelo es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Alta Gama:</mat-label>
+                    <mat-select formControlName="highEnd">
+                        <mat-option [value]="true">
+                            Sí
+                        </mat-option>
+                        <mat-option [value]="false">
+                            No
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Eléctrico:</mat-label>
+                    <mat-select formControlName="isElectric">
+                        <mat-option [value]="true">
+                            Sí
+                        </mat-option>
+                        <mat-option [value]="false">
+                            No
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
 
         <div class="form-actions">
             <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">

@@ -19,7 +19,7 @@ $mobile-bp: 599px
 
 .form-title
   text-align: center
-  margin-bottom: 15px
+  margin-bottom: 20px
 
   h3
     font-size: 25px
@@ -29,6 +29,46 @@ $mobile-bp: 599px
     font-size: 14px
     font-weight: 200
     color: var(--kin-gray-600)
+
+// Shared layout for dialog-hosted forms: wider dialog, real padding
+// (instead of the width:50%/margin:auto trick above, which assumes a
+// full-page context), grouped sections with icon titles, and a
+// 2-column grid per section.
+.dialog-form-container
+  width: 100%
+  max-width: none
+  margin: 0
+  padding: 28px 32px
+  box-sizing: border-box
+
+.form-section
+  display: flex
+  flex-direction: column
+
+.section-title
+  display: flex
+  align-items: center
+  gap: 8px
+  font-size: 14px
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.02em
+  color: var(--kin-secondary)
+  margin: 0 0 12px 0
+
+  mat-icon
+    font-size: 20px
+    width: 20px
+    height: 20px
+
+.form-grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  column-gap: 20px
+  row-gap: 4px
+
+.span-2
+  grid-column: 1 / -1
 
 @media (min-width: 600px) and (max-width: 1024px)
   .form-container
@@ -41,6 +81,12 @@ $mobile-bp: 599px
     min-width: unset
     box-sizing: border-box
     padding: 0 16px
+
+  .dialog-form-container
+    padding: 20px 16px
+
+  .form-grid
+    grid-template-columns: 1fr
 
   .form-actions
     flex-direction: column

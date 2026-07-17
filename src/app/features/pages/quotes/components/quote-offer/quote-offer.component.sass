@@ -3,6 +3,12 @@ $mobile-bp: 599px
 .quote-card
   max-width: 300px
   margin: 20px
+  border: 2px solid transparent
+  transition: border-color 0.15s ease, box-shadow 0.15s ease
+
+  &.selected
+    border-color: var(--kin-accent)
+    box-shadow: 0 0 0 2px rgba(var(--kin-accent-rgb, 0, 0, 0), 0.15)
 
 @media (max-width: #{$mobile-bp})
   .quote-card
@@ -12,7 +18,27 @@ $mobile-bp: 599px
 .center
     text-align: center
 
-mat-card-actions 
+.quick-facts
+  display: flex
+  flex-wrap: wrap
+  gap: 6px
+  justify-content: center
+  margin-top: 12px
+
+.fact-chip
+  font-size: 12px
+  color: var(--kin-gray-600)
+  background: var(--kin-gray-200)
+  border-radius: 12px
+  padding: 4px 10px
+  white-space: nowrap
+
+.card-actions
     display: flex
+    flex-direction: column
     justify-content: center
     align-items: center
+    gap: 8px
+
+.compare-checkbox
+  font-size: 13px

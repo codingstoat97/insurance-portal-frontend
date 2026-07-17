@@ -78,7 +78,6 @@ export class ClientPurchaseFormComponent implements OnInit {
   constructor(private fb: FormBuilder, private httpService: HttpService, @Inject(MAT_DIALOG_DATA) private data: { planId: number }) { }
 
   ngOnInit(): void {
-    console.log(this.data);
     this.planId = this.data.planId;
   }
 
@@ -89,11 +88,10 @@ export class ClientPurchaseFormComponent implements OnInit {
     }
     const formValue = this.form.getRawValue();
     const payload: ClientPlan = {
-      planId: 7,
+      planId: this.planId,
       ...formValue
     };
-    console.log(payload);
-    
+
     this.submitted.emit(payload);
   }
 

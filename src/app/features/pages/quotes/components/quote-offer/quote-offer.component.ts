@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -22,6 +22,10 @@ import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe
 export class QuoteOfferComponent {
   @Input() offer!: Plan;
   @Input() insuranceName!: string;
+  @Input() selected = false;
+  @Input() compareDisabled = false;
+
+  @Output() compareToggled = new EventEmitter<void>();
 
   constructor(private router: Router){}
 

@@ -1,0 +1,71 @@
+<div class="comparison-panel">
+    <div class="comparison-header">
+        <h2>Comparar planes ({{ offers.length }}/3)</h2>
+        <button mat-icon-button (click)="closePanel.emit()" aria-label="Cerrar comparación" title="Cerrar comparación">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <p *ngIf="offers.length === 1" class="hint">Selecciona al menos un plan más para comparar en la lista de abajo.</p>
+
+    <div class="comparison-scroll">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th class="row-label"></th>
+                    <th *ngFor="let offer of offers">
+                        <div class="plan-col-header">
+                            <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
+                                aria-label="Quitar de la comparación" title="Quitar de la comparación">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
+                            <span class="plan-level">Plan {{ offer.level | levelLabel }}</span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-label">Prima al contado</td>
+                    <td *ngFor="let offer of offers" class="highlight-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Franquicia</td>
+                    <td *ngFor="let offer of offers">{{ offer.franchise | number:'1.0-0' }} Bs.</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Descuento</td>
+                    <td *ngFor="let offer of offers">{{ offer.discount | number:'1.0-0' }}%</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Tasa</td>
+                    <td *ngFor="let offer of offers">{{ offer.rate | number:'1.0-0' }}%</td>
+                </tr>
+                <tr>
+                    <td class="row-label">Límite de años del vehículo</td>
+                    <td *ngFor="let offer of offers">{{ offer.ageLimit | number:'1.0-0' }} años</td>
+                </tr>
+                <tr *ngIf="loadingBenefits">
+                    <td class="row-label">Beneficios</td>
+                    <td *ngFor="let offer of offers" class="loading-cell">Cargando...</td>
+                </tr>
+                <tr *ngFor="let benefitName of benefitNames">
+                    <td class="row-label">{{ benefitName }}</td>
+                    <td *ngFor="let offer of offers" class="benefit-cell">
+                        <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
+                        <ng-template #noBenefit>
+                            <mat-icon class="benefit-no">remove</mat-icon>
+                        </ng-template>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"></td>
+                    <td *ngFor="let offer of offers" class="action-cell">
+                        <button mat-raised-button color="primary" (click)="contratar(offer)">Contratar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
