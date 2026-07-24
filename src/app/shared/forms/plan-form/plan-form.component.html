@@ -76,10 +76,17 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Franquicia (Bs.):</mat-label>
-                    <input matInput formControlName="franchise" placeholder="Ej. 150" />
-                    <mat-error *ngIf="form.get('franchise')?.hasError('required')">
-                        La franquicia es obligatoria.
+                    <mat-label>Franquicia (%):</mat-label>
+                    <input matInput type="number" formControlName="franchisePercentage" placeholder="Ej. 10" />
+                    <mat-error *ngIf="form.get('franchisePercentage')?.hasError('required')">
+                        El porcentaje de franquicia es obligatorio.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Franquicia Mínima (Bs.):</mat-label>
+                    <input matInput type="number" formControlName="franchiseMinimum" placeholder="Ej. 1000" />
+                    <mat-error *ngIf="form.get('franchiseMinimum')?.hasError('required')">
+                        El monto mínimo de franquicia es obligatorio.
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">

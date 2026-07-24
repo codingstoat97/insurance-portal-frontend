@@ -13,7 +13,7 @@ export interface Plan {
     planTypeId: number;
     segment?: string;
     planType?: string;
-    franchise: number;
+    franchise: string;
     state: boolean;
     createdBy: string;
     brokerId?: number;

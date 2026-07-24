@@ -54,7 +54,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
     { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'planType', header: 'Tipo de Plan', field: 'planType' },
-    { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
+    { id: 'franchise', header: 'Franquicia', field: 'franchise' },
     { id: 'state', header: 'Plan Activado', field: 'state' }
   ];
 

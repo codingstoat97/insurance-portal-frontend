@@ -52,7 +52,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
     discount: this.fb.control<number | null>(null),
     segmentId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     planTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
-    franchise: this.fb.control<number | null>(null),
+    franchisePercentage: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+    franchiseMinimum: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
     state: this.fb.control<boolean | true>(true),
     brokerId: this.fb.control<number | null>(null),
     benefits: this.fb.nonNullable.control<Benefit[]>([]),
@@ -134,6 +135,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
   }
 
   private setFormFromPlan(plan: Plan): void {
+    const { percentage, minimum } = this.parseFranchise(plan.franchise);
     this.form.reset({
       vehicleId: plan.vehicleId ?? null,
       regionalId: plan.regionalId ?? null,
@@ -144,7 +146,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
       discount: plan.discount ?? null,
       segmentId: plan.segmentId ?? this.segmentList.find(s => s.name === plan.segment)?.id ?? null,
       planTypeId: plan.planTypeId ?? this.planTypeList.find(pt => pt.name === plan.planType)?.id ?? null,
-      franchise: plan.franchise ?? null,
+      franchisePercentage: percentage,
+      franchiseMinimum: minimum,
       state: plan.state ?? true,
       brokerId: plan.brokerId ?? null,
       benefits: [...(plan.benefits ?? [])],
@@ -155,12 +158,27 @@ export class PlanFormComponent implements OnInit, OnChanges {
     this.form.updateValueAndValidity({ emitEvent: false });
   }
 
+  private parseFranchise(value: unknown): { percentage: number | null; minimum: number | null } {
+    const match = value != null ? String(value).match(/([\d.]+)\s*%.*?Bs\.?\s*([\d.,]+)/i) : null;
+    if (!match) {
+      return { percentage: null, minimum: null };
+    }
+    return {
+      percentage: parseFloat(match[1]),
+      minimum: parseFloat(match[2].replace(/,/g, '')),
+    };
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.getRawValue() as Plan;
+    const { franchisePercentage, franchiseMinimum, ...rest } = this.form.getRawValue();
+    const payload = {
+      ...rest,
+      franchise: `${franchisePercentage}% Min. Bs. ${franchiseMinimum}`,
+    } as Plan;
     this.submitted.emit(payload);
   }
 
