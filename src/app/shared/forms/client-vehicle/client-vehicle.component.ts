@@ -31,6 +31,7 @@ export class ClientVehicleComponent implements OnInit {
   @Output() submitted = new EventEmitter<ClientVehicle>();
   @Output() cancelled = new EventEmitter<void>();
 
+  vehicleClassificationList: string[] = [];
   vehicleTypeList: VehicleType[] = [];
   engineTypeList: string[] = [];
   regionalList: Region[] = [];
@@ -44,6 +45,10 @@ export class ClientVehicleComponent implements OnInit {
     model: this.fb.control<string>('', {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(50)],
+    }),
+    classification: this.fb.control<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
     }),
     year: this.fb.control<number | null>(null, {
       validators: [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
@@ -72,9 +77,30 @@ export class ClientVehicleComponent implements OnInit {
     if (this.value) {
       this.form.patchValue(this.value);
     }
+    this.getVehiculeClassificationList();
     this.getVehicleTypeList();
     this.getEngineTypeList();
     this.getRegionalList();
+  }
+
+  private getVehiculeClassificationList(): void {
+    this.httpService.get<any>(PATH.vehicleClassificationList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las clasificaciones de vehículo.'); return EMPTY; }))
+      .subscribe(res => {
+        this.vehicleClassificationList = this.normalizeClassifications(res);
+        const v = this.value?.classification ?? null;
+        if (v && !this.vehicleClassificationList.includes(v)) {
+          this.vehicleClassificationList = [...this.vehicleClassificationList, v];
+        }
+      });
+  }
+
+  private normalizeClassifications(res: any): string[] {
+    const arr = Array.isArray(res) ? res : [];
+    const asStrings = arr.map((x: any) =>
+      typeof x === 'string' ? x : (x?.value ?? x?.name ?? x?.id ?? '')
+    );
+    return [...new Set(asStrings.filter(Boolean))];
   }
 
   private getRegionalList(): void {

@@ -10,6 +10,17 @@
                 Datos del Vehículo
             </h4>
             <div class="form-grid">
+                <mat-form-field appearance="outline" class="span-2">
+                    <mat-label>Clasificación:</mat-label>
+                    <mat-select formControlName="classification">
+                        <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
+                            {{ c }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('classification')?.hasError('required')">
+                        Selecciona una clase
+                    </mat-error>
+                </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Marca</mat-label>
                     <input matInput formControlName="brand" placeholder="Ej. Honda" />

@@ -27,6 +27,20 @@
         </div>
 
         <div class="field-full">
+            <label class="field-label">Clasificación *</label>
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="classification" placeholder="Selecciona una clasificación">
+                    <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
+                        {{ c }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('classification')?.hasError('required')">
+                    Selecciona una clase
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="field-full">
             <label class="field-label">Regional *</label>
             <mat-form-field appearance="outline">
                 <mat-select formControlName="regional" placeholder="Selecciona tu regional">

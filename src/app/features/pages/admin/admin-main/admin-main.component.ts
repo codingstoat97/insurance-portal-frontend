@@ -50,6 +50,7 @@ export class AdminMainComponent implements OnInit {
   vehicleColumns = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'brand', header: 'Marca', field: 'brand' },
+    { id: 'classification', header: 'Clasificación', field: 'classification' },
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'highEnd', header: 'Es Alta Gama', field: 'highEnd' },
     { id: 'vehicleType', header: 'Tipo de Vehículo', field: 'vehicleType' },

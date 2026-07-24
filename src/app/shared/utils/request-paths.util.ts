@@ -4,6 +4,7 @@ export const vehicleAdd = 'vehicleCatalog/add';
 export const vehicleUpdate = 'vehicleCatalog/edit';
 export const vehicleDelete = 'vehicleCatalog/delete';
 export const vehicleGetByID = 'vehicleCatalog/getById';
+export const vehicleClassificationList = 'vehicleCatalog/vehicleClassification';
 export const vehicleEngineTypeList = 'vehicleCatalog/allEngineTypes';
 
 export const vehicleTypePath = 'vehicleTypes';
