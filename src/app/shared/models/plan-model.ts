@@ -9,7 +9,10 @@ export interface Plan {
     rate: number;
     ageLimit: number;
     discount: number;
-    level: string;
+    segmentId: number;
+    planTypeId: number;
+    segment?: string;
+    planType?: string;
     franchise: number;
     state: boolean;
     createdBy: string;

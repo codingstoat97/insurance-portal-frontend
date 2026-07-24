@@ -10,17 +10,6 @@
                 Datos del Vehículo
             </h4>
             <div class="form-grid">
-                <mat-form-field appearance="outline" class="span-2">
-                    <mat-label>Clasificación:</mat-label>
-                    <mat-select formControlName="classification">
-                        <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
-                            {{ c }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('classification')?.hasError('required')">
-                        Selecciona una clase
-                    </mat-error>
-                </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Marca</mat-label>
                     <input matInput formControlName="brand" placeholder="Ej. Honda" />
@@ -47,13 +36,24 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Tipo de Motor:</mat-label>
+                    <mat-label>Tipo de Vehículo:</mat-label>
                     <mat-select formControlName="vehicleType">
                         <mat-option *ngFor="let vt of vehicleTypeList" [value]="vt.name">
                             {{ vt.name }}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="form.get('vehicleType')?.hasError('required')">
+                        Selecciona un tipo de vehículo
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tipo de Motor:</mat-label>
+                    <mat-select formControlName="engineType">
+                        <mat-option *ngFor="let et of engineTypeList" [value]="et">
+                            {{ et }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('engineType')?.hasError('required')">
                         Selecciona un tipo de motor
                     </mat-error>
                 </mat-form-field>

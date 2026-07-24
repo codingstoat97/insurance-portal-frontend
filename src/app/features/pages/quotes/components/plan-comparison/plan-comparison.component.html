@@ -29,7 +29,7 @@
                         <div class="plan-row-header">
                             <div class="plan-name-block">
                                 <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
-                                <span class="plan-level">Plan {{ offer.level | levelLabel }}</span>
+                                <span class="plan-level">Plan {{ offer.planType }}</span>
                             </div>
                             <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
                                 aria-label="Quitar de la comparación" title="Quitar de la comparación">

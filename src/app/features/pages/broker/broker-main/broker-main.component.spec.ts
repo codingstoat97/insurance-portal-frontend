@@ -6,7 +6,6 @@ import { of } from 'rxjs';
 import { BrokerMainComponent } from './broker-main.component';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
-import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
 
 const mockHttpService = {
@@ -42,7 +41,6 @@ describe('BrokerMainComponent', () => {
         { provide: HttpService, useValue: mockHttpService },
         { provide: SnackBarService, useValue: mockSnackBar },
         { provide: MatDialog, useValue: mockDialog },
-        LevelLabelPipe,
         CoverageLabelPipe,
       ],
     }).compileComponents();

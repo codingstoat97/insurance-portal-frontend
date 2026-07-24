@@ -58,6 +58,29 @@
                         [addElement]="true" (addNewElementAction)="onAddNewElement('Region')"
                         (action)="onRowAction($event, 'Region')"></app-data-table>
                 </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">tune</mat-icon>
+                        Configuración
+                    </ng-template>
+                    <mat-tab-group class="nested-tab-group">
+                        <mat-tab label="Tipos de Vehículo">
+                            <app-data-table [rows]="vehicleTypeRows" [columns]="vehicleTypeColumns" [actions]="actions"
+                                [addElement]="true" (addNewElementAction)="onAddNewElement('VehicleType')"
+                                (action)="onRowAction($event, 'VehicleType')"></app-data-table>
+                        </mat-tab>
+                        <mat-tab label="Segmentos">
+                            <app-data-table [rows]="segmentRows" [columns]="segmentColumns" [actions]="actions"
+                                [addElement]="true" (addNewElementAction)="onAddNewElement('Segment')"
+                                (action)="onRowAction($event, 'Segment')"></app-data-table>
+                        </mat-tab>
+                        <mat-tab label="Tipos de Plan">
+                            <app-data-table [rows]="planTypeRows" [columns]="planTypeColumns" [actions]="actions"
+                                [addElement]="true" (addNewElementAction)="onAddNewElement('PlanType')"
+                                (action)="onRowAction($event, 'PlanType')"></app-data-table>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-tab>
             </mat-tab-group>
         </div>
     </mat-drawer-content>

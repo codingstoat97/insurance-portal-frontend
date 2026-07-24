@@ -8,7 +8,6 @@ import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-pu
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { Insurance, Plan, PlanBenefit } from 'src/app/shared/models';
-import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 @Component({
@@ -16,8 +15,7 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   standalone: true,
   imports: [
     CommonModule,
-    SharedModule,
-    LevelLabelPipe
+    SharedModule
   ],
   templateUrl: './plan-comparison.component.html',
   styleUrls: ['./plan-comparison.component.sass']

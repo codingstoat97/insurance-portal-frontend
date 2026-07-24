@@ -1,5 +1,5 @@
-<mat-tab-group *ngIf="offerList.length > 0" class="level-tabs" [(selectedIndex)]="activeTabIndex" animationDuration="0ms">
-    <mat-tab *ngFor="let tab of levelTabs" [label]="tab.label"></mat-tab>
+<mat-tab-group *ngIf="planTypeTabs.length > 1" class="level-tabs" [(selectedIndex)]="activeTabIndex" animationDuration="0ms">
+    <mat-tab *ngFor="let tab of planTypeTabs" [label]="tab.label"></mat-tab>
 </mat-tab-group>
 
 <div *ngIf="filteredOfferList.length > 0" class="offer-list-container">

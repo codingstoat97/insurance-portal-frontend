@@ -12,15 +12,18 @@ import { ResponsiveService } from 'src/app/core/services/responsive/responsive.s
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
+import { SimpleNameFormComponent } from 'src/app/shared/forms/simple-name-form/simple-name-form.component';
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
 import { catchError, EMPTY } from 'rxjs';
 
-import { Insurance, Region, User, Vehicle } from 'src/app/shared/models';
+import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
 import { UserFormComponent } from 'src/app/shared/forms/user-form/user-form.component';
+
+type NamedCatalogEntity = VehicleType | Segment | PlanType;
 
 
 @Component({
@@ -47,10 +50,10 @@ export class AdminMainComponent implements OnInit {
   vehicleColumns = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'brand', header: 'Marca', field: 'brand' },
-    { id: 'classification', header: 'Clasificación', field: 'classification' },
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'highEnd', header: 'Es Alta Gama', field: 'highEnd' },
-    { id: 'vehicleType', header: 'Tipo de Motor', field: 'vehicleType' }
+    { id: 'vehicleType', header: 'Tipo de Vehículo', field: 'vehicleType' },
+    { id: 'engineType', header: 'Tipo de Motor', field: 'engineType' }
   ];
 
   vehicleRows = [];
@@ -71,6 +74,27 @@ export class AdminMainComponent implements OnInit {
   ];
 
   brokerRows = [];
+
+  vehicleTypeColumns = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' }
+  ];
+
+  vehicleTypeRows = [];
+
+  segmentColumns = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' }
+  ];
+
+  segmentRows = [];
+
+  planTypeColumns = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' }
+  ];
+
+  planTypeRows = [];
 
   actions: any[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
@@ -100,6 +124,9 @@ export class AdminMainComponent implements OnInit {
     this.fetchVehicleList();
     this.fetchInsuranceList();
     this.fetchBrokerList();
+    this.fetchVehicleTypeList();
+    this.fetchSegmentList();
+    this.fetchPlanTypeList();
   }
 
   private fetchInsuranceList() {
@@ -126,6 +153,24 @@ export class AdminMainComponent implements OnInit {
       .subscribe(res => { this.brokerRows = res; });
   }
 
+  private fetchVehicleTypeList() {
+    this.httpService.get<any>(PATH.vehicleTypeList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de vehículo.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleTypeRows = res; });
+  }
+
+  private fetchSegmentList() {
+    this.httpService.get<any>(PATH.segmentList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los segmentos.'); return EMPTY; }))
+      .subscribe(res => { this.segmentRows = res; });
+  }
+
+  private fetchPlanTypeList() {
+    this.httpService.get<any>(PATH.planTypeList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de plan.'); return EMPTY; }))
+      .subscribe(res => { this.planTypeRows = res; });
+  }
+
   openDeleteDialog(type: string, itemName: any, item: any): void {
     this.deleteDialogRef = this.dialog.open(DeleteModalComponent, {
       data: { type: type, element: itemName },
@@ -138,12 +183,15 @@ export class AdminMainComponent implements OnInit {
           case 'Insurance': this.deleteEntity(type, item.id); break;
           case 'Region': this.deleteEntity(type, item.id); break;
           case 'Vehicle': this.deleteEntity(type, item.id); break;
+          case 'VehicleType': this.deleteEntity(type, item.id); break;
+          case 'Segment': this.deleteEntity(type, item.id); break;
+          case 'PlanType': this.deleteEntity(type, item.id); break;
         }
       }
     });
   }
 
-  openInformationDialog(type: string, item: Vehicle | Region | Insurance): void {
+  openInformationDialog(type: string, item: Vehicle | Region | Insurance | NamedCatalogEntity): void {
     this.infoDialogRef = this.dialog.open(InfoModalComponent, {
       data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
       scrollStrategy: this.scrollStrategy
@@ -155,11 +203,14 @@ export class AdminMainComponent implements OnInit {
       case 'Insurance': return this.insuranceColumns;
       case 'Region': return this.regionColumns;
       case 'Vehicle': return this.vehicleColumns;
+      case 'VehicleType': return this.vehicleTypeColumns;
+      case 'Segment': return this.segmentColumns;
+      case 'PlanType': return this.planTypeColumns;
       default: return [];
     }
   }
 
-  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region | User) {
+  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region | User | NamedCatalogEntity) {
     const dialogRef = this.getDialogRef(type);
 
     if (entity) {
@@ -175,7 +226,7 @@ export class AdminMainComponent implements OnInit {
       dialogRef.close();
     });
 
-    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User) => {
+    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User | NamedCatalogEntity) => {
       if (result) {
         if (entity) {
           this.updateEntity(type, result, (entity as any).id);
@@ -206,11 +257,30 @@ export class AdminMainComponent implements OnInit {
         dialogRef = this.dialog.open(UserFormComponent, {
           width: '620px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
+      case 'VehicleType':
+      case 'Segment':
+      case 'PlanType': {
+        dialogRef = this.dialog.open(SimpleNameFormComponent, {
+          width: '480px', maxWidth: '95vw', maxHeight: '90vh',
+        });
+        const cfg = this.catalogFormConfig[type];
+        dialogRef.componentInstance.sectionTitle = cfg.sectionTitle;
+        dialogRef.componentInstance.sectionIcon = cfg.sectionIcon;
+        dialogRef.componentInstance.fieldLabel = cfg.fieldLabel;
+        dialogRef.componentInstance.placeholder = cfg.placeholder;
+        break;
+      }
     }
     return dialogRef;
   }
 
-  private handleEditEntity(entity: Vehicle | Insurance | Region | User, dialogRef: any) {
+  private readonly catalogFormConfig: Record<string, { sectionTitle: string; sectionIcon: string; fieldLabel: string; placeholder: string }> = {
+    VehicleType: { sectionTitle: 'Datos del Tipo de Vehículo', sectionIcon: 'directions_car', fieldLabel: 'Nombre del Tipo de Vehículo', placeholder: 'Ej. Automóvil' },
+    Segment: { sectionTitle: 'Datos del Segmento', sectionIcon: 'category', fieldLabel: 'Nombre del Segmento', placeholder: 'Ej. Individual' },
+    PlanType: { sectionTitle: 'Datos del Tipo de Plan', sectionIcon: 'assignment', fieldLabel: 'Nombre del Tipo de Plan', placeholder: 'Ej. Básico' },
+  };
+
+  private handleEditEntity(entity: Vehicle | Insurance | Region | User | NamedCatalogEntity, dialogRef: any) {
     dialogRef.componentInstance.title = 'Editar';
     dialogRef.componentInstance.value = entity;
     dialogRef.componentInstance.showDescription = false;
@@ -238,7 +308,7 @@ export class AdminMainComponent implements OnInit {
     }
   }
 
-  private saveEntity(type: string, payload: Insurance | Vehicle | Region | User): void {
+  private saveEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity): void {
     let path = this.getEntityPath(type) + '/add';
     if (type == 'Broker') {
       path += '/brokers';
@@ -251,7 +321,7 @@ export class AdminMainComponent implements OnInit {
       });
   }
 
-  private updateEntity(type: string, payload: Insurance | Vehicle | Region | User, id: any): void {
+  private updateEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity, id: any): void {
     const path = this.getEntityPath(type) + '/edit/' + id;
     this.httpService.put(path, payload)
       .pipe(catchError(() => { this.snackbar.error('Error al actualizar.'); return EMPTY; }))
@@ -277,6 +347,9 @@ export class AdminMainComponent implements OnInit {
       case 'Insurance': return PATH.insurancePath;
       case 'Region': return PATH.regionPath;
       case 'Broker': return PATH.adminPath;
+      case 'VehicleType': return PATH.vehicleTypePath;
+      case 'Segment': return PATH.segmentPath;
+      case 'PlanType': return PATH.planTypePath;
       default: return '';
     }
   }
@@ -287,6 +360,9 @@ export class AdminMainComponent implements OnInit {
       case 'Vehicle': this.fetchVehicleList(); break;
       case 'Region': this.fetchRegionList(); break;
       case 'Broker': this.fetchBrokerList(); break;
+      case 'VehicleType': this.fetchVehicleTypeList(); break;
+      case 'Segment': this.fetchSegmentList(); break;
+      case 'PlanType': this.fetchPlanTypeList(); break;
     }
   }
 

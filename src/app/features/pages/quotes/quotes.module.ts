@@ -15,7 +15,6 @@ import { QuoteOfferComponent } from "./components/quote-offer/quote-offer.compon
 import { OfferListComponent } from "./components/offer-list/offer-list.component";
 import { QuotePageComponent } from './components/quote-page/quote-page.component';
 
-import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 
@@ -35,7 +34,6 @@ import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-pu
     QuoteOfferComponent,
     OfferListComponent,
     ClientVehicleComponent,
-    LevelLabelPipe,
     MatDialogModule
 ],
 providers: [PlanPurchaseService],

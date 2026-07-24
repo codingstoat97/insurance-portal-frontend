@@ -19,7 +19,6 @@ import { Benefit, Broker, ClientPlanApproval, Insurance, Plan, Region, Vehicle }
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
 
-import { LevelLabelPipe } from 'src/app/shared/pipes/level-pipe/level-label.pipe';
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
 
 import { catchError, EMPTY, forkJoin } from 'rxjs';
@@ -29,7 +28,7 @@ import { catchError, EMPTY, forkJoin } from 'rxjs';
   selector: 'app-broker-main',
   templateUrl: './broker-main.component.html',
   styleUrls: ['./broker-main.component.sass'],
-  providers: [LevelLabelPipe, CoverageLabelPipe]
+  providers: [CoverageLabelPipe]
 })
 export class BrokerMainComponent implements OnInit {
 
@@ -53,7 +52,8 @@ export class BrokerMainComponent implements OnInit {
     { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
-    { id: 'level', header: 'Nivel', field: 'level', valueGetter: (row) => this.levelLabelPipe.transform(row.level) },
+    { id: 'segment', header: 'Segmento', field: 'segment' },
+    { id: 'planType', header: 'Tipo de Plan', field: 'planType' },
     { id: 'franchise', header: 'Franquicia (Bs.)', field: 'franchise' },
     { id: 'state', header: 'Plan Activado', field: 'state' }
   ];
@@ -76,7 +76,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'vehiclePlate', header: 'Placa', field: 'vehiclePlate' },
     { id: 'vehiclePrice', header: 'Precio Vehículo (Bs.)', field: 'vehiclePrice' },
     { id: 'insurance', header: 'Aseguradora', valueGetter: (row) => this.insuranceMap[row.plan?.insuranceId!]?.name ?? '—' },
-    { id: 'level', header: 'Nivel', valueGetter: (row) => this.levelLabelPipe.transform(row.plan?.level) },
+    { id: 'planType', header: 'Tipo de Plan', valueGetter: (row) => row.plan?.planType ?? '—' },
   ];
 
   waitingListRows: ClientPlanApproval[] = [];
@@ -105,7 +105,6 @@ export class BrokerMainComponent implements OnInit {
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
-    private levelLabelPipe: LevelLabelPipe,
     private coverageLabelPipe: CoverageLabelPipe,
     private responsiveService: ResponsiveService,
     private authService: AuthService) { }

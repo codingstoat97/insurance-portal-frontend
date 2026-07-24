@@ -4,9 +4,28 @@ export const vehicleAdd = 'vehicleCatalog/add';
 export const vehicleUpdate = 'vehicleCatalog/edit';
 export const vehicleDelete = 'vehicleCatalog/delete';
 export const vehicleGetByID = 'vehicleCatalog/getById';
-export const vehicleClassificationList = 'vehicleCatalog/vehicleClassification';
+export const vehicleEngineTypeList = 'vehicleCatalog/allEngineTypes';
 
+export const vehicleTypePath = 'vehicleTypes';
 export const vehicleTypeList = 'vehicleTypes/list';
+export const vehicleTypeAdd = 'vehicleTypes/add';
+export const vehicleTypeUpdate = 'vehicleTypes/edit';
+export const vehicleTypeDelete = 'vehicleTypes/delete';
+export const vehicleTypeGetByID = 'vehicleTypes/getById';
+
+export const segmentPath = 'segments';
+export const segmentList = 'segments/list';
+export const segmentAdd = 'segments/add';
+export const segmentUpdate = 'segments/edit';
+export const segmentDelete = 'segments/delete';
+export const segmentGetByID = 'segments/getById';
+
+export const planTypePath = 'planTypes';
+export const planTypeList = 'planTypes/list';
+export const planTypeAdd = 'planTypes/add';
+export const planTypeUpdate = 'planTypes/edit';
+export const planTypeDelete = 'planTypes/delete';
+export const planTypeGetByID = 'planTypes/getById';
 
 export const regionPath = 'regionals';
 export const regionList = 'regionals/list'; 

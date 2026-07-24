@@ -1,0 +1,35 @@
+<div class="form-container dialog-form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>{{ sectionIcon }}</mat-icon>
+                {{ sectionTitle }}
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ fieldLabel }}:</mat-label>
+                    <input matInput formControlName="name" [placeholder]="placeholder" />
+                    <mat-error *ngIf="form.get('name')?.hasError('required')">
+                        El nombre es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

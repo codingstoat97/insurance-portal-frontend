@@ -9,11 +9,8 @@ import { catchError, EMPTY } from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Plan, Vehicle, Region, Insurance, Benefit, Broker } from 'src/app/shared/models';
+import { Plan, Vehicle, Region, Insurance, Benefit, Broker, Segment, PlanType } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
-
-type PlanLevel = 'basic' | 'gold';
-
 
 @Component({
   selector: 'app-plan-form',
@@ -42,6 +39,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
   insuranceList: Insurance[] = [];
   benefitList: Benefit[] = [];
   brokerList: Broker[] = [];
+  segmentList: Segment[] = [];
+  planTypeList: PlanType[] = [];
 
   form = this.fb.group({
     vehicleId: this.fb.control<number | null>(null, { validators: [] }),
@@ -51,7 +50,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
     rate: this.fb.control<number | null>(null),
     ageLimit: this.fb.control<number | null>(null),
     discount: this.fb.control<number | null>(null),
-    level: this.fb.nonNullable.control<PlanLevel>('basic', [Validators.required]),
+    segmentId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
+    planTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     franchise: this.fb.control<number | null>(null),
     state: this.fb.control<boolean | true>(true),
     brokerId: this.fb.control<number | null>(null),
@@ -67,6 +67,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
     this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
+    this.fetchSegmentList();
+    this.fetchPlanTypeList();
     if (this.showBrokerSelect) {
       this.fetchBrokerList();
     }
@@ -108,6 +110,24 @@ export class PlanFormComponent implements OnInit, OnChanges {
       .subscribe(res => { this.brokerList = res; });
   }
 
+  fetchSegmentList(): void {
+    this.httpService.get<Segment[]>(PATH.segmentList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los segmentos.'); return EMPTY; }))
+      .subscribe(res => {
+        this.segmentList = res ?? [];
+        if (this.planForEdit) this.setFormFromPlan(this.planForEdit);
+      });
+  }
+
+  fetchPlanTypeList(): void {
+    this.httpService.get<PlanType[]>(PATH.planTypeList)
+      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los tipos de plan.'); return EMPTY; }))
+      .subscribe(res => {
+        this.planTypeList = res ?? [];
+        if (this.planForEdit) this.setFormFromPlan(this.planForEdit);
+      });
+  }
+
   getVehicleInfo(v: Vehicle): string {
     const result = v.brand + '-' + v.model;
     return result;
@@ -122,7 +142,8 @@ export class PlanFormComponent implements OnInit, OnChanges {
       rate: plan.rate ?? null,
       ageLimit: plan.ageLimit ?? null,
       discount: plan.discount ?? null,
-      level: this.toLevel(this.value?.level),
+      segmentId: plan.segmentId ?? this.segmentList.find(s => s.name === plan.segment)?.id ?? null,
+      planTypeId: plan.planTypeId ?? this.planTypeList.find(pt => pt.name === plan.planType)?.id ?? null,
       franchise: plan.franchise ?? null,
       state: plan.state ?? true,
       brokerId: plan.brokerId ?? null,
@@ -132,10 +153,6 @@ export class PlanFormComponent implements OnInit, OnChanges {
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.form.updateValueAndValidity({ emitEvent: false });
-  }
-
-  private toLevel(x: any): PlanLevel {
-    return x === 'gold' ? 'gold' : 'basic';
   }
 
   onSubmit() {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { catchError, EMPTY } from 'rxjs';
@@ -17,7 +17,7 @@ import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 const MAX_COMPARE = 3;
 
-interface PlanLevelTab {
+interface PlanTypeTab {
   value: string;
   label: string;
 }
@@ -35,7 +35,7 @@ interface PlanLevelTab {
   templateUrl: './offer-list.component.html',
   styleUrls: ['./offer-list.component.sass']
 })
-export class OfferListComponent implements OnInit {
+export class OfferListComponent implements OnInit, OnChanges {
 
   @Input() offerList: any[] = [];
   insuranceMap = new Map<number, Insurance>();
@@ -43,21 +43,41 @@ export class OfferListComponent implements OnInit {
   selectedOffers: Plan[] = [];
   readonly maxCompare = MAX_COMPARE;
 
-  readonly levelTabs: PlanLevelTab[] = [
-    { value: 'basic', label: 'Básico' },
-    { value: 'gold', label: 'Premium' }
-  ];
+  planTypeTabs: PlanTypeTab[] = [];
   activeTabIndex = 0;
 
   get filteredOfferList(): any[] {
-    const level = this.levelTabs[this.activeTabIndex]?.value;
-    return this.offerList.filter(offer => offer.level === level);
+    if (this.planTypeTabs.length === 0) return this.offerList;
+    const planType = this.planTypeTabs[this.activeTabIndex]?.value;
+    return this.offerList.filter(offer => offer.planType === planType);
   }
 
   constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
     this.loadInsurances();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('offerList' in changes) {
+      this.rebuildPlanTypeTabs();
+    }
+  }
+
+  private rebuildPlanTypeTabs(): void {
+    const seen = new Set<string>();
+    const tabs: PlanTypeTab[] = [];
+    for (const offer of this.offerList) {
+      const name = offer?.planType;
+      if (name && !seen.has(name)) {
+        seen.add(name);
+        tabs.push({ value: name, label: name });
+      }
+    }
+    this.planTypeTabs = tabs;
+    if (this.activeTabIndex >= tabs.length) {
+      this.activeTabIndex = 0;
+    }
   }
 
   trackById(index: number, item: any) {
