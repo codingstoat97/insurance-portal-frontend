@@ -8,6 +8,7 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { QuoteOfferComponent } from "../quote-offer/quote-offer.component";
 import { PlanComparisonComponent } from "../plan-comparison/plan-comparison.component";
@@ -22,6 +23,11 @@ interface PlanTypeTab {
   label: string;
 }
 
+interface InsuranceChip {
+  id: number;
+  name: string;
+}
+
 @Component({
   selector: 'app-offer-list',
   standalone: true,
@@ -29,6 +35,7 @@ interface PlanTypeTab {
     CommonModule,
     SharedModule,
     MatTabsModule,
+    MatChipsModule,
     QuoteOfferComponent,
     PlanComparisonComponent
   ],
@@ -43,13 +50,22 @@ export class OfferListComponent implements OnInit, OnChanges {
   selectedOffers: Plan[] = [];
   readonly maxCompare = MAX_COMPARE;
 
+  insuranceChips: InsuranceChip[] = [];
+  selectedInsuranceIds = new Set<number>();
+
   planTypeTabs: PlanTypeTab[] = [];
   activeTabIndex = 0;
 
+  get insuranceFilteredList(): any[] {
+    if (this.selectedInsuranceIds.size === 0) return this.offerList;
+    return this.offerList.filter(offer => this.selectedInsuranceIds.has(offer.insuranceId));
+  }
+
   get filteredOfferList(): any[] {
-    if (this.planTypeTabs.length === 0) return this.offerList;
+    const list = this.insuranceFilteredList;
+    if (this.planTypeTabs.length === 0) return list;
     const planType = this.planTypeTabs[this.activeTabIndex]?.value;
-    return this.offerList.filter(offer => offer.planType === planType);
+    return list.filter(offer => offer.planType === planType);
   }
 
   constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
@@ -60,14 +76,37 @@ export class OfferListComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('offerList' in changes) {
+      this.rebuildInsuranceChips();
       this.rebuildPlanTypeTabs();
+    }
+  }
+
+  onInsuranceChipsChange(selectedIds: number[]): void {
+    this.selectedInsuranceIds = new Set(selectedIds);
+    this.rebuildPlanTypeTabs();
+  }
+
+  private rebuildInsuranceChips(): void {
+    const seen = new Map<number, InsuranceChip>();
+    for (const offer of this.offerList) {
+      const id = offer?.insuranceId;
+      if (id != null && !seen.has(id)) {
+        seen.set(id, { id, name: this.insuranceMap.get(id)?.name || 'Sin nombre' });
+      }
+    }
+    this.insuranceChips = Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name));
+
+    const validIds = new Set(this.insuranceChips.map(c => c.id));
+    const stillValid = [...this.selectedInsuranceIds].filter(id => validIds.has(id));
+    if (stillValid.length !== this.selectedInsuranceIds.size) {
+      this.selectedInsuranceIds = new Set(stillValid);
     }
   }
 
   private rebuildPlanTypeTabs(): void {
     const seen = new Set<string>();
     const tabs: PlanTypeTab[] = [];
-    for (const offer of this.offerList) {
+    for (const offer of this.insuranceFilteredList) {
       const name = offer?.planType;
       if (name && !seen.has(name)) {
         seen.add(name);
@@ -117,6 +156,7 @@ export class OfferListComponent implements OnInit, OnChanges {
       .pipe(catchError(() => { this.snackbar.error('Error al cargar las aseguradoras.'); return EMPTY; }))
       .subscribe(res => {
         this.insuranceMap = new Map(res.map(i => [i.id, i]));
+        this.rebuildInsuranceChips();
       });
   }
 
