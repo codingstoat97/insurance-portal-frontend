@@ -6,3 +6,4 @@ export * from './region-model';
 export * from './insurance-model';
 export * from './plan-benefit-model';
 export * from './broker-model';
+export * from './client-plan-model';

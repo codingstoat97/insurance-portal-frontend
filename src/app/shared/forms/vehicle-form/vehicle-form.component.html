@@ -47,15 +47,15 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Eléctrico:</mat-label>
-                    <mat-select formControlName="isElectric">
-                        <mat-option [value]="true">
-                            Sí
-                        </mat-option>
-                        <mat-option [value]="false">
-                            No
+                    <mat-label>Tipo de Motor:</mat-label>
+                    <mat-select formControlName="vehicleType">
+                        <mat-option *ngFor="let vt of vehicleTypeList" [value]="vt.name">
+                            {{ vt.name }}
                         </mat-option>
                     </mat-select>
+                    <mat-error *ngIf="form.get('vehicleType')?.hasError('required')">
+                        Selecciona un tipo de motor
+                    </mat-error>
                 </mat-form-field>
             </div>
         </div>

@@ -47,10 +47,10 @@ export class AdminMainComponent implements OnInit {
   vehicleColumns = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'brand', header: 'Marca', field: 'brand' },
-    { id: 'classifications', header: 'Clasificación', field: 'classifications' },
+    { id: 'classification', header: 'Clasificación', field: 'classification' },
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'highEnd', header: 'Es Alta Gama', field: 'highEnd' },
-    { id: 'isElectric', header: 'Es Eléctrico', field: 'isElectric' }
+    { id: 'vehicleType', header: 'Tipo de Motor', field: 'vehicleType' }
   ];
 
   vehicleRows = [];
@@ -177,7 +177,11 @@ export class AdminMainComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User) => {
       if (result) {
-        this.saveEntity(type, result);
+        if (entity) {
+          this.updateEntity(type, result, (entity as any).id);
+        } else {
+          this.saveEntity(type, result);
+        }
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
@@ -243,6 +247,16 @@ export class AdminMainComponent implements OnInit {
       .pipe(catchError(() => { this.snackbar.error('Error al guardar.'); return EMPTY; }))
       .subscribe(() => {
         this.snackbar.success('Guardado con éxito');
+        this.refreshData(type);
+      });
+  }
+
+  private updateEntity(type: string, payload: Insurance | Vehicle | Region | User, id: any): void {
+    const path = this.getEntityPath(type) + '/edit/' + id;
+    this.httpService.put(path, payload)
+      .pipe(catchError(() => { this.snackbar.error('Error al actualizar.'); return EMPTY; }))
+      .subscribe(() => {
+        this.snackbar.success('Actualizado con éxito');
         this.refreshData(type);
       });
   }

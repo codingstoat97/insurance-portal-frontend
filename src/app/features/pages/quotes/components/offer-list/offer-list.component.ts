@@ -7,6 +7,8 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
+import { MatTabsModule } from '@angular/material/tabs';
+
 import { QuoteOfferComponent } from "../quote-offer/quote-offer.component";
 import { PlanComparisonComponent } from "../plan-comparison/plan-comparison.component";
 
@@ -15,12 +17,18 @@ import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 const MAX_COMPARE = 3;
 
+interface PlanLevelTab {
+  value: string;
+  label: string;
+}
+
 @Component({
   selector: 'app-offer-list',
   standalone: true,
   imports: [
     CommonModule,
     SharedModule,
+    MatTabsModule,
     QuoteOfferComponent,
     PlanComparisonComponent
   ],
@@ -34,6 +42,17 @@ export class OfferListComponent implements OnInit {
   selectedIds = new Set<number>();
   selectedOffers: Plan[] = [];
   readonly maxCompare = MAX_COMPARE;
+
+  readonly levelTabs: PlanLevelTab[] = [
+    { value: 'basic', label: 'Básico' },
+    { value: 'gold', label: 'Premium' }
+  ];
+  activeTabIndex = 0;
+
+  get filteredOfferList(): any[] {
+    const level = this.levelTabs[this.activeTabIndex]?.value;
+    return this.offerList.filter(offer => offer.level === level);
+  }
 
   constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
 

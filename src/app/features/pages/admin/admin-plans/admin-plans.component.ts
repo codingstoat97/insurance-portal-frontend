@@ -81,8 +81,6 @@ export class AdminPlansComponent implements OnInit {
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
-  private readonly DEFAULT_BENEFIT_LIMITS = [{ name: 'cobertura', limit: 90 }];
-
   get isMobile(): boolean {
     return this.responsiveService.isPhonePortrait;
   }
@@ -278,7 +276,7 @@ export class AdminPlansComponent implements OnInit {
     }
 
     const requests = benefits.map(b => {
-      const payload = { planId, benefitId: b.id, limits: this.DEFAULT_BENEFIT_LIMITS };
+      const payload = { planId, benefitId: b.id, description: b.description };
       return this.httpService.post(PATHS.planBenefitsAdd, payload);
     });
 

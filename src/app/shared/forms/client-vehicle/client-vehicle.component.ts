@@ -9,7 +9,7 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { ClientVehicle, Region } from '../../models';
+import { ClientVehicle, Region, VehicleType } from '../../models';
 
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
@@ -32,6 +32,7 @@ export class ClientVehicleComponent implements OnInit {
   @Output() cancelled = new EventEmitter<void>();
 
   vehicleClassificationList: string[] = [];
+  vehicleTypeList: VehicleType[] = [];
   regionalList: Region[] = [];
   description = "Cuéntanos sobre tu auto para encontrar la mejor cobertura."
 
@@ -60,7 +61,10 @@ export class ClientVehicleComponent implements OnInit {
     }),
     level: this.fb.control<any>(null),
     franchise: this.fb.control<any>(null),
-    isElectric: this.fb.control<boolean>(false)
+    vehicleType: this.fb.control<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
@@ -70,6 +74,7 @@ export class ClientVehicleComponent implements OnInit {
       this.form.patchValue(this.value);
     }
     this.getVehiculeClassificationList();
+    this.getVehicleTypeList();
     this.getRegionalList();
   }
 
@@ -97,6 +102,12 @@ export class ClientVehicleComponent implements OnInit {
     this.httpService.get<any>(PATH.regionList)
       .pipe(catchError(() => { this.snackbar.error('Error al cargar las regionales.'); return EMPTY; }))
       .subscribe(res => { this.regionalList = res; });
+  }
+
+  private getVehicleTypeList(): void {
+    this.httpService.get<VehicleType[]>(PATH.vehicleTypeList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de motor.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleTypeList = res ?? []; });
   }
 
   onSubmit() {

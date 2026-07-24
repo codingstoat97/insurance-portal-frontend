@@ -10,10 +10,12 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 @Component({
   selector: 'app-client-purchase-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormImportsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormImportsModule, MatDatepickerModule],
   templateUrl: './client-purchase-form.component.html',
   styleUrls: ['./client-purchase-form.component.sass']
 })
@@ -54,7 +56,7 @@ export class ClientPurchaseFormComponent implements OnInit {
       validators: [Validators.required, Validators.min(1)]
     }),
     countryOfBirth: this.fb.nonNullable.control('', { validators: [Validators.required] }),
-    birthdate: this.fb.nonNullable.control('', { validators: [Validators.required] }),
+    birthdate: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
     cellphone: this.fb.nonNullable.control(0, {
       validators: [Validators.required, Validators.min(0)]
     }),
@@ -89,7 +91,8 @@ export class ClientPurchaseFormComponent implements OnInit {
     const formValue = this.form.getRawValue();
     const payload: ClientPlan = {
       planId: this.planId,
-      ...formValue
+      ...formValue,
+      birthdate: this.toIsoDate(formValue.birthdate!)
     };
 
     this.submitted.emit(payload);
@@ -97,6 +100,13 @@ export class ClientPurchaseFormComponent implements OnInit {
 
   onCancel() {
     this.cancelled.emit();
+  }
+
+  private toIsoDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
 }

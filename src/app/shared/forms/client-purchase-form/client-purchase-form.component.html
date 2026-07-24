@@ -105,7 +105,10 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Fecha de Nacimiento:</mat-label>
-                    <input matInput formControlName="birthdate" placeholder="Ej. 15/08/97" />
+                    <input matInput [matDatepicker]="birthdatePicker" formControlName="birthdate"
+                        placeholder="DD/MM/AAAA" readonly />
+                    <mat-datepicker-toggle matIconSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #birthdatePicker></mat-datepicker>
                     <mat-error *ngIf="form.get('birthdate')?.hasError('required')">
                         Campo obligatorio
                     </mat-error>

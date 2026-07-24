@@ -6,6 +6,8 @@ export const vehicleDelete = 'vehicleCatalog/delete';
 export const vehicleGetByID = 'vehicleCatalog/getById';
 export const vehicleClassificationList = 'vehicleCatalog/vehicleClassification';
 
+export const vehicleTypeList = 'vehicleTypes/list';
+
 export const regionPath = 'regionals';
 export const regionList = 'regionals/list'; 
 export const regionAdd = 'regionals/add';
@@ -51,6 +53,9 @@ export const brokerList = 'broker/list';
 export const brokerGetByID = 'broker/getBrokerInfo';
 export const brokerGetPlans = 'broker/getPlansByBroker';
 export const brokerUpdate = 'broker/edit';
+export const brokerConfirmSoldPlan = 'broker/confirmSoldPlan';
+export const brokerGetSoldPlans = 'broker/getSoldPlansByBroker';
+export const brokerGetWaitingListPlans = 'broker/getWaitingListPlansByBroker';
 
 export const adminPath = 'admin';
 export const adminAddBroker = 'admin/add/brokers';

@@ -12,56 +12,44 @@
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th class="row-label"></th>
-                    <th *ngFor="let offer of offers">
-                        <div class="plan-col-header">
+                    <th class="plan-name-cell"></th>
+                    <th>Prima al contado</th>
+                    <th>Franquicia</th>
+                    <th>Descuento</th>
+                    <th>Tasa</th>
+                    <th>Límite de años del vehículo</th>
+                    <th *ngIf="loadingBenefits">Beneficios</th>
+                    <th *ngFor="let benefitName of benefitNames">{{ benefitName }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let offer of offers">
+                    <td class="plan-name-cell">
+                        <div class="plan-row-header">
+                            <div class="plan-name-block">
+                                <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
+                                <span class="plan-level">Plan {{ offer.level | levelLabel }}</span>
+                            </div>
                             <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
                                 aria-label="Quitar de la comparación" title="Quitar de la comparación">
                                 <mat-icon>close</mat-icon>
                             </button>
-                            <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
-                            <span class="plan-level">Plan {{ offer.level | levelLabel }}</span>
                         </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="row-label">Prima al contado</td>
-                    <td *ngFor="let offer of offers" class="highlight-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
-                </tr>
-                <tr>
-                    <td class="row-label">Franquicia</td>
-                    <td *ngFor="let offer of offers">{{ offer.franchise | number:'1.0-0' }} Bs.</td>
-                </tr>
-                <tr>
-                    <td class="row-label">Descuento</td>
-                    <td *ngFor="let offer of offers">{{ offer.discount | number:'1.0-0' }}%</td>
-                </tr>
-                <tr>
-                    <td class="row-label">Tasa</td>
-                    <td *ngFor="let offer of offers">{{ offer.rate | number:'1.0-0' }}%</td>
-                </tr>
-                <tr>
-                    <td class="row-label">Límite de años del vehículo</td>
-                    <td *ngFor="let offer of offers">{{ offer.ageLimit | number:'1.0-0' }} años</td>
-                </tr>
-                <tr *ngIf="loadingBenefits">
-                    <td class="row-label">Beneficios</td>
-                    <td *ngFor="let offer of offers" class="loading-cell">Cargando...</td>
-                </tr>
-                <tr *ngFor="let benefitName of benefitNames">
-                    <td class="row-label">{{ benefitName }}</td>
-                    <td *ngFor="let offer of offers" class="benefit-cell">
+                    </td>
+                    <td class="highlight-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                    <td>{{ offer.franchise | number:'1.0-0' }} Bs.</td>
+                    <td>{{ offer.discount | number:'1.0-0' }}%</td>
+                    <td>{{ offer.rate | number:'1.0-0' }}%</td>
+                    <td>{{ offer.ageLimit | number:'1.0-0' }} años</td>
+                    <td *ngIf="loadingBenefits" class="loading-cell">Cargando...</td>
+                    <td *ngFor="let benefitName of benefitNames" class="benefit-cell">
                         <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
                         <ng-template #noBenefit>
                             <mat-icon class="benefit-no">remove</mat-icon>
                         </ng-template>
                     </td>
-                </tr>
-                <tr>
-                    <td class="row-label"></td>
-                    <td *ngFor="let offer of offers" class="action-cell">
+                    <td class="action-cell">
                         <button mat-raised-button color="primary" (click)="contratar(offer)">Contratar</button>
                     </td>
                 </tr>

@@ -5,7 +5,12 @@ export interface Vehicle {
     brand: string;
     model: string;
     highEnd: boolean;
-    isElectric: boolean;
+    vehicleType: string;
+}
+
+export interface VehicleType {
+    id: any;
+    name: string;
 }
 
 export interface ClientVehicle {
@@ -17,4 +22,5 @@ export interface ClientVehicle {
     regional: string;
     level: string;
     franchise: string;
+    vehicleType: string;
 }

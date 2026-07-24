@@ -75,7 +75,19 @@
             </div>
         </div>
 
-        <mat-checkbox formControlName="isElectric">Es eléctrico</mat-checkbox>
+        <div class="field-full">
+            <label class="field-label">Tipo de Motor *</label>
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="vehicleType" placeholder="Selecciona el tipo de motor">
+                    <mat-option *ngFor="let vt of vehicleTypeList" [value]="vt.name">
+                        {{ vt.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('vehicleType')?.hasError('required')">
+                    Selecciona un tipo de motor
+                </mat-error>
+            </mat-form-field>
+        </div>
 
         <div class="form-actions">
             <button *ngIf="showCancel" mat-flat-button type="button" class="btn-back" (click)="onCancel()">

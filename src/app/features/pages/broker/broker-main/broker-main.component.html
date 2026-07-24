@@ -42,6 +42,17 @@
                         [addElement]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
+                <mat-tab label="Aprobación de Pólizas">
+                    <mat-tab-group class="approval-tab-group">
+                        <mat-tab label="Pendientes">
+                            <app-data-table [rows]="waitingListRows" [columns]="approvalColumns"
+                                [actions]="waitingListActions" (action)="onWaitingListRowAction($event)"></app-data-table>
+                        </mat-tab>
+                        <mat-tab label="Aprobadas">
+                            <app-data-table [rows]="soldPlanRows" [columns]="approvalColumns"></app-data-table>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-tab>
             </mat-tab-group>
         </div>
     </mat-drawer-content>

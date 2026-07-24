@@ -3,10 +3,5 @@ export interface PlanBenefit {
     planId: number;
     benefitId: number;
     benefitName: string;
-    limits: Limit[];
-}
-
-export interface Limit {
-    name: string;
-    limit: any;
+    description: string;
 }

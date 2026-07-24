@@ -14,7 +14,7 @@ import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
 import { BrokerFormComponent } from 'src/app/shared/forms/broker-form/broker-form.component';
-import { Benefit, Broker, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
+import { Benefit, Broker, ClientPlanApproval, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
@@ -69,6 +69,23 @@ export class BrokerMainComponent implements OnInit {
 
   benefitRows: Benefit[] = [];
 
+  approvalColumns: Column<ClientPlanApproval>[] = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'clientName', header: 'Cliente', field: 'clientName' },
+    { id: 'clientCellphone', header: 'Celular', field: 'clientCellphone' },
+    { id: 'vehiclePlate', header: 'Placa', field: 'vehiclePlate' },
+    { id: 'vehiclePrice', header: 'Precio Vehículo (Bs.)', field: 'vehiclePrice' },
+    { id: 'insurance', header: 'Aseguradora', valueGetter: (row) => this.insuranceMap[row.plan?.insuranceId!]?.name ?? '—' },
+    { id: 'level', header: 'Nivel', valueGetter: (row) => this.levelLabelPipe.transform(row.plan?.level) },
+  ];
+
+  waitingListRows: ClientPlanApproval[] = [];
+  soldPlanRows: ClientPlanApproval[] = [];
+
+  waitingListActions: Action[] = [
+    { id: 'approve', icon: 'check_circle', tooltip: 'Aprobar' },
+  ];
+
   planActions: Action[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
@@ -80,8 +97,6 @@ export class BrokerMainComponent implements OnInit {
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
-
-  private readonly DEFAULT_BENEFIT_LIMITS = [{ name: 'cobertura', limit: 90 }];
 
   get isMobile(): boolean {
     return this.responsiveService.isPhonePortrait;
@@ -112,9 +127,48 @@ export class BrokerMainComponent implements OnInit {
         this.regionMap = Object.fromEntries(regions.map(r => [r.id, r]));
         this.insuranceMap = Object.fromEntries(insurances.map(i => [i.id, i]));
         this.fetchPlanList();
+        this.fetchWaitingListPlans();
+        this.fetchSoldPlans();
       },
       error: () => this.snackbar.error('Error al cargar datos de referencia.')
     });
+  }
+
+  fetchWaitingListPlans(): void {
+    this.httpService.get<ClientPlanApproval[]>(PATHS.brokerGetWaitingListPlans)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al cargar las pólizas pendientes.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(res => { this.waitingListRows = res; });
+  }
+
+  fetchSoldPlans(): void {
+    this.httpService.get<ClientPlanApproval[]>(PATHS.brokerGetSoldPlans)
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al cargar las pólizas aprobadas.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(res => { this.soldPlanRows = res; });
+  }
+
+  onWaitingListRowAction(e: { actionId: string; row: ClientPlanApproval }): void {
+    if (e.actionId === 'approve') {
+      this.confirmSoldPlan(e.row);
+    }
+  }
+
+  private confirmSoldPlan(row: ClientPlanApproval): void {
+    this.httpService.put(PATHS.brokerConfirmSoldPlan + '/' + row.id, {})
+      .pipe(
+        catchError(() => { this.snackbar.error('Error al aprobar la póliza.'); return EMPTY; }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.snackbar.success('Póliza aprobada correctamente');
+        this.fetchWaitingListPlans();
+        this.fetchSoldPlans();
+      });
   }
 
   fetchPlanList(): void {
@@ -319,7 +373,7 @@ export class BrokerMainComponent implements OnInit {
     }
 
     const requests = benefits.map(b => {
-      const payload = { planId, benefitId: b.id, limits: this.DEFAULT_BENEFIT_LIMITS };
+      const payload = { planId, benefitId: b.id, description: b.description };
       return this.httpService.post(PATHS.planBenefitsAdd, payload);
     });
 

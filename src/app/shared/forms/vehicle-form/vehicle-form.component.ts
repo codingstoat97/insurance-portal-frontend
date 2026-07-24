@@ -9,7 +9,7 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { Vehicle } from '../../models';
+import { Vehicle, VehicleType } from '../../models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 @Component({
@@ -35,6 +35,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
   @Output() cancelled = new EventEmitter<void>();
 
   vehicleClassificationList: string[] = [];
+  vehicleTypeList: VehicleType[] = [];
   description = "Con esta información podremos mostrarte planes adaptados al modelo, año y características de tu vehículo. Así evitamos ofrecerte opciones que no se ajusten a lo que realmente necesitas."
 
   form = this.fb.group({
@@ -42,7 +43,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
     brand: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
     model: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
     highEnd: this.fb.control<boolean | null>(null),
-    isElectric: this.fb.control<boolean | null>(null),
+    vehicleType: this.fb.control<string | null>(null, { validators: [Validators.required] }),
   });
 
   constructor(
@@ -52,6 +53,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getVehiculeClassificationList();
+    this.getVehicleTypeList();
     this.applyValueToForm(this.value);
   }
 
@@ -63,7 +65,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
 
   private applyValueToForm(v?: any | null) {
     if (v) {
-      const cls = (v.classifications ?? null) as string | null;
+      const cls = (v.classification ?? null) as string | null;
       if (cls && this.vehicleClassificationList.length && !this.vehicleClassificationList.includes(cls)) {
         this.vehicleClassificationList = [...this.vehicleClassificationList, cls];
       }
@@ -74,7 +76,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
           brand: v.brand ?? '',
           model: v.model ?? '',
           highEnd: v.highEnd ?? null,
-          isElectric: v.isElectric ?? null,
+          vehicleType: v.vehicleType ?? null,
         },
         { emitEvent: false }
       );
@@ -85,7 +87,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
           brand: '',
           model: '',
           highEnd: null,
-          isElectric: null,
+          vehicleType: null,
         },
         { emitEvent: false }
       );
@@ -114,6 +116,12 @@ export class VehicleFormComponent implements OnInit, OnChanges {
         }
         if (this.value) this.applyValueToForm(this.value);
       });
+  }
+
+  private getVehicleTypeList(): void {
+    this.httpService.get<VehicleType[]>(PATHS.vehicleTypeList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de motor.'); return EMPTY; }))
+      .subscribe(res => { this.vehicleTypeList = res ?? []; });
   }
 
   onSubmit() {

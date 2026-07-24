@@ -35,19 +35,21 @@
         white-space: nowrap
         border-bottom: 1px solid var(--kin-gray-200)
 
-    .row-label
+    .plan-name-cell
         text-align: left
-        font-size: 13px
-        color: var(--kin-gray-600)
         white-space: normal
-        min-width: 160px
+        min-width: 200px
 
-.plan-col-header
+.plan-row-header
     display: flex
-    flex-direction: column
+    flex-direction: row
     align-items: center
-    position: relative
-    padding-top: 8px
+    justify-content: space-between
+    gap: 8px
+
+    .plan-name-block
+        display: flex
+        flex-direction: column
 
     .insurance-name
         font-weight: 700
@@ -58,12 +60,10 @@
         color: var(--kin-gray-600)
 
     .remove-btn
-        position: absolute
-        top: -8px
-        right: -8px
         width: 28px
         height: 28px
         line-height: 28px
+        flex-shrink: 0
 
         mat-icon
             font-size: 16px
