@@ -1,6 +1,6 @@
 <div class="comparison-panel">
     <div class="comparison-header">
-        <h2>Comparar planes ({{ offers.length }}/3)</h2>
+        <h2>Comparar planes ({{ offers.length }}/{{ maxCompare }})</h2>
         <button mat-icon-button (click)="closePanel.emit()" aria-label="Cerrar comparación" title="Cerrar comparación">
             <mat-icon>close</mat-icon>
         </button>
@@ -50,7 +50,8 @@
                         </ng-template>
                     </td>
                     <td class="action-cell">
-                        <button mat-raised-button color="primary" (click)="contratar(offer)">Contratar</button>
+                        <button *ngIf="salesEnabled$ | async" mat-raised-button color="primary"
+                            (click)="contratar(offer)">Contratar</button>
                     </td>
                 </tr>
             </tbody>

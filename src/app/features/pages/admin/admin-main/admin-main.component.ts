@@ -8,6 +8,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
+import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
@@ -97,6 +98,8 @@ export class AdminMainComponent implements OnInit {
 
   planTypeRows = [];
 
+  salesEnabled = true;
+
   actions: any[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
@@ -114,6 +117,7 @@ export class AdminMainComponent implements OnInit {
     private snackbar: SnackBarService,
     private responsiveService: ResponsiveService,
     private authService: AuthService,
+    private salesConfigService: SalesConfigService,
     private router: Router) { }
 
   logout(): void {
@@ -128,6 +132,19 @@ export class AdminMainComponent implements OnInit {
     this.fetchVehicleTypeList();
     this.fetchSegmentList();
     this.fetchPlanTypeList();
+    this.salesConfigService.enabled$.subscribe(enabled => { this.salesEnabled = enabled; });
+  }
+
+  onSalesEnabledChange(enabled: boolean): void {
+    this.salesConfigService.update(enabled)
+      .pipe(catchError(() => {
+        this.snackbar.error('Error al actualizar la configuración de ventas.');
+        this.salesEnabled = !enabled;
+        return EMPTY;
+      }))
+      .subscribe(() => {
+        this.snackbar.success(enabled ? 'Ventas habilitadas.' : 'Ventas deshabilitadas.');
+      });
   }
 
   private fetchInsuranceList() {

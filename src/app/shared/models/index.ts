@@ -9,3 +9,4 @@ export * from './broker-model';
 export * from './client-plan-model';
 export * from './segment-model';
 export * from './plan-type-model';
+export * from './sales-config-model';

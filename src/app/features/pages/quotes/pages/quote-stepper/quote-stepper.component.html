@@ -12,7 +12,7 @@
         <div class="step-circle">1</div>
         <div class="step-info">
           <span class="step-title">Datos del vehículo</span>
-          <span class="step-sub">Paso 1 de 3</span>
+          <span class="step-sub">Paso 1 de {{ totalSteps }}</span>
         </div>
       </div>
       <div class="step-connector"></div>
@@ -27,15 +27,18 @@
           </button>
         </div>
       </div>
-      <div class="step-connector"></div>
 
-      <div class="step-item" [class.active]="currentStep === 2">
-        <div class="step-circle">3</div>
-        <div class="step-info">
-          <span class="step-title">Resumen y pago</span>
-          <span class="step-sub">Contrata online</span>
+      <ng-container *ngIf="salesEnabled">
+        <div class="step-connector"></div>
+
+        <div class="step-item" [class.active]="currentStep === 2">
+          <div class="step-circle">3</div>
+          <div class="step-info">
+            <span class="step-title">Resumen y pago</span>
+            <span class="step-sub">Contrata online</span>
+          </div>
         </div>
-      </div>
+      </ng-container>
     </nav>
 
     <div class="help-card">
@@ -54,7 +57,7 @@
 
     <div class="progress-header">
       <div class="progress-labels">
-        <span class="progress-step">PASO {{ currentStep + 1 }} DE 3</span>
+        <span class="progress-step">PASO {{ currentStep + 1 }} DE {{ totalSteps }}</span>
         <span class="progress-pct">{{ progressPercent }}% completado</span>
       </div>
       <mat-progress-bar mode="determinate" [value]="progressPercent"></mat-progress-bar>
@@ -72,7 +75,9 @@
         <app-offer-list [offerList]="offerList"></app-offer-list>
       </div>
 
-      <div *ngSwitchCase="2" class="placeholder-step">Resumen y pago</div>
+      <ng-container *ngSwitchCase="2">
+        <div *ngIf="salesEnabled" class="placeholder-step">Resumen y pago</div>
+      </ng-container>
     </ng-container>
 
   </main>

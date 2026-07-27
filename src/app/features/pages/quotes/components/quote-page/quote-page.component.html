@@ -83,7 +83,7 @@
         </mat-card-content>
         <mat-card-actions class="quote-actions">
             <button mat-button (click)="goBack()">Volver</button>
-            <button mat-button (click)="openPurchaseDialog()">Continuar</button>
+            <button *ngIf="salesEnabled$ | async" mat-button (click)="openPurchaseDialog()">Continuar</button>
         </mat-card-actions>
     </mat-card>
 </div>

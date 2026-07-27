@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { catchError, EMPTY } from 'rxjs';
 
@@ -16,7 +17,7 @@ import { PlanComparisonComponent } from "../plan-comparison/plan-comparison.comp
 import { Insurance, Plan } from 'src/app/shared/models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
-const MAX_COMPARE = 3;
+const MAX_COMPARE = 5;
 
 interface PlanTypeTab {
   value: string;
@@ -68,7 +69,28 @@ export class OfferListComponent implements OnInit, OnChanges {
     return list.filter(offer => offer.planType === planType);
   }
 
-  constructor(private httpService: HttpService, private snackbar: SnackBarService) { }
+  get tableOfferList(): any[] {
+    return [...this.filteredOfferList].sort((a, b) => this.totalCost(a) - this.totalCost(b));
+  }
+
+  private totalCost(offer: any): number {
+    const premium = Number(offer?.minimumPremium) || 0;
+    return premium + this.franchiseMinimum(offer?.franchise);
+  }
+
+  private franchiseMinimum(value: unknown): number {
+    const match = value != null ? String(value).match(/Bs\.?\s*([\d.,]+)/i) : null;
+    return match ? parseFloat(match[1].replace(/,/g, '')) : 0;
+  }
+
+  constructor(
+    private httpService: HttpService,
+    private snackbar: SnackBarService,
+    private router: Router) { }
+
+  goToQuotePage(offerId: number): void {
+    this.router.navigate(['/quotes', offerId]);
+  }
 
   ngOnInit(): void {
     this.loadInsurances();

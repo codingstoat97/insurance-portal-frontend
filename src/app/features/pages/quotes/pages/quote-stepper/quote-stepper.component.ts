@@ -5,6 +5,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
+import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 
 import { ClientVehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -21,7 +22,8 @@ export class QuoteStepperComponent implements OnInit {
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private stepperService: QuoteStepperService,
-    private responsiveService: ResponsiveService
+    private responsiveService: ResponsiveService,
+    private salesConfigService: SalesConfigService
   ) { }
 
   get isMobile(): boolean {
@@ -31,15 +33,28 @@ export class QuoteStepperComponent implements OnInit {
   currentStep = 0;
   clientVehicleData: ClientVehicle | null = null;
   offerList: any[] = [];
+  salesEnabled = true;
+
+  get totalSteps(): number {
+    return this.salesEnabled ? 3 : 2;
+  }
 
   get progressPercent(): number {
-    return Math.round(((this.currentStep + 1) / 3) * 100);
+    return Math.round(((this.currentStep + 1) / this.totalSteps) * 100);
   }
 
   ngOnInit(): void {
     this.currentStep = this.stepperService.currentStep;
     this.clientVehicleData = this.stepperService.clientVehicleData;
     this.offerList = this.stepperService.offerList;
+
+    this.salesConfigService.enabled$.subscribe(enabled => {
+      this.salesEnabled = enabled;
+      if (!enabled && this.currentStep > 1) {
+        this.currentStep = 1;
+        this.stepperService.currentStep = this.currentStep;
+      }
+    });
   }
 
   onClientVehicleSubmitted(clientVehicle: ClientVehicle): void {

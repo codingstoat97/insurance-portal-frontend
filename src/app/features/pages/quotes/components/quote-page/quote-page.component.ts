@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
+import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 
 import { catchError, EMPTY } from 'rxjs';
 
@@ -27,13 +28,15 @@ export class QuotePageComponent {
   public regionData!: Region | null;
 
   public scrollStrategy: ScrollStrategy | undefined;
+  readonly salesEnabled$ = this.salesConfigService.enabled$;
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
     private httpService: HttpService,
     private snackbarService: SnackBarService,
-    private planPurchaseService: PlanPurchaseService
+    private planPurchaseService: PlanPurchaseService,
+    private salesConfigService: SalesConfigService
   ) { }
 
   ngOnInit(): void {

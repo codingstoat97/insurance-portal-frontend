@@ -79,6 +79,18 @@
                                 [addElement]="true" (addNewElementAction)="onAddNewElement('PlanType')"
                                 (action)="onRowAction($event, 'PlanType')"></app-data-table>
                         </mat-tab>
+                        <mat-tab label="Ventas">
+                            <div class="sales-config-panel">
+                                <mat-slide-toggle [checked]="salesEnabled"
+                                    (change)="onSalesEnabledChange($event.checked)">
+                                    Habilitar ventas
+                                </mat-slide-toggle>
+                                <p class="sales-config-hint">
+                                    Si está deshabilitado, los clientes no podrán ver el resumen de pago en las
+                                    cotizaciones ni continuar con la compra de un plan.
+                                </p>
+                            </div>
+                        </mat-tab>
                     </mat-tab-group>
                 </mat-tab>
             </mat-tab-group>

@@ -5,6 +5,7 @@ import { catchError, forkJoin, of } from 'rxjs';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
+import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { Insurance, Plan, PlanBenefit } from 'src/app/shared/models';
@@ -23,16 +24,19 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
 export class PlanComparisonComponent implements OnChanges {
   @Input() offers: Plan[] = [];
   @Input() insuranceMap = new Map<number, Insurance>();
+  @Input() maxCompare = 3;
 
   @Output() removeOffer = new EventEmitter<number>();
   @Output() closePanel = new EventEmitter<void>();
 
   benefitsByPlan = new Map<number, PlanBenefit[]>();
   loadingBenefits = false;
+  readonly salesEnabled$ = this.salesConfigService.enabled$;
 
   constructor(
     private httpService: HttpService,
-    private purchaseService: PlanPurchaseService
+    private purchaseService: PlanPurchaseService,
+    private salesConfigService: SalesConfigService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {

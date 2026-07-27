@@ -23,5 +23,39 @@
     <h2>No se encontraron ofertas disponibles.</h2>
 </div>
 
+<div *ngIf="filteredOfferList.length > 0" class="offer-table-container">
+    <table class="offer-comparison-table">
+        <thead>
+            <tr>
+                <th class="select-col"></th>
+                <th>Aseguradora</th>
+                <th>Plan</th>
+                <th>Dcto.</th>
+                <th>Prima Anual</th>
+                <th>Franquicia</th>
+                <th class="action-col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let offer of tableOfferList; trackBy: trackById">
+                <td class="select-col">
+                    <mat-checkbox [checked]="selectedIds.has(offer.id)"
+                        [disabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
+                        (change)="toggleCompare(offer.id)"></mat-checkbox>
+                </td>
+                <td class="insurance-cell">{{ insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre' }}</td>
+                <td>{{ offer.planType }}</td>
+                <td>{{ offer.discount | number:'1.0-0' }}%</td>
+                <td class="premium-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                <td>{{ offer.franchise }}</td>
+                <td class="action-col">
+                    <button mat-stroked-button color="primary" (click)="goToQuotePage(offer.id)">Ver Detalles</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <app-plan-comparison *ngIf="selectedOffers.length > 0" [offers]="selectedOffers" [insuranceMap]="insuranceMap"
+    [maxCompare]="maxCompare"
     (removeOffer)="removeFromComparison($event)" (closePanel)="clearSelection()"></app-plan-comparison>

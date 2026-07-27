@@ -79,3 +79,5 @@ export const brokerGetWaitingListPlans = 'broker/getWaitingListPlansByBroker';
 
 export const adminPath = 'admin';
 export const adminAddBroker = 'admin/add/brokers';
+
+export const salesConfigPath = 'salesConfig';
