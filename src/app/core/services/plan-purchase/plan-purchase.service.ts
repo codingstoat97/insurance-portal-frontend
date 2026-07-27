@@ -5,7 +5,6 @@ import { catchError, EMPTY } from 'rxjs';
 import { HttpService } from '../http/http.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
-import { ImageModalComponent } from 'src/app/shared/components/image-modal/image-modal.component';
 import { ClientPurchaseFormComponent } from 'src/app/shared/forms/client-purchase-form/client-purchase-form.component';
 
 import { ClientPlan } from 'src/app/shared/models';
@@ -20,7 +19,7 @@ export class PlanPurchaseService {
     private snackbarService: SnackBarService
   ) { }
 
-  openPurchaseDialog(planId: number, qrImage: string | undefined): void {
+  openPurchaseDialog(planId: number): void {
     const dialogRef = this.dialog.open(ClientPurchaseFormComponent, {
       width: '760px',
       maxWidth: '95vw',
@@ -37,28 +36,17 @@ export class PlanPurchaseService {
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        this.saveClientPlan(res, qrImage);
+        this.saveClientPlan(res);
       }
       sub1?.unsubscribe?.(); sub2?.unsubscribe?.();
     });
   }
 
-  private saveClientPlan(clientPlan: ClientPlan, qrImage: string | undefined): void {
+  private saveClientPlan(clientPlan: ClientPlan): void {
     this.httpService.clientPost<ClientPlan>(PATH.clientPlanAdd, clientPlan)
       .pipe(catchError(() => { this.snackbarService.error('Error al guardar los datos del cliente.'); return EMPTY; }))
       .subscribe(() => {
         this.snackbarService.success('Se guardaron los datos correctamente');
-        this.openQrModal(qrImage);
       });
-  }
-
-  private openQrModal(qrImage: string | undefined): void {
-    this.dialog.open(ImageModalComponent, {
-      width: '400px',
-      data: {
-        title: 'QR del Seguro',
-        image: qrImage
-      }
-    });
   }
 }

@@ -91,6 +91,32 @@
                                 </p>
                             </div>
                         </mat-tab>
+                        <mat-tab label="Columnas de Ofertas">
+                            <div class="offer-columns-panel">
+                                <p class="offer-columns-hint">
+                                    Controla qué columnas se muestran a los clientes en la tabla de comparación
+                                    de ofertas en /quotes.
+                                </p>
+                                <table class="offer-columns-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Columna</th>
+                                            <th>Visible</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let column of offerColumns">
+                                            <td>{{ column.label }}</td>
+                                            <td>
+                                                <mat-slide-toggle [checked]="column.enabled"
+                                                    (change)="onOfferColumnToggle(column, $event.checked)">
+                                                </mat-slide-toggle>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </mat-tab>
                     </mat-tab-group>
                 </mat-tab>
             </mat-tab-group>

@@ -81,3 +81,7 @@ export const adminPath = 'admin';
 export const adminAddBroker = 'admin/add/brokers';
 
 export const salesConfigPath = 'salesConfig';
+
+export const offerColumnConfigPath = 'offerColumnConfig';
+export const offerColumnConfigList = 'offerColumnConfig/list';
+export const offerColumnConfigUpdate = 'offerColumnConfig/edit';

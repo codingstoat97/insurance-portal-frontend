@@ -3,5 +3,5 @@ export interface Insurance {
     name: string;
     type: string;
     email: string;
-    qrImage: string;
+    logo: string;
 }

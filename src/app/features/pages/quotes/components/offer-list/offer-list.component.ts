@@ -6,6 +6,7 @@ import { catchError, EMPTY } from 'rxjs';
 
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
+import { OfferColumnConfigService } from 'src/app/core/services/offer-column-config/offer-column-config.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { MatTabsModule } from '@angular/material/tabs';
@@ -57,6 +58,15 @@ export class OfferListComponent implements OnInit, OnChanges {
   planTypeTabs: PlanTypeTab[] = [];
   activeTabIndex = 0;
 
+  columnVisible: Record<string, boolean> = {
+    logo: true,
+    aseguradora: true,
+    plan: true,
+    descuento: true,
+    primaAnual: true,
+    franquicia: true
+  };
+
   get insuranceFilteredList(): any[] {
     if (this.selectedInsuranceIds.size === 0) return this.offerList;
     return this.offerList.filter(offer => this.selectedInsuranceIds.has(offer.insuranceId));
@@ -86,6 +96,7 @@ export class OfferListComponent implements OnInit, OnChanges {
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
+    private offerColumnConfigService: OfferColumnConfigService,
     private router: Router) { }
 
   goToQuotePage(offerId: number): void {
@@ -94,6 +105,9 @@ export class OfferListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.loadInsurances();
+    this.offerColumnConfigService.columns$.subscribe(columns => {
+      columns.forEach(c => this.columnVisible[c.columnKey] = c.enabled);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

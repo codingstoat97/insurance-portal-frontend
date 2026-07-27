@@ -19,6 +19,7 @@ import { Plan } from 'src/app/shared/models';
 export class QuoteOfferComponent {
   @Input() offer!: Plan;
   @Input() insuranceName!: string;
+  @Input() logo?: string | null;
   @Input() selected = false;
   @Input() compareDisabled = false;
 

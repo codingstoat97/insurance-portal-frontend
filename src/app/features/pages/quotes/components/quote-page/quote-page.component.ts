@@ -91,7 +91,7 @@ export class QuotePageComponent {
 
   openPurchaseDialog(): void {
     if (!this.quotePlan) return;
-    this.planPurchaseService.openPurchaseDialog(this.quotePlan.id, this.insuranceData?.qrImage);
+    this.planPurchaseService.openPurchaseDialog(this.quotePlan.id);
   }
 
   goBack(): void {

@@ -37,7 +37,7 @@ export class InsuranceFormComponent implements OnInit, OnChanges {
     name: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
     type: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required] }),
     email: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    qrImage: [''],
+    logo: [''],
   });
 
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
@@ -74,11 +74,9 @@ export class InsuranceFormComponent implements OnInit, OnChanges {
 
     reader.onload = () => {
       const base64 = reader.result as string;
-      console.log(base64);
-      this.form.patchValue({ qrImage: base64 });
+      this.form.patchValue({ logo: base64 });
     };
-    
-    
+
     reader.readAsDataURL(file);
   }
 
@@ -88,7 +86,8 @@ export class InsuranceFormComponent implements OnInit, OnChanges {
         {
           name: v.name ?? '',
           type: v.type ?? '',
-          email: v.email ?? ''
+          email: v.email ?? '',
+          logo: v.logo ?? ''
         },
         { emitEvent: false }
       );
@@ -97,7 +96,8 @@ export class InsuranceFormComponent implements OnInit, OnChanges {
         {
           name: '',
           type: '',
-          email: ''
+          email: '',
+          logo: ''
         },
         { emitEvent: false }
       );

@@ -14,6 +14,7 @@
 <div *ngIf="filteredOfferList.length > 0" class="offer-list-container">
     <app-quote-offer *ngFor="let offer of filteredOfferList; trackBy: trackById" [offer]="offer"
         [insuranceName]="insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre'"
+        [logo]="insuranceMap.get(offer.insuranceId)?.logo"
         [selected]="selectedIds.has(offer.id)"
         [compareDisabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
         (compareToggled)="toggleCompare(offer.id)"></app-quote-offer>
@@ -28,11 +29,12 @@
         <thead>
             <tr>
                 <th class="select-col"></th>
-                <th>Aseguradora</th>
-                <th>Plan</th>
-                <th>Dcto.</th>
-                <th>Prima Anual</th>
-                <th>Franquicia</th>
+                <th *ngIf="columnVisible['logo']" class="logo-col"></th>
+                <th *ngIf="columnVisible['aseguradora']">Aseguradora</th>
+                <th *ngIf="columnVisible['plan']">Plan</th>
+                <th *ngIf="columnVisible['descuento']">Dcto.</th>
+                <th *ngIf="columnVisible['primaAnual']">Prima Anual</th>
+                <th *ngIf="columnVisible['franquicia']">Franquicia</th>
                 <th class="action-col"></th>
             </tr>
         </thead>
@@ -43,11 +45,16 @@
                         [disabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
                         (change)="toggleCompare(offer.id)"></mat-checkbox>
                 </td>
-                <td class="insurance-cell">{{ insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre' }}</td>
-                <td>{{ offer.planType }}</td>
-                <td>{{ offer.discount | number:'1.0-0' }}%</td>
-                <td class="premium-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
-                <td>{{ offer.franchise }}</td>
+                <td *ngIf="columnVisible['logo']" class="logo-col">
+                    <img *ngIf="insuranceMap.get(offer.insuranceId)?.logo" class="table-logo"
+                        [src]="insuranceMap.get(offer.insuranceId)?.logo"
+                        [alt]="(insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre') + ' logo'">
+                </td>
+                <td *ngIf="columnVisible['aseguradora']" class="insurance-cell">{{ insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre' }}</td>
+                <td *ngIf="columnVisible['plan']">{{ offer.planType }}</td>
+                <td *ngIf="columnVisible['descuento']">{{ offer.discount | number:'1.0-0' }}%</td>
+                <td *ngIf="columnVisible['primaAnual']" class="premium-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                <td *ngIf="columnVisible['franquicia']">{{ offer.franchise }}</td>
                 <td class="action-col">
                     <button mat-stroked-button color="primary" (click)="goToQuotePage(offer.id)">Ver Detalles</button>
                 </td>

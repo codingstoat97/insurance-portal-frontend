@@ -9,6 +9,7 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
+import { OfferColumnConfigService } from 'src/app/core/services/offer-column-config/offer-column-config.service';
 
 import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insurance-form.component';
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
@@ -20,7 +21,7 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
 
 import { catchError, EMPTY } from 'rxjs';
 
-import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType } from 'src/app/shared/models';
+import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType, OfferColumnConfig } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
 import { UserFormComponent } from 'src/app/shared/forms/user-form/user-form.component';
 
@@ -100,6 +101,8 @@ export class AdminMainComponent implements OnInit {
 
   salesEnabled = true;
 
+  offerColumns: OfferColumnConfig[] = [];
+
   actions: any[] = [
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
@@ -118,6 +121,7 @@ export class AdminMainComponent implements OnInit {
     private responsiveService: ResponsiveService,
     private authService: AuthService,
     private salesConfigService: SalesConfigService,
+    private offerColumnConfigService: OfferColumnConfigService,
     private router: Router) { }
 
   logout(): void {
@@ -133,6 +137,7 @@ export class AdminMainComponent implements OnInit {
     this.fetchSegmentList();
     this.fetchPlanTypeList();
     this.salesConfigService.enabled$.subscribe(enabled => { this.salesEnabled = enabled; });
+    this.offerColumnConfigService.columns$.subscribe(columns => { this.offerColumns = columns; });
   }
 
   onSalesEnabledChange(enabled: boolean): void {
@@ -144,6 +149,18 @@ export class AdminMainComponent implements OnInit {
       }))
       .subscribe(() => {
         this.snackbar.success(enabled ? 'Ventas habilitadas.' : 'Ventas deshabilitadas.');
+      });
+  }
+
+  onOfferColumnToggle(column: OfferColumnConfig, enabled: boolean): void {
+    this.offerColumnConfigService.update(column.id, enabled)
+      .pipe(catchError(() => {
+        this.snackbar.error('Error al actualizar la columna.');
+        column.enabled = !enabled;
+        return EMPTY;
+      }))
+      .subscribe(() => {
+        this.snackbar.success(enabled ? `Columna "${column.label}" habilitada.` : `Columna "${column.label}" deshabilitada.`);
       });
   }
 

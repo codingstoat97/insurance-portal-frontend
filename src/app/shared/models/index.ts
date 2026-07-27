@@ -10,3 +10,4 @@ export * from './client-plan-model';
 export * from './segment-model';
 export * from './plan-type-model';
 export * from './sales-config-model';
+export * from './offer-column-config-model';

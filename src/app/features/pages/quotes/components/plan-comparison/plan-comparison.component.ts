@@ -60,7 +60,7 @@ export class PlanComparisonComponent implements OnChanges {
   }
 
   contratar(offer: Plan): void {
-    this.purchaseService.openPurchaseDialog(offer.id, this.insuranceMap.get(offer.insuranceId)?.qrImage);
+    this.purchaseService.openPurchaseDialog(offer.id);
   }
 
   private loadBenefits(): void {
