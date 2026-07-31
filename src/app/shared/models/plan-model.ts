@@ -2,6 +2,7 @@ import { Benefit } from "./benefit-model";
 
 export interface Plan {
     id: number;
+    name: string;
     vehicleId: number;
     regionalId: number;
     insuranceId: number;
@@ -9,6 +10,7 @@ export interface Plan {
     rate: number;
     ageLimit: number;
     discount: number;
+    interest: number;
     segmentId: number;
     planTypeId: number;
     segment?: string;

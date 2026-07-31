@@ -33,7 +33,8 @@
                 <th *ngIf="columnVisible['aseguradora']">Aseguradora</th>
                 <th *ngIf="columnVisible['plan']">Plan</th>
                 <th *ngIf="columnVisible['descuento']">Dcto.</th>
-                <th *ngIf="columnVisible['primaAnual']">Prima Anual</th>
+                <th *ngIf="columnVisible['primaAnual']">Prima al Contado</th>
+                <th *ngIf="columnVisible['primaACredito']">Prima a Crédito</th>
                 <th *ngIf="columnVisible['franquicia']">Franquicia</th>
                 <th class="action-col"></th>
             </tr>
@@ -53,7 +54,8 @@
                 <td *ngIf="columnVisible['aseguradora']" class="insurance-cell">{{ insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre' }}</td>
                 <td *ngIf="columnVisible['plan']">{{ offer.planType }}</td>
                 <td *ngIf="columnVisible['descuento']">{{ offer.discount | number:'1.0-0' }}%</td>
-                <td *ngIf="columnVisible['primaAnual']" class="premium-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                <td *ngIf="columnVisible['primaAnual']" class="premium-cell">{{ primaAlContado(offer) | number:'1.0-0' }} Bs.</td>
+                <td *ngIf="columnVisible['primaACredito']" class="premium-cell">{{ primaACredito(offer) | number:'1.0-0' }} Bs.</td>
                 <td *ngIf="columnVisible['franquicia']">{{ offer.franchise }}</td>
                 <td class="action-col">
                     <button mat-stroked-button color="primary" (click)="goToQuotePage(offer.id)">Ver Detalles</button>

@@ -44,6 +44,7 @@ export class AdminPlansComponent implements OnInit {
 
   planColumns: Column<Plan>[] = [
     { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' },
     { id: 'vehicleId', header: 'Vehículo', field: 'vehicleId', valueGetter: (row) => this.vehicleMap[row.vehicleId!]?.brand ?? '—' },
     { id: 'regionalId', header: 'Regional', field: 'regionalId', valueGetter: (row) => this.regionMap[row.regionalId!]?.name ?? '—' },
     { id: 'insuranceId', header: 'Aseguradora', field: 'insuranceId', valueGetter: (row) => this.insuranceMap[row.insuranceId!]?.name ?? '—' },
@@ -51,6 +52,7 @@ export class AdminPlansComponent implements OnInit {
     { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },
+    { id: 'interest', header: 'Interés (%)', field: 'interest' },
     { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'planType', header: 'Tipo de Plan', field: 'planType' },
     { id: 'franchise', header: 'Franquicia', field: 'franchise' },

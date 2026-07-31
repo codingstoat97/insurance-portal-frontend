@@ -59,6 +59,18 @@ export class PlanComparisonComponent implements OnChanges {
     return this.insuranceMap.get(insuranceId)?.name || 'Sin nombre';
   }
 
+  primaAlContado(offer: Plan): number {
+    const premium = Number(offer?.minimumPremium) || 0;
+    const rate = Number(offer?.rate) || 0;
+    return premium + (premium * (rate / 100));
+  }
+
+  primaACredito(offer: Plan): number {
+    const contado = this.primaAlContado(offer);
+    const interest = Number(offer?.interest) || 0;
+    return contado + (contado * interest);
+  }
+
   contratar(offer: Plan): void {
     this.purchaseService.openPurchaseDialog(offer.id);
   }

@@ -30,4 +30,10 @@ export class QuoteOfferComponent {
   goToQuotePage() {
     this.router.navigate(['/quotes', this.offer.id]);
   }
+
+  get primaAlContado(): number {
+    const premium = Number(this.offer?.minimumPremium) || 0;
+    const rate = Number(this.offer?.rate) || 0;
+    return premium + (premium * (rate / 100));
+  }
 }

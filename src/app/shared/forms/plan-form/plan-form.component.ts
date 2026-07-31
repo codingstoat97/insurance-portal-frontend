@@ -43,6 +43,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
   planTypeList: PlanType[] = [];
 
   form = this.fb.group({
+    name: this.fb.control<string | null>(null, { validators: [Validators.required] }),
     vehicleId: this.fb.control<number | null>(null, { validators: [] }),
     regionalId: this.fb.control<number | null>(null, { validators: [] }),
     insuranceId: this.fb.control<number | null>(null, { validators: [] }),
@@ -50,6 +51,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
     rate: this.fb.control<number | null>(null),
     ageLimit: this.fb.control<number | null>(null),
     discount: this.fb.control<number | null>(null),
+    interest: this.fb.control<number | null>(null),
     segmentId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     planTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     franchisePercentage: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
@@ -137,6 +139,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
   private setFormFromPlan(plan: Plan): void {
     const { percentage, minimum } = this.parseFranchise(plan.franchise);
     this.form.reset({
+      name: plan.name ?? null,
       vehicleId: plan.vehicleId ?? null,
       regionalId: plan.regionalId ?? null,
       insuranceId: plan.insuranceId ?? null,
@@ -144,6 +147,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
       rate: plan.rate ?? null,
       ageLimit: plan.ageLimit ?? null,
       discount: plan.discount ?? null,
+      interest: plan.interest ?? null,
       segmentId: plan.segmentId ?? this.segmentList.find(s => s.name === plan.segment)?.id ?? null,
       planTypeId: plan.planTypeId ?? this.planTypeList.find(pt => pt.name === plan.planType)?.id ?? null,
       franchisePercentage: percentage,

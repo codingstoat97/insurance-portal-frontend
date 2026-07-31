@@ -50,6 +50,24 @@
                             </span>
                         </div>
                         <div class="detail-row">
+                            <span class="detail-label">Interés:</span>
+                            <span class="detail-value">
+                                {{ quotePlan?.interest | number:'1.2-2' }} %
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Prima al Contado:</span>
+                            <span class="detail-value">
+                                {{ primaAlContado | number:'1.0-0' }} Bs.
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Prima a Crédito:</span>
+                            <span class="detail-value">
+                                {{ primaACredito | number:'1.0-0' }} Bs.
+                            </span>
+                        </div>
+                        <div class="detail-row">
                             <span class="detail-label">Límite de años del vehículo:</span>
                             <span class="detail-value">
                                 {{ quotePlan?.ageLimit | number:'1.0-0' }} años

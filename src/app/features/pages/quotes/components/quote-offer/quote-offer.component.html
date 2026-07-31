@@ -7,7 +7,7 @@
   <img *ngIf="logo" class="insurer-logo" [src]="logo" [alt]="insuranceName + ' logo'">
   <div *ngIf="!logo" class="insurer-logo insurer-logo-placeholder">{{ insuranceName }}</div>
   <mat-card-content class="center">
-    <h1>{{offer.minimumPremium | number:'1.0-0'}} Bs.</h1>
+    <h1>{{primaAlContado | number:'1.0-0'}} Bs.</h1>
     <p>Prima al contado</p>
     <div class="quick-facts">
       <span class="fact-chip">Franquicia {{ offer.franchise }}</span>

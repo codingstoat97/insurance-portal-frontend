@@ -64,6 +64,7 @@ export class OfferListComponent implements OnInit, OnChanges {
     plan: true,
     descuento: true,
     primaAnual: true,
+    primaACredito: true,
     franquicia: true
   };
 
@@ -84,13 +85,24 @@ export class OfferListComponent implements OnInit, OnChanges {
   }
 
   private totalCost(offer: any): number {
-    const premium = Number(offer?.minimumPremium) || 0;
-    return premium + this.franchiseMinimum(offer?.franchise);
+    return this.primaAlContado(offer) + this.franchiseMinimum(offer?.franchise);
   }
 
   private franchiseMinimum(value: unknown): number {
     const match = value != null ? String(value).match(/Bs\.?\s*([\d.,]+)/i) : null;
     return match ? parseFloat(match[1].replace(/,/g, '')) : 0;
+  }
+
+  primaAlContado(offer: any): number {
+    const premium = Number(offer?.minimumPremium) || 0;
+    const rate = Number(offer?.rate) || 0;
+    return premium + (premium * (rate / 100));
+  }
+
+  primaACredito(offer: any): number {
+    const contado = this.primaAlContado(offer);
+    const interest = Number(offer?.interest) || 0;
+    return contado + (contado * interest);
   }
 
   constructor(

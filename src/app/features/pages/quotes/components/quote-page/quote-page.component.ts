@@ -96,6 +96,18 @@ export class QuotePageComponent {
       .subscribe(res => { this.vehicleData = res; });
   }
 
+  get primaAlContado(): number {
+    const premium = Number(this.quotePlan?.minimumPremium) || 0;
+    const rate = Number(this.quotePlan?.rate) || 0;
+    return premium + (premium * (rate / 100));
+  }
+
+  get primaACredito(): number {
+    const contado = this.primaAlContado;
+    const interest = Number(this.quotePlan?.interest) || 0;
+    return contado + (contado * (interest / 100));
+  }
+
   openPurchaseDialog(): void {
     if (!this.quotePlan) return;
     this.planPurchaseService.openPurchaseDialog(this.quotePlan.id);
@@ -149,6 +161,8 @@ export class QuotePageComponent {
       planDetailsBody.push(['Descuento', `${this.formatNumber(this.quotePlan.discount)} %`]);
     }
     planDetailsBody.push(['Franquicia', this.quotePlan?.franchise ?? '-']);
+    planDetailsBody.push(['Prima al Contado', `${this.formatNumber(this.primaAlContado)} Bs.`]);
+    planDetailsBody.push(['Prima a Crédito', `${this.formatNumber(this.primaACredito)} Bs.`]);
 
     autoTable(doc, {
       startY: (doc as any).lastAutoTable.finalY + 8,
@@ -159,9 +173,22 @@ export class QuotePageComponent {
       margin: { left: marginX, right: marginX },
     });
 
+    cursorY = (doc as any).lastAutoTable.finalY + 5;
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(100);
+    const creditLegend = doc.splitTextToSize(
+      'Prima a Crédito: Cuota inicial del 30% y cuatro (4) cuotas iguales los siguientes meses.',
+      pageWidth - marginX * 2
+    );
+    doc.text(creditLegend, marginX, cursorY);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0);
+    cursorY += creditLegend.length * 3.5 + 5;
+
     const benefitRows = (this.planBenefits ?? []).map(b => [b.benefitName ?? '-', b.description ?? '-']);
     autoTable(doc, {
-      startY: (doc as any).lastAutoTable.finalY + 8,
+      startY: cursorY,
       head: [['Coberturas', 'Descripción']],
       body: benefitRows.length ? benefitRows : [['-', 'No se registraron beneficios para este plan.']],
       theme: 'grid',

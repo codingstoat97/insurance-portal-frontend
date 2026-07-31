@@ -14,6 +14,7 @@
                 <tr>
                     <th class="plan-name-cell"></th>
                     <th>Prima al contado</th>
+                    <th>Prima a crédito</th>
                     <th>Franquicia</th>
                     <th>Descuento</th>
                     <th>Tasa</th>
@@ -37,7 +38,8 @@
                             </button>
                         </div>
                     </td>
-                    <td class="highlight-cell">{{ offer.minimumPremium | number:'1.0-0' }} Bs.</td>
+                    <td class="highlight-cell">{{ primaAlContado(offer) | number:'1.0-0' }} Bs.</td>
+                    <td>{{ primaACredito(offer) | number:'1.0-0' }} Bs.</td>
                     <td>{{ offer.franchise }}</td>
                     <td>{{ offer.discount | number:'1.0-0' }}%</td>
                     <td>{{ offer.rate | number:'1.0-0' }}%</td>

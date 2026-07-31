@@ -10,6 +10,13 @@
                 Vehículo y Cobertura
             </h4>
             <div class="form-grid">
+                <mat-form-field appearance="outline" class="span-2">
+                    <mat-label>Nombre del Plan:</mat-label>
+                    <input matInput formControlName="name" placeholder="Ej. Plan Básico" />
+                    <mat-error *ngIf="form.get('name')?.hasError('required')">
+                        El nombre del plan es obligatorio.
+                    </mat-error>
+                </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Vehículo:</mat-label>
                     <mat-select formControlName="vehicleId">
@@ -73,6 +80,13 @@
                     <input matInput formControlName="discount" placeholder="Ej. 20" />
                     <mat-error *ngIf="form.get('discount')?.hasError('required')">
                         El porcentaje de descuento es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Interés (%):</mat-label>
+                    <input matInput formControlName="interest" placeholder="Ej. 2.0" />
+                    <mat-error *ngIf="form.get('interest')?.hasError('required')">
+                        El interés es obligatorio
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
