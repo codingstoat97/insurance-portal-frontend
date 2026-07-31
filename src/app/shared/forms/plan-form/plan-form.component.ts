@@ -55,7 +55,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
     segmentId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     planTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     franchisePercentage: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
-    franchiseMinimum: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+    franchiseMinimum: this.fb.control<number | null>(null, { validators: [Validators.min(0)] }),
     state: this.fb.control<boolean | true>(true),
     brokerId: this.fb.control<number | null>(null),
     benefits: this.fb.nonNullable.control<Benefit[]>([]),
@@ -179,9 +179,12 @@ export class PlanFormComponent implements OnInit, OnChanges {
       return;
     }
     const { franchisePercentage, franchiseMinimum, ...rest } = this.form.getRawValue();
+    const franchise = franchiseMinimum != null
+      ? `${franchisePercentage}% Min. Bs. ${franchiseMinimum}`
+      : `${franchisePercentage}%`;
     const payload = {
       ...rest,
-      franchise: `${franchisePercentage}% Min. Bs. ${franchiseMinimum}`,
+      franchise,
     } as Plan;
     this.submitted.emit(payload);
   }
