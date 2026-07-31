@@ -5,12 +5,15 @@
     </mat-drawer>
     <mat-drawer-content>
         <div class="page-header">
-            <h2>Hola, {{ username }}</h2>
+            <ng-container *ngIf="!isMobile">
+                <h2>Hola, {{ username }}</h2>
+                <p>Administra tus planes de seguro en esta sección.</p>
+            </ng-container>
             <div class="mobile-profile" *ngIf="isMobile">
                 <img class="mobile-avatar" [src]="profilePictureURL" alt="Foto de perfil" />
-                <button mat-stroked-button [matMenuTriggerFor]="mobileMenu">
+                <span class="mobile-greeting">Hola, {{ username }}</span>
+                <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Mi Perfil">
                     <mat-icon>account_circle</mat-icon>
-                    Mi Perfil
                 </button>
                 <mat-menu #mobileMenu>
                     <button mat-menu-item (click)="navigateToEntities()">
@@ -32,7 +35,6 @@
                     </button>
                 </mat-menu>
             </div>
-            <p>Administra tus planes de seguro en esta sección.</p>
         </div>
         <div class="tab-container">
             <mat-tab-group>

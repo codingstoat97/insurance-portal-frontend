@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Column } from 'src/app/shared/utils/data-table-types.util';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
+import { DataCardListComponent } from 'src/app/shared/components/data-card-list/data-card-list.component';
 
 @Component({
   selector: 'app-data-table',
@@ -23,7 +25,8 @@ import { Column } from 'src/app/shared/utils/data-table-types.util';
     MatTableModule,
     MatInputModule,
     MatTooltipModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    DataCardListComponent
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.sass']
@@ -44,7 +47,11 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>([]);
 
-  constructor() {
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
+
+  constructor(private responsiveService: ResponsiveService) {
     this.dataSource = new MatTableDataSource(this.rows);
   }
 

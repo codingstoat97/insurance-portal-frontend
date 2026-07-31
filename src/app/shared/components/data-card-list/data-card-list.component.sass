@@ -1,0 +1,55 @@
+:host
+  display: block
+  flex: 1 1 auto
+  min-height: 0
+  overflow: auto
+  -webkit-overflow-scrolling: touch
+
+.card-list
+  display: flex
+  flex-direction: column
+  gap: 12px
+  padding: 4px 4px
+
+.data-card
+  border-radius: 10px
+
+.data-card-content
+  display: flex
+  flex-direction: column
+
+.data-card-row
+  display: flex
+  justify-content: space-between
+  align-items: center
+  gap: 12px
+  padding: 8px 0
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06)
+
+  &:last-child
+    border-bottom: none
+
+.data-card-label
+  font-weight: 600
+  font-size: 13px
+  color: var(--kin-gray-600)
+  white-space: nowrap
+
+.data-card-value
+  font-weight: 500
+  font-size: 13px
+  color: var(--kin-text, rgba(0, 0, 0, 0.87))
+  text-align: right
+  word-break: break-word
+
+.data-card-actions
+  display: flex
+  justify-content: flex-end
+  gap: 4px
+  padding: 4px 8px 8px
+
+.no-data
+  text-align: center
+  font-size: 20px
+  padding: 32px 0
+  color: var(--kin-gray-600)

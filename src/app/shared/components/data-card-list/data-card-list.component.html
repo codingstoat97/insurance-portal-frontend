@@ -1,0 +1,18 @@
+<div class="card-list">
+    <mat-card *ngFor="let row of rows" appearance="outlined" class="data-card">
+        <mat-card-content class="data-card-content">
+            <div class="data-card-row" *ngFor="let col of columns">
+                <span class="data-card-label">{{ col.header || col.id }}</span>
+                <span class="data-card-value">{{ getValue(col, row) }}</span>
+            </div>
+        </mat-card-content>
+        <mat-card-actions *ngIf="actions.length" class="data-card-actions" align="end">
+            <button mat-icon-button *ngFor="let a of actions" [disabled]="a.disabled?.(row)"
+                [color]="a.color" (click)="onAction(a, row, $event)" [matTooltip]="a.tooltip">
+                <mat-icon>{{ a.icon }}</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <div class="no-data" *ngIf="!rows.length">Sin datos</div>
+</div>
