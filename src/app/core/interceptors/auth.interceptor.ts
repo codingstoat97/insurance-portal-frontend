@@ -40,7 +40,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case 401:
-          authService.logout();
+          authService.clearSession();
+          router.navigate(['/login']);
           snackBar.error('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
           break;
 

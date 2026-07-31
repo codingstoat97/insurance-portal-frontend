@@ -33,6 +33,9 @@ export class AuthService {
   }
 
   getRedirectionPath(): string {
+    if (!this.isLoggedIn()) {
+      return '/login';
+    }
     const role = this.getRole();
     if(role == 'ROLE_ADMIN') {
       return '/admin';
@@ -49,7 +52,25 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    if (!token) return false;
+    if (this.isTokenExpired(token)) {
+      this.clearSession();
+      return false;
+    }
+    return true;
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const payload = token.split('.')[1];
+    if (!payload) return true;
+    try {
+      const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+      if (!decoded.exp) return false;
+      return Date.now() >= decoded.exp * 1000;
+    } catch {
+      return true;
+    }
   }
 
   logout(): void {
