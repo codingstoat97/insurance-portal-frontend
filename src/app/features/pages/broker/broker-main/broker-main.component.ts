@@ -49,7 +49,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'vehicleId', header: 'Vehículo', field: 'vehicleId', valueGetter: (row) => this.vehicleMap[row.vehicleId!]?.brand ?? '—' },
     { id: 'regionalId', header: 'Regional', field: 'regionalId', valueGetter: (row) => this.regionMap[row.regionalId!]?.name ?? '—' },
     { id: 'insuranceId', header: 'Aseguradora', field: 'insuranceId', valueGetter: (row) => this.insuranceMap[row.insuranceId!]?.name ?? '—' },
-    { id: 'minimumPremium', header: 'Prima (Bs.)', field: 'minimumPremium' },
+    { id: 'minimumPremium', header: 'Prima (Bs.)', valueGetter: (row) => row.minimumPremium?.toFixed(2) ?? '—' },
     { id: 'rate', header: 'Tasa (%)', field: 'rate' },
     { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
     { id: 'discount', header: 'Descuento (%)', field: 'discount' },

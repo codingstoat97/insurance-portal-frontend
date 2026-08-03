@@ -116,7 +116,11 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
 
   private normalize(val: unknown): string | number {
     if (val == null) return '';
-    return typeof val === 'string' ? val.toLowerCase() : (val as any);
+    if (typeof val === 'string') {
+      const num = Number(val);
+      return val.trim() !== '' && !isNaN(num) ? num : val.toLowerCase();
+    }
+    return val as any;
   }
 
   private setupSortingAccessor(): void {

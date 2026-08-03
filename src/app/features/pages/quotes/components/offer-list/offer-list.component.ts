@@ -102,7 +102,7 @@ export class OfferListComponent implements OnInit, OnChanges {
   primaACredito(offer: any): number {
     const contado = this.primaAlContado(offer);
     const interest = Number(offer?.interest) || 0;
-    return contado + (contado * interest);
+    return contado + (contado * (interest / 100));
   }
 
   constructor(

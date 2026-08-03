@@ -9,7 +9,7 @@
             <div class="row" *ngFor="let col of data.columns">
                 <span class="label">{{ col.header }}</span>
                 <span class="value">
-                   {{ ($any(data.element))[col.field] ?? '—' }}
+                   {{ getValue(col) ?? '—' }}
                 </span>
             </div>
         </div>

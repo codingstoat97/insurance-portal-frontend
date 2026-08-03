@@ -29,4 +29,8 @@ export class InfoModalComponent {
   closeModal(): void {
     this.dialogRef.close();
   }
+
+  getValue(col: any): any {
+    return col.valueGetter ? col.valueGetter(this.data.element) : this.data.element[col.field ?? col.id];
+  }
 }
