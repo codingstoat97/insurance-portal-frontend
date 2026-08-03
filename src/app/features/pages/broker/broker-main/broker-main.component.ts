@@ -73,8 +73,8 @@ export class BrokerMainComponent implements OnInit {
 
   approvalColumns: Column<ClientPlanApproval>[] = [
     { id: 'id', header: 'ID', field: 'id' },
-    { id: 'clientName', header: 'Cliente', field: 'clientName' },
-    { id: 'clientCellphone', header: 'Celular', field: 'clientCellphone' },
+    { id: 'clientName', header: 'Cliente', valueGetter: (row) => this.getClientFullName(row) },
+    { id: 'clientCellphone', header: 'Celular', valueGetter: (row) => row.client?.cellphone ?? '—' },
     { id: 'vehiclePlate', header: 'Placa', field: 'vehiclePlate' },
     { id: 'vehiclePrice', header: 'Precio Vehículo (Bs.)', field: 'vehiclePrice' },
     { id: 'insurance', header: 'Aseguradora', valueGetter: (row) => this.insuranceMap[row.plan?.insuranceId!]?.name ?? '—' },
@@ -151,6 +151,12 @@ export class BrokerMainComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(res => { this.soldPlanRows = res; });
+  }
+
+  private getClientFullName(row: ClientPlanApproval): string {
+    const client = row.client;
+    if (!client) return '—';
+    return [client.name, client.paternalSurname, client.maternalSurname].filter(Boolean).join(' ');
   }
 
   onWaitingListRowAction(e: { actionId: string; row: ClientPlanApproval }): void {
