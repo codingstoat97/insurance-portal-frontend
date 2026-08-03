@@ -92,6 +92,7 @@ export class BrokerMainComponent implements OnInit {
     { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'edit', icon: 'edit', tooltip: 'Editar' },
     { id: 'add', icon: 'add', tooltip: 'Añadir Beneficios' },
+    { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
   ];
 
   actions: Action[] = [
@@ -352,6 +353,7 @@ export class BrokerMainComponent implements OnInit {
       case 'info': this.openInformationDialog(type, e.row); break;
       case 'edit': this.openEntityDialog(type, e.row); break;
       case 'add': this.openAddBenefitsModal(e.row); break;
+      case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
     }
   }
 
