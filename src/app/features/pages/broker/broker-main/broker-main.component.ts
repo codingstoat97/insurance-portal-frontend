@@ -36,7 +36,7 @@ export class BrokerMainComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   username: string = 'Erick Kinlock';
-  profilePictureURL = '/assets/user-pp.jpg';
+  profilePictureURL = '/assets/default-profile.svg';
   broker?: Broker;
 
   vehicleMap: Record<number, Vehicle> = {};
@@ -196,7 +196,7 @@ export class BrokerMainComponent implements OnInit {
       .subscribe(res => {
         this.broker = res;
         this.username = res.name;
-        this.profilePictureURL = res.logo || '/assets/user-pp.jpg';
+        this.profilePictureURL = res.logo || '/assets/default-profile.svg';
       });
   }
 
