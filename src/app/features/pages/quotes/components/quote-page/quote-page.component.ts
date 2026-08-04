@@ -153,11 +153,24 @@ export class QuotePageComponent {
     const marginX = 14;
     let cursorY = 18;
 
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`Plan de ${this.insuranceData?.name ?? ''} - ${this.quotePlan?.name ?? ''}`, marginX, cursorY);
+    const titleText = this.quotePlan?.name ?? '';
+    const titlePaddingX = 4;
+    const tileHeight = 11;
+    const tileX = marginX;
+    const tileY = cursorY - 6;
+    const tileWidth = pageWidth - marginX * 2;
 
-    cursorY += 7;
+    // --kin-accent (#ff8b22), same solid-bar treatment as the section headers below
+    doc.setFillColor(255, 139, 34);
+    doc.rect(tileX, tileY, tileWidth, tileHeight, 'F');
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(244, 240, 230);
+    doc.text(titleText, tileX + titlePaddingX, tileY + tileHeight / 2, { baseline: 'middle' });
+    doc.setTextColor(0, 0, 0);
+
+    cursorY = tileY + tileHeight + 7;
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.text(`Contacto: ${this.insuranceData?.email ?? '-'}`, marginX, cursorY);
