@@ -155,7 +155,7 @@ export class QuotePageComponent {
 
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Plan de ${this.insuranceData?.name ?? ''} Seguros - Seguro ${this.insuranceData?.type ?? ''}`, marginX, cursorY);
+    doc.text(`Plan de ${this.insuranceData?.name ?? ''} - ${this.quotePlan?.name ?? ''}`, marginX, cursorY);
 
     cursorY += 7;
     doc.setFontSize(10);
@@ -180,7 +180,7 @@ export class QuotePageComponent {
         ['Valor del Vehículo', this.clientVehicleData?.vehicleValue ? `${this.formatNumber(this.clientVehicleData.vehicleValue)} Bs.` : '-'],
       ],
       theme: 'grid',
-      headStyles: { fillColor: [33, 37, 41] },
+      headStyles: { fillColor: [64, 136, 162], textColor: [244, 240, 230] },
       margin: { left: marginX, right: marginX },
     });
 
@@ -197,7 +197,7 @@ export class QuotePageComponent {
       head: [['Detalles del Plan', '']],
       body: planDetailsBody,
       theme: 'grid',
-      headStyles: { fillColor: [33, 37, 41] },
+      headStyles: { fillColor: [64, 136, 162], textColor: [244, 240, 230] },
       margin: { left: marginX, right: marginX },
     });
 
@@ -220,7 +220,7 @@ export class QuotePageComponent {
       head: [['Coberturas', 'Descripción']],
       body: benefitRows.length ? benefitRows : [['-', 'No se registraron beneficios para este plan.']],
       theme: 'grid',
-      headStyles: { fillColor: [33, 37, 41] },
+      headStyles: { fillColor: [64, 136, 162], textColor: [244, 240, 230] },
       margin: { left: marginX, right: marginX },
       columnStyles: { 0: { cellWidth: 55 } },
     });
