@@ -3,6 +3,7 @@ export type Column<T = any> = {
   header: string;
   field?: keyof T & string;
   valueGetter?: (row: T) => any;
+  iconGetter?: (row: T) => { icon: string; color: string } | null;
 };
 
 export type Action = {

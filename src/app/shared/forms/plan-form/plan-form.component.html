@@ -58,11 +58,11 @@
         <div class="form-section">
             <h4 class="section-title">
                 <mat-icon>payments</mat-icon>
-                Precios y Condiciones
+                Condiciones
             </h4>
             <div class="form-grid">
                 <mat-form-field appearance="outline">
-                    <mat-label>Prima (Bs.):</mat-label>
+                    <mat-label>Prima Minima (Bs.):</mat-label>
                     <input matInput formControlName="minimumPremium" placeholder="Ej. 2000" />
                     <mat-error *ngIf="form.get('minimumPremium')?.hasError('required')">
                         La cantidad de prima es obligatoria

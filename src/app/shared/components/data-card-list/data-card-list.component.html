@@ -3,7 +3,11 @@
         <mat-card-content class="data-card-content">
             <div class="data-card-row" *ngFor="let col of columns">
                 <span class="data-card-label">{{ col.header || col.id }}</span>
-                <span class="data-card-value">{{ getValue(col, row) }}</span>
+                <span class="data-card-value">
+                    <mat-icon *ngIf="col.iconGetter as getIcon; else plainValue"
+                        [style.color]="getIcon(row)?.color">{{ getIcon(row)?.icon }}</mat-icon>
+                    <ng-template #plainValue>{{ getValue(col, row) }}</ng-template>
+                </span>
             </div>
         </mat-card-content>
         <mat-card-actions *ngIf="actions.length" class="data-card-actions" align="end">

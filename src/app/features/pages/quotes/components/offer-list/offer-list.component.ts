@@ -61,12 +61,15 @@ export class OfferListComponent implements OnInit, OnChanges {
   columnVisible: Record<string, boolean> = {
     logo: true,
     aseguradora: true,
-    plan: true,
     descuento: true,
     primaAnual: true,
     primaACredito: true,
     franquicia: true
   };
+
+  get selectedInsuranceIdsArray(): number[] {
+    return [...this.selectedInsuranceIds];
+  }
 
   get insuranceFilteredList(): any[] {
     if (this.selectedInsuranceIds.size === 0) return this.offerList;
@@ -131,6 +134,11 @@ export class OfferListComponent implements OnInit, OnChanges {
 
   onInsuranceChipsChange(selectedIds: number[]): void {
     this.selectedInsuranceIds = new Set(selectedIds);
+    this.rebuildPlanTypeTabs();
+  }
+
+  clearInsuranceFilter(): void {
+    this.selectedInsuranceIds = new Set();
     this.rebuildPlanTypeTabs();
   }
 
