@@ -102,6 +102,10 @@
         <mat-card-actions class="quote-actions">
             <button mat-button (click)="goBack()">Volver</button>
             <div class="right-actions">
+                <button mat-stroked-button color="primary" [disabled]="!quotePlan" (click)="openSendEmailModal()">
+                    <mat-icon>email</mat-icon>
+                    Enviar por Correo
+                </button>
                 <button mat-stroked-button color="primary" [disabled]="!quotePlan" (click)="downloadPdf()">
                     <mat-icon>download</mat-icon>
                     Descargar PDF

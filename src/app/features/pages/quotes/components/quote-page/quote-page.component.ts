@@ -3,11 +3,15 @@ import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { MatDialog } from '@angular/material/dialog';
+
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+
+import { SendEmailModalComponent } from 'src/app/shared/components/send-email-modal/send-email-modal.component';
 
 import { catchError, EMPTY } from 'rxjs';
 
@@ -42,7 +46,8 @@ export class QuotePageComponent {
     private snackbarService: SnackBarService,
     private planPurchaseService: PlanPurchaseService,
     private salesConfigService: SalesConfigService,
-    private stepperService: QuoteStepperService
+    private stepperService: QuoteStepperService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -119,7 +124,30 @@ export class QuotePageComponent {
 
   downloadPdf(): void {
     if (!this.quotePlan) return;
+    const doc = this.buildQuotePdf();
+    const fileName = `Cotizacion_${this.insuranceData?.name ?? 'Plan'}_${this.quotePlan?.id ?? this.quoteId}.pdf`.replace(/\s+/g, '_');
+    doc.save(fileName);
+  }
 
+  openSendEmailModal(): void {
+    if (!this.quotePlan) return;
+    const dialogRef = this.dialog.open(SendEmailModalComponent, { width: '420px', maxWidth: '95vw' });
+    dialogRef.afterClosed().subscribe((email?: string) => {
+      if (email) this.sendPdfByEmail(email);
+    });
+  }
+
+  private sendPdfByEmail(email: string): void {
+    if (!this.quotePlan) return;
+    const doc = this.buildQuotePdf();
+    const base64Pdf = doc.output('datauristring').split(',').pop() ?? '';
+
+    this.httpService.post(PATH.planSendEmail + '/' + this.quotePlan.id, { base64Pdf, email })
+      .pipe(catchError(() => { this.snackbarService.error('Error al enviar el correo.'); return EMPTY; }))
+      .subscribe(() => this.snackbarService.success('Correo enviado correctamente.'));
+  }
+
+  private buildQuotePdf(): jsPDF {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const marginX = 14;
@@ -211,8 +239,7 @@ export class QuotePageComponent {
       doc.text(`Página ${i} de ${pageCount}`, pageWidth - marginX - 20, doc.internal.pageSize.getHeight() - 10);
     }
 
-    const fileName = `Cotizacion_${this.insuranceData?.name ?? 'Plan'}_${this.quotePlan?.id ?? this.quoteId}.pdf`.replace(/\s+/g, '_');
-    doc.save(fileName);
+    return doc;
   }
 
   private formatNumber(value?: number): string {

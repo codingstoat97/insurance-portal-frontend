@@ -50,6 +50,7 @@ export const planUpdate = 'plans/edit';
 export const planDelete = 'plans/delete';
 export const planGetByID = 'plans/getById';
 export const planSearch = 'plans/search'
+export const planSendEmail = 'plans/sendEmail';
 
 export const planBenefitsPath = 'planBenefits';
 export const planBenefitsGetAllByPlan = 'planBenefits/list/byPlanId';
