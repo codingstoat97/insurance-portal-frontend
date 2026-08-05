@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { SharedModule } from '../shared.module';
 
@@ -31,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatCardModule,
     MatDividerModule,
     MatCheckboxModule,
+    MatAutocompleteModule,
     ReactiveFormsModule,
     FormsModule
   ]

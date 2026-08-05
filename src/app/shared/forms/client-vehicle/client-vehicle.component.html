@@ -9,7 +9,12 @@
             <div class="field-half">
                 <label class="field-label">Marca *</label>
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="brand" placeholder="Ej. Toyota" />
+                    <input matInput formControlName="brand" placeholder="Ej. Toyota" [matAutocomplete]="brandAuto" />
+                    <mat-autocomplete #brandAuto="matAutocomplete">
+                        <mat-option *ngFor="let b of (filteredBrandList$ | async)" [value]="b">
+                            {{ b }}
+                        </mat-option>
+                    </mat-autocomplete>
                     <mat-error *ngIf="form.get('brand')?.hasError('required')">
                         La marca del vehículo es obligatoria
                     </mat-error>
@@ -18,7 +23,12 @@
             <div class="field-half">
                 <label class="field-label">Modelo / Tipo *</label>
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="model" placeholder="Ej. Corolla XEI" />
+                    <input matInput formControlName="model" placeholder="Ej. Corolla XEI" [matAutocomplete]="modelAuto" />
+                    <mat-autocomplete #modelAuto="matAutocomplete">
+                        <mat-option *ngFor="let m of (filteredModelList$ | async)" [value]="m">
+                            {{ m }}
+                        </mat-option>
+                    </mat-autocomplete>
                     <mat-error *ngIf="form.get('model')?.hasError('required')">
                         El modelo es obligatorio
                     </mat-error>

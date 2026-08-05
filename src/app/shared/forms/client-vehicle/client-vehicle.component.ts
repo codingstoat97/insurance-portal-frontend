@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { catchError, EMPTY } from 'rxjs';
+import {
+  BehaviorSubject, Observable, catchError, combineLatest, debounceTime,
+  distinctUntilChanged, EMPTY, map, of, pairwise, startWith, switchMap,
+} from 'rxjs';
 
 import { FormImportsModule } from '../form-imports.module';
 
@@ -36,6 +39,11 @@ export class ClientVehicleComponent implements OnInit {
   engineTypeList: string[] = [];
   regionalList: Region[] = [];
   description = "Cuéntanos sobre tu auto para encontrar la mejor cobertura."
+
+  private brandListSubject = new BehaviorSubject<string[]>([]);
+  private modelListSubject = new BehaviorSubject<string[]>([]);
+  filteredBrandList$!: Observable<string[]>;
+  filteredModelList$!: Observable<string[]>;
 
   form = this.fb.group({
     brand: this.fb.control<string>('', {
@@ -74,13 +82,61 @@ export class ClientVehicleComponent implements OnInit {
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
-    if (this.value) {
-      this.form.patchValue(this.value);
-    }
     this.getVehiculeClassificationList();
     this.getVehicleTypeList();
     this.getEngineTypeList();
     this.getRegionalList();
+    this.getBrandList();
+    this.setupBrandAndModelAutocomplete();
+
+    if (this.value) {
+      this.form.patchValue(this.value);
+    }
+  }
+
+  private setupBrandAndModelAutocomplete(): void {
+    const brandControl = this.form.controls.brand;
+    const modelControl = this.form.controls.model;
+
+    this.filteredBrandList$ = combineLatest([
+      brandControl.valueChanges.pipe(startWith(brandControl.value)),
+      this.brandListSubject,
+    ]).pipe(map(([typed, list]) => this.filterOptions(list, typed)));
+
+    this.filteredModelList$ = combineLatest([
+      modelControl.valueChanges.pipe(startWith(modelControl.value)),
+      this.modelListSubject,
+    ]).pipe(map(([typed, list]) => this.filterOptions(list, typed)));
+
+    const brandStable$ = brandControl.valueChanges.pipe(
+      startWith(brandControl.value),
+      debounceTime(300),
+      distinctUntilChanged(),
+    );
+
+    // Only clear the model once the brand genuinely changes after the initial/prefilled value —
+    // pairwise() skips the first emission, so patched edit values are left untouched.
+    brandStable$.pipe(pairwise())
+      .subscribe(() => modelControl.setValue('', { emitEvent: false }));
+
+    brandStable$.pipe(
+      switchMap(brand => brand
+        ? this.httpService.get<string[]>(`${PATH.vehicleAllModelsByBrand}?brand=${encodeURIComponent(brand)}`)
+          .pipe(catchError(() => of([])))
+        : of([])),
+    ).subscribe(models => this.modelListSubject.next(models ?? []));
+  }
+
+  private filterOptions(list: string[], typed: string | null): string[] {
+    const filterValue = (typed ?? '').toLowerCase();
+    if (!filterValue) return list;
+    return list.filter(o => o.toLowerCase().includes(filterValue));
+  }
+
+  private getBrandList(): void {
+    this.httpService.get<string[]>(PATH.vehicleAllBrands)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar las marcas.'); return EMPTY; }))
+      .subscribe(res => this.brandListSubject.next(res ?? []));
   }
 
   private getVehiculeClassificationList(): void {
