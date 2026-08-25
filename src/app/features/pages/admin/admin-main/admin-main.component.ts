@@ -15,13 +15,14 @@ import { InsuranceFormComponent } from 'src/app/shared/forms/insurance-form/insu
 import { VehicleFormComponent } from 'src/app/shared/forms/vehicle-form/vehicle-form.component';
 import { RegionFormComponent } from 'src/app/shared/forms/region-form/region-form.component';
 import { SimpleNameFormComponent } from 'src/app/shared/forms/simple-name-form/simple-name-form.component';
+import { ClientFormComponent } from 'src/app/shared/forms/client-form/client-form.component';
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
 import { catchError, EMPTY } from 'rxjs';
 
-import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType, OfferColumnConfig } from 'src/app/shared/models';
+import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType, OfferColumnConfig, Client } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util'
 import { UserFormComponent } from 'src/app/shared/forms/user-form/user-form.component';
 
@@ -54,12 +55,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'brand', header: 'Marca', field: 'brand' },
     { id: 'classification', header: 'Clasificación', field: 'classification' },
     { id: 'model', header: 'Modelo', field: 'model' },
-    {
-      id: 'highEnd', header: 'Es Alta Gama',
-      iconGetter: (row: Vehicle) => row.highEnd
-        ? { icon: 'check_circle', color: 'green' }
-        : { icon: 'cancel', color: 'red' }
-    },
+    { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'vehicleType', header: 'Tipo de Vehículo', field: 'vehicleType' },
     { id: 'engineType', header: 'Tipo de Motor', field: 'engineType' }
   ];
@@ -104,6 +100,47 @@ export class AdminMainComponent implements OnInit {
 
   planTypeRows = [];
 
+  clientColumns = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', valueGetter: (row: Client) => [row.name, row.paternalSurname, row.maternalSurname].filter(Boolean).join(' ') },
+    { id: 'ci', header: 'CI', field: 'ci' },
+    { id: 'email', header: 'Correo Electrónico', field: 'email' },
+    { id: 'phone', header: 'Teléfono', field: 'phone' }
+  ];
+
+  clientRows = [];
+
+  clientActions: any[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
+    { id: 'edit', icon: 'edit', tooltip: 'Editar' },
+    { id: 'delete', icon: 'delete', tooltip: 'Eliminar' },
+  ];
+
+  clientDetailColumns = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'name', header: 'Nombre', field: 'name' },
+    { id: 'paternalSurname', header: 'Apellido Paterno', field: 'paternalSurname' },
+    { id: 'maternalSurname', header: 'Apellido Materno', field: 'maternalSurname' },
+    { id: 'marriedName', header: 'Apellido de Casada', field: 'marriedName' },
+    { id: 'documentType', header: 'Tipo de Documento', field: 'documentType' },
+    { id: 'ci', header: 'CI', field: 'ci' },
+    { id: 'gender', header: 'Género', field: 'gender' },
+    { id: 'birthdate', header: 'Fecha de Nacimiento', field: 'birthdate' },
+    { id: 'countryOfBirth', header: 'País de Nacimiento', field: 'countryOfBirth' },
+    { id: 'countryOfResidence', header: 'País de Residencia', field: 'countryOfResidence' },
+    { id: 'maritalStatus', header: 'Estado Civil', field: 'maritalStatus' },
+    { id: 'email', header: 'Correo Electrónico', field: 'email' },
+    { id: 'phone', header: 'Teléfono', field: 'phone' },
+    { id: 'cellphone', header: 'Celular', field: 'cellphone' },
+    { id: 'address', header: 'Dirección', field: 'address' },
+    { id: 'area', header: 'Área', field: 'area' },
+    { id: 'profession', header: 'Profesión', field: 'profession' },
+    { id: 'occupation', header: 'Ocupación', field: 'occupation' },
+    { id: 'employmentSituation', header: 'Situación Laboral', field: 'employmentSituation' },
+    { id: 'workPlace', header: 'Lugar de Trabajo', field: 'workPlace' },
+    { id: 'salary', header: 'Salario', field: 'salary' },
+  ];
+
   salesEnabled = true;
 
   offerColumns: OfferColumnConfig[] = [];
@@ -141,6 +178,7 @@ export class AdminMainComponent implements OnInit {
     this.fetchVehicleTypeList();
     this.fetchSegmentList();
     this.fetchPlanTypeList();
+    this.fetchClientList();
     this.salesConfigService.enabled$.subscribe(enabled => { this.salesEnabled = enabled; });
     this.offerColumnConfigService.columns$.subscribe(columns => { this.offerColumns = columns; });
   }
@@ -211,6 +249,12 @@ export class AdminMainComponent implements OnInit {
       .subscribe(res => { this.planTypeRows = res; });
   }
 
+  private fetchClientList() {
+    this.httpService.get<any>(PATH.clientList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los clientes.'); return EMPTY; }))
+      .subscribe(res => { this.clientRows = res; });
+  }
+
   openDeleteDialog(type: string, itemName: any, item: any): void {
     this.deleteDialogRef = this.dialog.open(DeleteModalComponent, {
       data: { type: type, element: itemName },
@@ -226,12 +270,13 @@ export class AdminMainComponent implements OnInit {
           case 'VehicleType': this.deleteEntity(type, item.id); break;
           case 'Segment': this.deleteEntity(type, item.id); break;
           case 'PlanType': this.deleteEntity(type, item.id); break;
+          case 'Client': this.deleteEntity(type, item.id); break;
         }
       }
     });
   }
 
-  openInformationDialog(type: string, item: Vehicle | Region | Insurance | NamedCatalogEntity): void {
+  openInformationDialog(type: string, item: Vehicle | Region | Insurance | NamedCatalogEntity | Client): void {
     this.infoDialogRef = this.dialog.open(InfoModalComponent, {
       data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
       scrollStrategy: this.scrollStrategy
@@ -246,11 +291,12 @@ export class AdminMainComponent implements OnInit {
       case 'VehicleType': return this.vehicleTypeColumns;
       case 'Segment': return this.segmentColumns;
       case 'PlanType': return this.planTypeColumns;
+      case 'Client': return this.clientDetailColumns;
       default: return [];
     }
   }
 
-  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region | User | NamedCatalogEntity) {
+  openEntityDialog(type: string, entity?: Vehicle | Insurance | Region | User | NamedCatalogEntity | Client) {
     const dialogRef = this.getDialogRef(type);
 
     if (entity) {
@@ -266,7 +312,7 @@ export class AdminMainComponent implements OnInit {
       dialogRef.close();
     });
 
-    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User | NamedCatalogEntity) => {
+    dialogRef.afterClosed().subscribe((result: Vehicle | Insurance | Region | User | NamedCatalogEntity | Client) => {
       if (result) {
         if (entity) {
           this.updateEntity(type, result, (entity as any).id);
@@ -297,6 +343,10 @@ export class AdminMainComponent implements OnInit {
         dialogRef = this.dialog.open(UserFormComponent, {
           width: '620px', maxWidth: '95vw', maxHeight: '90vh',
         }); break;
+      case 'Client':
+        dialogRef = this.dialog.open(ClientFormComponent, {
+          width: '760px', maxWidth: '95vw', maxHeight: '90vh',
+        }); break;
       case 'VehicleType':
       case 'Segment':
       case 'PlanType': {
@@ -320,7 +370,7 @@ export class AdminMainComponent implements OnInit {
     PlanType: { sectionTitle: 'Datos del Tipo de Plan', sectionIcon: 'assignment', fieldLabel: 'Nombre del Tipo de Plan', placeholder: 'Ej. Básico' },
   };
 
-  private handleEditEntity(entity: Vehicle | Insurance | Region | User | NamedCatalogEntity, dialogRef: any) {
+  private handleEditEntity(entity: Vehicle | Insurance | Region | User | NamedCatalogEntity | Client, dialogRef: any) {
     dialogRef.componentInstance.title = 'Editar';
     dialogRef.componentInstance.value = entity;
     dialogRef.componentInstance.showDescription = false;
@@ -344,11 +394,18 @@ export class AdminMainComponent implements OnInit {
     switch (e.actionId) {
       case 'info': this.openInformationDialog(type, e.row); break;
       case 'edit': this.openEntityDialog(type, e.row); break;
-      case 'delete': this.openDeleteDialog(type, e.row.name, e.row); break;
+      case 'delete': this.openDeleteDialog(type, this.getEntityDisplayName(type, e.row), e.row); break;
     }
   }
 
-  private saveEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity): void {
+  private getEntityDisplayName(type: string, row: any): string {
+    if (type === 'Client') {
+      return [row.name, row.paternalSurname, row.maternalSurname].filter(Boolean).join(' ');
+    }
+    return row.name;
+  }
+
+  private saveEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity | Client): void {
     let path = this.getEntityPath(type) + '/add';
     if (type == 'Broker') {
       path += '/brokers';
@@ -361,7 +418,7 @@ export class AdminMainComponent implements OnInit {
       });
   }
 
-  private updateEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity, id: any): void {
+  private updateEntity(type: string, payload: Insurance | Vehicle | Region | User | NamedCatalogEntity | Client, id: any): void {
     const path = this.getEntityPath(type) + '/edit/' + id;
     this.httpService.put(path, payload)
       .pipe(catchError(() => { this.snackbar.error('Error al actualizar.'); return EMPTY; }))
@@ -390,6 +447,7 @@ export class AdminMainComponent implements OnInit {
       case 'VehicleType': return PATH.vehicleTypePath;
       case 'Segment': return PATH.segmentPath;
       case 'PlanType': return PATH.planTypePath;
+      case 'Client': return PATH.clientPath;
       default: return '';
     }
   }
@@ -403,6 +461,7 @@ export class AdminMainComponent implements OnInit {
       case 'VehicleType': this.fetchVehicleTypeList(); break;
       case 'Segment': this.fetchSegmentList(); break;
       case 'PlanType': this.fetchPlanTypeList(); break;
+      case 'Client': this.fetchClientList(); break;
     }
   }
 

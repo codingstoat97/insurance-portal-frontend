@@ -1,0 +1,236 @@
+<div class="form-container dialog-form-container">
+    <div class="form-title">
+        <h3>{{title}}</h3>
+        <p *ngIf="showDescription">
+            {{description}}
+        </p>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="field-container">
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>badge</mat-icon>
+                Datos Personales
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nombre(s):</mat-label>
+                    <input matInput formControlName="name" placeholder="Ej. Erica" />
+                    <mat-error *ngIf="form.get('name')?.hasError('required')">
+                        El nombre es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Apellido Paterno:</mat-label>
+                    <input matInput formControlName="paternalSurname" placeholder="Ej. Sanchez" />
+                    <mat-error *ngIf="form.get('paternalSurname')?.hasError('required')">
+                        El apellido paterno es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('paternalSurname')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Apellido Materno:</mat-label>
+                    <input matInput formControlName="maternalSurname" placeholder="Ej. Perez" />
+                    <mat-error *ngIf="form.get('maternalSurname')?.hasError('minlength')">
+                        Debe tener al menos 2 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Apellido de Matrimonio:</mat-label>
+                    <input matInput formControlName="marriedName" placeholder="Ej. de Inchauste" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Género:</mat-label>
+                    <mat-select formControlName="gender">
+                        <mat-option [value]="'male'">
+                            Masculino
+                        </mat-option>
+                        <mat-option [value]="'female'">
+                            Femenino
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('gender')?.hasError('required')">
+                        Selecciona un género
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Estado Civil:</mat-label>
+                    <mat-select formControlName="maritalStatus">
+                        <mat-option [value]="'single'">
+                            Soltero(a)
+                        </mat-option>
+                        <mat-option [value]="'married'">
+                            Casado(a)
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('maritalStatus')?.hasError('required')">
+                        Selecciona una opción
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Fecha de Nacimiento:</mat-label>
+                    <input matInput [matDatepicker]="birthdatePicker" formControlName="birthdate"
+                        placeholder="DD/MM/AAAA" readonly />
+                    <mat-datepicker-toggle matIconSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #birthdatePicker></mat-datepicker>
+                    <mat-error *ngIf="form.get('birthdate')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tipo de Documento:</mat-label>
+                    <mat-select formControlName="documentType">
+                        <mat-option [value]="'passport'">
+                            Pasaporte
+                        </mat-option>
+                        <mat-option [value]="'id'">
+                            Carnet de Identidad
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('documentType')?.hasError('required')">
+                        Selecciona una opción
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>CI / N° de Documento:</mat-label>
+                    <input matInput formControlName="ci" placeholder="Ej. 8523147" />
+                    <mat-error *ngIf="form.get('ci')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>call</mat-icon>
+                Contacto
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Teléfono:</mat-label>
+                    <input matInput formControlName="phone" placeholder="Ej. 44551122" />
+                    <mat-error *ngIf="form.get('phone')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Número de Celular:</mat-label>
+                    <input matInput formControlName="cellphone" placeholder="Ej. 70776334" />
+                    <mat-error *ngIf="form.get('cellphone')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Correo electrónico:</mat-label>
+                    <input matInput formControlName="email" placeholder="ejemplo@correo.com" type="email" />
+                    <mat-error *ngIf="form.get('email')?.hasError('required')">
+                        El correo es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('email')?.hasError('email')">
+                        Correo inválido
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>location_on</mat-icon>
+                Ubicación
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>País de nacimiento:</mat-label>
+                    <input matInput formControlName="countryOfBirth" placeholder="Colombia" />
+                    <mat-error *ngIf="form.get('countryOfBirth')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>País de Residencia:</mat-label>
+                    <input matInput formControlName="countryOfResidence" placeholder="Bolivia" />
+                    <mat-error *ngIf="form.get('countryOfResidence')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Área:</mat-label>
+                    <input matInput formControlName="area" placeholder="Cochabamba" />
+                    <mat-error *ngIf="form.get('area')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Dirección:</mat-label>
+                    <input matInput formControlName="address" placeholder="C. Las Hiedras #2134" />
+                    <mat-error *ngIf="form.get('address')?.hasError('required')">
+                        Campo obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('address')?.hasError('minlength')">
+                        Debe tener al menos 5 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+            <h4 class="section-title">
+                <mat-icon>work</mat-icon>
+                Datos Laborales
+            </h4>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Profesión:</mat-label>
+                    <input matInput formControlName="profession" placeholder="Licenciado en Enfermería" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Situación laboral:</mat-label>
+                    <mat-select formControlName="employmentSituation">
+                        <mat-option [value]="'unemployed'">
+                            Desempleado
+                        </mat-option>
+                        <mat-option [value]="'dependent'">
+                            Asalariado
+                        </mat-option>
+                        <mat-option [value]="'independent'">
+                            Independiente
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Ocupación:</mat-label>
+                    <input matInput formControlName="occupation" placeholder="Jefe de Enfermería" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Lugar de Trabajo:</mat-label>
+                    <input matInput formControlName="workPlace" placeholder="Clínica San Félix" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="span-2">
+                    <mat-label>Salario:</mat-label>
+                    <input matInput formControlName="salary" placeholder="3000" />
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                {{ submitLabel }}
+            </button>
+            <button *ngIf="showCancel" mat-stroked-button color="warn" type="button" (click)="onCancel()">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

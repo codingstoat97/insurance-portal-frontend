@@ -12,7 +12,7 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { ClientVehicle, Region, VehicleType } from '../../models';
+import { ClientVehicle, Region } from '../../models';
 
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
@@ -34,9 +34,6 @@ export class ClientVehicleComponent implements OnInit {
   @Output() submitted = new EventEmitter<ClientVehicle>();
   @Output() cancelled = new EventEmitter<void>();
 
-  vehicleClassificationList: string[] = [];
-  vehicleTypeList: VehicleType[] = [];
-  engineTypeList: string[] = [];
   regionalList: Region[] = [];
   description = "Cuéntanos sobre tu auto para encontrar la mejor cobertura."
 
@@ -54,10 +51,6 @@ export class ClientVehicleComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(50)],
     }),
-    classification: this.fb.control<string>('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
     year: this.fb.control<number | null>(null, {
       validators: [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
     }),
@@ -69,12 +62,15 @@ export class ClientVehicleComponent implements OnInit {
       validators: [Validators.required],
     }),
     franchise: this.fb.control<any>(null),
-    vehicleType: this.fb.control<string>('', {
+    clientName: this.fb.control<string>('', {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.maxLength(100)],
     }),
-    engineType: this.fb.control<string>('', {
+    clientEmail: this.fb.control<string>('', {
       nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    clientPhone: this.fb.control<number | null>(null, {
       validators: [Validators.required],
     }),
   });
@@ -82,9 +78,6 @@ export class ClientVehicleComponent implements OnInit {
   constructor(private fb: FormBuilder, private httpService: HttpService, private snackbar: SnackBarService) { }
 
   ngOnInit(): void {
-    this.getVehiculeClassificationList();
-    this.getVehicleTypeList();
-    this.getEngineTypeList();
     this.getRegionalList();
     this.getBrandList();
     this.setupBrandAndModelAutocomplete();
@@ -139,42 +132,10 @@ export class ClientVehicleComponent implements OnInit {
       .subscribe(res => this.brandListSubject.next(res ?? []));
   }
 
-  private getVehiculeClassificationList(): void {
-    this.httpService.get<any>(PATH.vehicleClassificationList)
-      .pipe(catchError(() => { this.snackbar.error('Error al cargar las clasificaciones de vehículo.'); return EMPTY; }))
-      .subscribe(res => {
-        this.vehicleClassificationList = this.normalizeClassifications(res);
-        const v = this.value?.classification ?? null;
-        if (v && !this.vehicleClassificationList.includes(v)) {
-          this.vehicleClassificationList = [...this.vehicleClassificationList, v];
-        }
-      });
-  }
-
-  private normalizeClassifications(res: any): string[] {
-    const arr = Array.isArray(res) ? res : [];
-    const asStrings = arr.map((x: any) =>
-      typeof x === 'string' ? x : (x?.value ?? x?.name ?? x?.id ?? '')
-    );
-    return [...new Set(asStrings.filter(Boolean))];
-  }
-
   private getRegionalList(): void {
     this.httpService.get<any>(PATH.regionList)
       .pipe(catchError(() => { this.snackbar.error('Error al cargar las regionales.'); return EMPTY; }))
       .subscribe(res => { this.regionalList = res; });
-  }
-
-  private getVehicleTypeList(): void {
-    this.httpService.get<VehicleType[]>(PATH.vehicleTypeList)
-      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de vehículo.'); return EMPTY; }))
-      .subscribe(res => { this.vehicleTypeList = res ?? []; });
-  }
-
-  private getEngineTypeList(): void {
-    this.httpService.get<string[]>(PATH.vehicleEngineTypeList)
-      .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de motor.'); return EMPTY; }))
-      .subscribe(res => { this.engineTypeList = res ?? []; });
   }
 
   onSubmit() {

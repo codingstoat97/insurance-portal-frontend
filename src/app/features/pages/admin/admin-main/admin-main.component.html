@@ -66,6 +66,14 @@
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
+                        <mat-icon class="tab-icon">people</mat-icon>
+                        Clientes
+                    </ng-template>
+                    <app-data-table [rows]="clientRows" [columns]="clientColumns" [actions]="clientActions"
+                        (action)="onRowAction($event, 'Client')"></app-data-table>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
                         <mat-icon class="tab-icon">map</mat-icon>
                         Regionales
                     </ng-template>

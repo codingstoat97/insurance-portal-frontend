@@ -9,7 +9,7 @@ import { catchError, EMPTY } from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { HttpService } from 'src/app/core/services/http/http.service';
 
-import { Plan, Vehicle, Region, Insurance, Benefit, Broker, Segment, PlanType } from 'src/app/shared/models';
+import { Plan, Region, Insurance, Benefit, Broker, Segment, PlanType } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 @Component({
@@ -34,7 +34,6 @@ export class PlanFormComponent implements OnInit, OnChanges {
   @Output() cancelled = new EventEmitter<void>();
 
   planForEdit: Plan | null = null;
-  vehicleList: Vehicle[] = [];
   regionList: Region[] = [];
   insuranceList: Insurance[] = [];
   benefitList: Benefit[] = [];
@@ -44,7 +43,6 @@ export class PlanFormComponent implements OnInit, OnChanges {
 
   form = this.fb.group({
     name: this.fb.control<string | null>(null, { validators: [Validators.required] }),
-    vehicleId: this.fb.control<number | null>(null, { validators: [] }),
     regionalId: this.fb.control<number | null>(null, { validators: [] }),
     insuranceId: this.fb.control<number | null>(null, { validators: [] }),
     minimumPremium: this.fb.control<number | null>(null),
@@ -67,7 +65,6 @@ export class PlanFormComponent implements OnInit, OnChanges {
     private snackbarService: SnackBarService) { }
 
   ngOnInit(): void {
-    this.fetchVehicleList();
     this.fetchRegionalList();
     this.fetchInsuranceList();
     this.fetchSegmentList();
@@ -87,12 +84,6 @@ export class PlanFormComponent implements OnInit, OnChanges {
       this.planForEdit = changes['value'].currentValue as Plan;
       this.setFormFromPlan(this.planForEdit);
     }
-  }
-
-  fetchVehicleList(): void {
-    this.httpService.get<Vehicle[]>(PATH.vehicleList)
-      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los vehículos.'); return EMPTY; }))
-      .subscribe(res => { this.vehicleList = res; });
   }
 
   fetchRegionalList(): void {
@@ -131,16 +122,10 @@ export class PlanFormComponent implements OnInit, OnChanges {
       });
   }
 
-  getVehicleInfo(v: Vehicle): string {
-    const result = v.brand + '-' + v.model;
-    return result;
-  }
-
   private setFormFromPlan(plan: Plan): void {
     const { percentage, minimum } = this.parseFranchise(plan.franchise);
     this.form.reset({
       name: plan.name ?? null,
-      vehicleId: plan.vehicleId ?? null,
       regionalId: plan.regionalId ?? null,
       insuranceId: plan.insuranceId ?? null,
       minimumPremium: plan.minimumPremium ?? null,

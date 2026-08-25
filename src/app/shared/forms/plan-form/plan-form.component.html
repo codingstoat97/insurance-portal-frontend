@@ -18,17 +18,6 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Vehículo:</mat-label>
-                    <mat-select formControlName="vehicleId">
-                        <mat-option *ngFor="let v of vehicleList" [value]="v.id">
-                            {{ getVehicleInfo(v) }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('vehicleId')?.hasError('required')">
-                        Selecciona un vehículo.
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
                     <mat-label>Región:</mat-label>
                     <mat-select formControlName="regionalId">
                         <mat-option *ngFor="let r of regionList" [value]="r.id">

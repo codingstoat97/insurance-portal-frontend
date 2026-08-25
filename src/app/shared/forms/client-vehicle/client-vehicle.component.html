@@ -37,20 +37,6 @@
         </div>
 
         <div class="field-full">
-            <label class="field-label">Clasificación *</label>
-            <mat-form-field appearance="outline">
-                <mat-select formControlName="classification" placeholder="Selecciona una clasificación">
-                    <mat-option *ngFor="let c of vehicleClassificationList" [value]="c">
-                        {{ c }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('classification')?.hasError('required')">
-                    Selecciona una clase
-                </mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="field-full">
             <label class="field-label">Regional *</label>
             <mat-form-field appearance="outline">
                 <mat-select formControlName="regional" placeholder="Selecciona tu regional">
@@ -87,31 +73,36 @@
 
         <div class="field-row">
             <div class="field-half">
-                <label class="field-label">Tipo de Vehículo *</label>
+                <label class="field-label">Nombre del cliente *</label>
                 <mat-form-field appearance="outline">
-                    <mat-select formControlName="vehicleType" placeholder="Selecciona el tipo de vehículo">
-                        <mat-option *ngFor="let vt of vehicleTypeList" [value]="vt.name">
-                            {{ vt.name }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('vehicleType')?.hasError('required')">
-                        Selecciona un tipo de vehículo
+                    <input matInput formControlName="clientName" placeholder="Ej. Juan Pérez" />
+                    <mat-error *ngIf="form.get('clientName')?.hasError('required')">
+                        El nombre del cliente es obligatorio
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="field-half">
-                <label class="field-label">Tipo de Motor *</label>
+                <label class="field-label">Teléfono *</label>
                 <mat-form-field appearance="outline">
-                    <mat-select formControlName="engineType" placeholder="Selecciona el tipo de motor">
-                        <mat-option *ngFor="let et of engineTypeList" [value]="et">
-                            {{ et }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('engineType')?.hasError('required')">
-                        Selecciona un tipo de motor
+                    <input matInput type="number" formControlName="clientPhone" placeholder="Ej. 70012345" />
+                    <mat-error *ngIf="form.get('clientPhone')?.hasError('required')">
+                        El teléfono del cliente es obligatorio
                     </mat-error>
                 </mat-form-field>
             </div>
+        </div>
+
+        <div class="field-full">
+            <label class="field-label">Correo electrónico *</label>
+            <mat-form-field appearance="outline">
+                <input matInput type="email" formControlName="clientEmail" placeholder="Ej. cliente@correo.com" />
+                <mat-error *ngIf="form.get('clientEmail')?.hasError('required')">
+                    El correo del cliente es obligatorio
+                </mat-error>
+                <mat-error *ngIf="form.get('clientEmail')?.hasError('email')">
+                    Ingresa un correo válido
+                </mat-error>
+            </mat-form-field>
         </div>
 
         <div class="form-actions">

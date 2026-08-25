@@ -18,7 +18,7 @@ import { catchError, EMPTY } from 'rxjs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-import { ClientVehicle, Insurance, Plan, PlanBenefit, Region, Vehicle } from 'src/app/shared/models';
+import { ClientVehicle, Insurance, Plan, PlanBenefit, Region } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
 @Component({
@@ -32,7 +32,6 @@ export class QuotePageComponent {
 
   public planBenefits: PlanBenefit[] | null = [];
   public insuranceData!: Insurance | null;
-  public vehicleData!: Vehicle | null;
   public regionData!: Region | null;
   public clientVehicleData!: ClientVehicle | null;
 
@@ -69,7 +68,6 @@ export class QuotePageComponent {
         this.fetchPlanBenefits();
         this.fetchInsuranceData();
         this.fetchRegionData();
-        this.fetchVehicleData();
       });
   }
 
@@ -92,13 +90,6 @@ export class QuotePageComponent {
     this.httpService.get<Region>(PATH.regionGetByID + '/' + this.quotePlan?.regionalId)
       .pipe(catchError(() => { this.snackbarService.error('Error al cargar los datos de la regional.'); return EMPTY; }))
       .subscribe(res => { this.regionData = res; });
-  }
-
-  private fetchVehicleData(): void {
-    if (!this.quotePlan) return;
-    this.httpService.get<Vehicle>(PATH.vehicleGetByID + '/' + this.quotePlan?.vehicleId)
-      .pipe(catchError(() => { this.snackbarService.error('Error al cargar los datos del vehículo.'); return EMPTY; }))
-      .subscribe(res => { this.vehicleData = res; });
   }
 
   get primaAlContado(): number {
@@ -187,8 +178,8 @@ export class QuotePageComponent {
       startY: cursorY,
       head: [['Datos del Vehículo', '']],
       body: [
-        ['Marca', this.vehicleData?.brand ?? '-'],
-        ['Modelo', this.vehicleData?.model ?? '-'],
+        ['Marca', this.clientVehicleData?.brand ?? '-'],
+        ['Modelo', this.clientVehicleData?.model ?? '-'],
         ['Año', this.clientVehicleData?.year ? String(this.clientVehicleData.year) : '-'],
         ['Valor del Vehículo', this.clientVehicleData?.vehicleValue ? `${this.formatNumber(this.clientVehicleData.vehicleValue)} Bs.` : '-'],
       ],

@@ -88,3 +88,7 @@ export const salesConfigPath = 'salesConfig';
 export const offerColumnConfigPath = 'offerColumnConfig';
 export const offerColumnConfigList = 'offerColumnConfig/list';
 export const offerColumnConfigUpdate = 'offerColumnConfig/edit';
+
+export const clientPath = 'clients';
+export const clientList = 'clients/list';
+export const clientGetByID = 'clients/getById';

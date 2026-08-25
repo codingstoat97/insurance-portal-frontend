@@ -1,6 +1,4 @@
-import { Plan } from './plan-model';
-
-export interface ClientPlanApprovalClient {
+export interface Client {
     id: number;
     email: string;
     phone: number;
@@ -23,15 +21,4 @@ export interface ClientPlanApprovalClient {
     occupation: string;
     workPlace: string;
     salary: string;
-}
-
-export interface ClientPlanApproval {
-    id: number;
-    plan: Plan;
-    client: ClientPlanApprovalClient;
-    vehicleBrand: string;
-    vehicleModel: string;
-    vehiclePlate: string;
-    vehiclePrice: number;
-    soldConfirmation: boolean;
 }

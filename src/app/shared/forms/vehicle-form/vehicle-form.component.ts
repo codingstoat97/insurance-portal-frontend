@@ -9,7 +9,7 @@ import { FormImportsModule } from '../form-imports.module';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
-import { Vehicle, VehicleType } from '../../models';
+import { Segment, Vehicle, VehicleType } from '../../models';
 import * as PATHS from 'src/app/shared/utils/request-paths.util'
 
 @Component({
@@ -37,13 +37,14 @@ export class VehicleFormComponent implements OnInit, OnChanges {
   vehicleClassificationList: string[] = [];
   vehicleTypeList: VehicleType[] = [];
   engineTypeList: string[] = [];
+  segmentList: Segment[] = [];
   description = "Con esta información podremos mostrarte planes adaptados al modelo, año y características de tu vehículo. Así evitamos ofrecerte opciones que no se ajusten a lo que realmente necesitas."
 
   form = this.fb.group({
     classification: this.fb.control<string | null>(null, { validators: [Validators.required] }),
     brand: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
     model: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(50)] }),
-    highEnd: this.fb.control<boolean | null>(null),
+    segment: this.fb.control<string | null>(null, { validators: [Validators.required] }),
     vehicleType: this.fb.control<string | null>(null, { validators: [Validators.required] }),
     engineType: this.fb.control<string | null>(null, { validators: [Validators.required] }),
   });
@@ -57,6 +58,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
     this.getVehiculeClassificationList();
     this.getVehicleTypeList();
     this.getEngineTypeList();
+    this.getSegmentList();
     this.applyValueToForm(this.value);
   }
 
@@ -78,7 +80,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
           classification: cls,
           brand: v.brand ?? '',
           model: v.model ?? '',
-          highEnd: v.highEnd ?? null,
+          segment: v.segment ?? null,
           vehicleType: v.vehicleType ?? null,
           engineType: v.engineType ?? null,
         },
@@ -90,7 +92,7 @@ export class VehicleFormComponent implements OnInit, OnChanges {
           classification: null,
           brand: '',
           model: '',
-          highEnd: null,
+          segment: null,
           vehicleType: null,
           engineType: null,
         },
@@ -133,6 +135,12 @@ export class VehicleFormComponent implements OnInit, OnChanges {
     this.httpService.get<string[]>(PATHS.vehicleEngineTypeList)
       .pipe(catchError(() => { this.snackbar.error('Error al cargar los tipos de motor.'); return EMPTY; }))
       .subscribe(res => { this.engineTypeList = res ?? []; });
+  }
+
+  private getSegmentList(): void {
+    this.httpService.get<Segment[]>(PATHS.segmentList)
+      .pipe(catchError(() => { this.snackbar.error('Error al cargar los segmentos.'); return EMPTY; }))
+      .subscribe(res => { this.segmentList = res ?? []; });
   }
 
   onSubmit() {

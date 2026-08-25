@@ -36,15 +36,15 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Alta Gama:</mat-label>
-                    <mat-select formControlName="highEnd">
-                        <mat-option [value]="true">
-                            Sí
-                        </mat-option>
-                        <mat-option [value]="false">
-                            No
+                    <mat-label>Segmento:</mat-label>
+                    <mat-select formControlName="segment">
+                        <mat-option *ngFor="let s of segmentList" [value]="s.name">
+                            {{ s.name }}
                         </mat-option>
                     </mat-select>
+                    <mat-error *ngIf="form.get('segment')?.hasError('required')">
+                        Selecciona un segmento
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Tipo de Vehículo:</mat-label>

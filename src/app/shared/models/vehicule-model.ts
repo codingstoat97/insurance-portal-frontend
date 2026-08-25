@@ -4,7 +4,7 @@ export interface Vehicle {
     classification: string;
     brand: string;
     model: string;
-    highEnd: boolean;
+    segment: string;
     vehicleType: string;
     engineType: string;
 }
@@ -17,11 +17,11 @@ export interface VehicleType {
 export interface ClientVehicle {
     brand: string;
     model: string;
-    classification: string;
     year: number;
     vehicleValue: number;
     regional: string;
     franchise: string;
-    vehicleType: string;
-    engineType: string;
+    clientName: string;
+    clientEmail: string;
+    clientPhone: number;
 }

@@ -14,7 +14,7 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
 import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-modal/add-benefit-modal.component';
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
-import { Benefit, Insurance, Plan, Region, Vehicle } from 'src/app/shared/models';
+import { Benefit, Insurance, Plan, Region } from 'src/app/shared/models';
 
 import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
@@ -38,14 +38,12 @@ export class AdminPlansComponent implements OnInit {
   username: string = 'Admin';
   profilePictureURL = '/assets/admin-pp.jpg';
 
-  vehicleMap: Record<number, Vehicle> = {};
   regionMap: Record<number, Region> = {};
   insuranceMap: Record<number, Insurance> = {};
 
   planColumns: Column<Plan>[] = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'name', header: 'Nombre', field: 'name' },
-    { id: 'vehicleId', header: 'Vehículo', field: 'vehicleId', valueGetter: (row) => this.vehicleMap[row.vehicleId!]?.brand ?? '—' },
     { id: 'regionalId', header: 'Regional', field: 'regionalId', valueGetter: (row) => this.regionMap[row.regionalId!]?.name ?? '—' },
     { id: 'insuranceId', header: 'Aseguradora', field: 'insuranceId', valueGetter: (row) => this.insuranceMap[row.insuranceId!]?.name ?? '—' },
     { id: 'minimumPremium', header: 'Prima (Bs.)', valueGetter: (row) => row.minimumPremium?.toFixed(2) ?? '—' },
@@ -107,12 +105,10 @@ export class AdminPlansComponent implements OnInit {
   ngOnInit(): void {
     this.fetchBenefitList();
     forkJoin({
-      vehicles: this.httpService.get<Vehicle[]>(PATHS.vehicleList),
       regions: this.httpService.get<Region[]>(PATHS.regionList),
       insurances: this.httpService.get<Insurance[]>(PATHS.insuranceList),
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: ({ vehicles, regions, insurances }) => {
-        this.vehicleMap = Object.fromEntries(vehicles.map(v => [v.id, v]));
+      next: ({ regions, insurances }) => {
         this.regionMap = Object.fromEntries(regions.map(r => [r.id, r]));
         this.insuranceMap = Object.fromEntries(insurances.map(i => [i.id, i]));
         this.fetchPlanList();
