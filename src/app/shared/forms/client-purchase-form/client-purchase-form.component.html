@@ -15,7 +15,8 @@
             <div class="form-grid">
                 <mat-form-field appearance="outline">
                     <mat-label>Precio del Vehículo:</mat-label>
-                    <input matInput formControlName="vehiclePrice" placeholder="Ej. 20000" />
+                    <input matInput inputmode="numeric" [value]="vehiclePriceDisplay" (input)="onVehiclePriceInput($event)"
+                        (blur)="form.controls.vehiclePrice.markAsTouched()" placeholder="Ej. 20.000" />
                     <mat-error *ngIf="form.get('vehiclePrice')?.hasError('required')">
                         Campo obligatorio
                     </mat-error>

@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { formatThousands, parseThousands } from 'src/app/shared/utils/number-format.util';
 
 @Component({
   selector: 'app-client-purchase-form',
@@ -32,6 +33,8 @@ export class ClientPurchaseFormComponent implements OnInit {
 
   regionList: Region[] = [];
   description = "Ingresa los datos requeridos para continuar con la compra de la poliza.";
+
+  vehiclePriceDisplay = '';
 
   form = this.fb.nonNullable.group({
     vehiclePrice: this.fb.nonNullable.control(0, {
@@ -81,6 +84,14 @@ export class ClientPurchaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.planId = this.data.planId;
+    this.vehiclePriceDisplay = formatThousands(this.form.controls.vehiclePrice.value);
+  }
+
+  onVehiclePriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const numericValue = parseThousands(input.value) ?? 0;
+    this.form.controls.vehiclePrice.setValue(numericValue);
+    this.vehiclePriceDisplay = formatThousands(numericValue);
   }
 
   onSubmit(): void {

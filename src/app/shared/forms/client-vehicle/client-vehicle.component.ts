@@ -15,6 +15,7 @@ import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.servi
 import { ClientVehicle, Region } from '../../models';
 
 import * as PATH from 'src/app/shared/utils/request-paths.util';
+import { formatThousands, parseThousands } from 'src/app/shared/utils/number-format.util';
 
 @Component({
   standalone: true,
@@ -41,6 +42,8 @@ export class ClientVehicleComponent implements OnInit {
   private modelListSubject = new BehaviorSubject<string[]>([]);
   filteredBrandList$!: Observable<string[]>;
   filteredModelList$!: Observable<string[]>;
+
+  vehicleValueDisplay = '';
 
   form = this.fb.group({
     brand: this.fb.control<string>('', {
@@ -85,6 +88,14 @@ export class ClientVehicleComponent implements OnInit {
     if (this.value) {
       this.form.patchValue(this.value);
     }
+    this.vehicleValueDisplay = formatThousands(this.form.controls.vehicleValue.value);
+  }
+
+  onVehicleValueInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const numericValue = parseThousands(input.value);
+    this.form.controls.vehicleValue.setValue(numericValue);
+    this.vehicleValueDisplay = formatThousands(numericValue);
   }
 
   private setupBrandAndModelAutocomplete(): void {

@@ -63,7 +63,8 @@
             <div class="field-half">
                 <label class="field-label">Valor del vehículo (Bs.) *</label>
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="vehicleValue" placeholder="Ej. 85.000" />
+                    <input matInput inputmode="numeric" [value]="vehicleValueDisplay" (input)="onVehicleValueInput($event)"
+                        (blur)="form.controls.vehicleValue.markAsTouched()" placeholder="Ej. 85.000" />
                     <mat-error *ngIf="form.get('vehicleValue')?.hasError('required')">
                         Ingrese el valor del vehículo
                     </mat-error>
