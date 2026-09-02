@@ -39,6 +39,28 @@
                         Selecciona una aseguradora.
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tipo de Vehículo:</mat-label>
+                    <mat-select formControlName="vehicleTypeId">
+                        <mat-option *ngFor="let vt of vehicleTypeList" [value]="vt.id">
+                            {{ vt.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('vehicleTypeId')?.hasError('required')">
+                        Selecciona un tipo de vehículo.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tipo de Motor:</mat-label>
+                    <mat-select formControlName="engineType">
+                        <mat-option *ngFor="let et of engineTypeList" [value]="et">
+                            {{ et }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('engineType')?.hasError('required')">
+                        Selecciona un tipo de motor.
+                    </mat-error>
+                </mat-form-field>
             </div>
         </div>
 

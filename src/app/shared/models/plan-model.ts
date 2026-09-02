@@ -12,8 +12,11 @@ export interface Plan {
     interest: number;
     segmentId: number;
     planTypeId: number;
+    vehicleTypeId: number;
+    engineType: string;
     segment?: string;
     planType?: string;
+    vehicleType?: string;
     franchise: string;
     state: boolean;
     createdBy: string;
