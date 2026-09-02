@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { SharedModule } from 'src/app/shared/shared.module';
+import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+import * as premium from 'src/app/shared/utils/premium.util';
 
 import { Plan } from 'src/app/shared/models';
 
@@ -25,15 +27,17 @@ export class QuoteOfferComponent {
 
   @Output() compareToggled = new EventEmitter<void>();
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private stepperService: QuoteStepperService
+  ){}
 
   goToQuotePage() {
     this.router.navigate(['/quotes', this.offer.id]);
   }
 
   get primaAlContado(): number {
-    const premium = Number(this.offer?.minimumPremium) || 0;
-    const rate = Number(this.offer?.rate) || 0;
-    return premium + (premium * (rate / 100));
+    const vehicleValue = Number(this.stepperService.clientVehicleData?.vehicleValue) || 0;
+    return premium.primaAlContado(this.offer, vehicleValue);
   }
 }

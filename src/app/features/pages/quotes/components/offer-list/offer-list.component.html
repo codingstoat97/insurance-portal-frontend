@@ -39,7 +39,7 @@
                 <th *ngIf="columnVisible['logo']" class="logo-col"></th>
                 <th *ngIf="columnVisible['aseguradora']">Nombre del Plan</th>
                 <th *ngIf="columnVisible['descuento']">Dcto.</th>
-                <th *ngIf="columnVisible['primaAnual']">Prima al Contado</th>
+                <th *ngIf="columnVisible['primaAnual']">Prima Anual</th>
                 <th *ngIf="columnVisible['primaACredito']">Prima a Crédito</th>
                 <th *ngIf="columnVisible['franquicia']">Franquicia</th>
                 <th class="action-col"></th>
@@ -59,7 +59,7 @@
                 </td>
                 <td *ngIf="columnVisible['aseguradora']" class="insurance-cell">{{ offer.name || 'Sin nombre' }}</td>
                 <td *ngIf="columnVisible['descuento']">{{ offer.discount | number:'1.0-0' }}%</td>
-                <td *ngIf="columnVisible['primaAnual']" class="premium-cell">Bs. {{ primaAlContado(offer) | number:'1.0-0' }}</td>
+                <td *ngIf="columnVisible['primaAnual']" class="premium-cell">Bs. {{ primaAnual(offer) | number:'1.0-0' }}</td>
                 <td *ngIf="columnVisible['primaACredito']" class="premium-cell">Bs. {{ primaACredito(offer) | number:'1.0-0' }}</td>
                 <td *ngIf="columnVisible['franquicia']">{{ offer.franchise }}</td>
                 <td class="action-col">

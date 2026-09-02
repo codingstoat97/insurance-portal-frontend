@@ -20,6 +20,7 @@ import autoTable from 'jspdf-autotable';
 
 import { ClientVehicle, Insurance, Plan, PlanBenefit, Region } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
+import { primaAnual, primaAlContado, primaACredito } from 'src/app/shared/utils/premium.util';
 
 @Component({
   selector: 'app-quote-page',
@@ -92,16 +93,20 @@ export class QuotePageComponent {
       .subscribe(res => { this.regionData = res; });
   }
 
+  get vehicleValue(): number {
+    return Number(this.clientVehicleData?.vehicleValue) || 0;
+  }
+
+  get primaAnual(): number {
+    return primaAnual(this.quotePlan, this.vehicleValue);
+  }
+
   get primaAlContado(): number {
-    const premium = Number(this.quotePlan?.minimumPremium) || 0;
-    const rate = Number(this.quotePlan?.rate) || 0;
-    return premium + (premium * (rate / 100));
+    return primaAlContado(this.quotePlan, this.vehicleValue);
   }
 
   get primaACredito(): number {
-    const contado = this.primaAlContado;
-    const interest = Number(this.quotePlan?.interest) || 0;
-    return contado + (contado * (interest / 100));
+    return primaACredito(this.quotePlan, this.vehicleValue);
   }
 
   openPurchaseDialog(): void {
@@ -193,6 +198,7 @@ export class QuotePageComponent {
       planDetailsBody.push(['Descuento', `${this.formatNumber(this.quotePlan.discount)} %`]);
     }
     planDetailsBody.push(['Franquicia', this.quotePlan?.franchise ?? '-']);
+    planDetailsBody.push(['Prima Anual', `${this.formatNumber(this.primaAnual)} Bs.`]);
     planDetailsBody.push(['Prima al Contado', `${this.formatNumber(this.primaAlContado)} Bs.`]);
     planDetailsBody.push(['Prima a Crédito', `${this.formatNumber(this.primaACredito)} Bs.`]);
 

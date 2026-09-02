@@ -6,7 +6,9 @@ import { catchError, forkJoin, of } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
+import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import * as premium from 'src/app/shared/utils/premium.util';
 
 import { Insurance, Plan, PlanBenefit } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
@@ -36,8 +38,13 @@ export class PlanComparisonComponent implements OnChanges {
   constructor(
     private httpService: HttpService,
     private purchaseService: PlanPurchaseService,
-    private salesConfigService: SalesConfigService
+    private salesConfigService: SalesConfigService,
+    private stepperService: QuoteStepperService
   ) { }
+
+  private get vehicleValue(): number {
+    return Number(this.stepperService.clientVehicleData?.vehicleValue) || 0;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['offers']) {
@@ -60,15 +67,11 @@ export class PlanComparisonComponent implements OnChanges {
   }
 
   primaAlContado(offer: Plan): number {
-    const premium = Number(offer?.minimumPremium) || 0;
-    const rate = Number(offer?.rate) || 0;
-    return premium + (premium * (rate / 100));
+    return premium.primaAlContado(offer, this.vehicleValue);
   }
 
   primaACredito(offer: Plan): number {
-    const contado = this.primaAlContado(offer);
-    const interest = Number(offer?.interest) || 0;
-    return contado + (contado * interest);
+    return premium.primaACredito(offer, this.vehicleValue);
   }
 
   contratar(offer: Plan): void {

@@ -7,7 +7,9 @@ import { catchError, EMPTY } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { OfferColumnConfigService } from 'src/app/core/services/offer-column-config/offer-column-config.service';
+import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import * as premium from 'src/app/shared/utils/premium.util';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
@@ -91,27 +93,35 @@ export class OfferListComponent implements OnInit, OnChanges {
     return this.primaAlContado(offer) + this.franchiseMinimum(offer?.franchise);
   }
 
+  private get vehicleValue(): number {
+    return Number(this.stepperService.clientVehicleData?.vehicleValue) || 0;
+  }
+
   private franchiseMinimum(value: unknown): number {
+    // Franchise strings use "." as the thousands separator, e.g. "10% Min. Bs. 1.000".
     const match = value != null ? String(value).match(/Bs\.?\s*([\d.,]+)/i) : null;
-    return match ? parseFloat(match[1].replace(/,/g, '')) : 0;
+    if (!match) return 0;
+    const normalized = match[1].replace(/\./g, '').replace(',', '.');
+    return parseFloat(normalized) || 0;
+  }
+
+  primaAnual(offer: any): number {
+    return premium.primaAnual(offer, this.vehicleValue);
   }
 
   primaAlContado(offer: any): number {
-    const premium = Number(offer?.minimumPremium) || 0;
-    const rate = Number(offer?.rate) || 0;
-    return premium + (premium * (rate / 100));
+    return premium.primaAlContado(offer, this.vehicleValue);
   }
 
   primaACredito(offer: any): number {
-    const contado = this.primaAlContado(offer);
-    const interest = Number(offer?.interest) || 0;
-    return contado + (contado * (interest / 100));
+    return premium.primaACredito(offer, this.vehicleValue);
   }
 
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private offerColumnConfigService: OfferColumnConfigService,
+    private stepperService: QuoteStepperService,
     private router: Router) { }
 
   goToQuotePage(offerId: number): void {
