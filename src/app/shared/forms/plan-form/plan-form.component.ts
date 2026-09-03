@@ -56,7 +56,7 @@ export class PlanFormComponent implements OnInit, OnChanges {
     planTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     vehicleTypeId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
     engineType: this.fb.control<string | null>(null, { validators: [Validators.required] }),
-    franchisePercentage: this.fb.control<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+    franchisePercentage: this.fb.control<number | null>(null, { validators: [Validators.min(0)] }),
     franchiseMinimum: this.fb.control<number | null>(null, { validators: [Validators.min(0)] }),
     state: this.fb.control<boolean | true>(true),
     brokerId: this.fb.control<number | null>(null),
@@ -171,14 +171,21 @@ export class PlanFormComponent implements OnInit, OnChanges {
   }
 
   private parseFranchise(value: unknown): { percentage: number | null; minimum: number | null } {
-    const match = value != null ? String(value).match(/([\d.]+)\s*%.*?Bs\.?\s*([\d.,]+)/i) : null;
-    if (!match) {
-      return { percentage: null, minimum: null };
-    }
-    return {
-      percentage: parseFloat(match[1]),
-      minimum: parseFloat(match[2].replace(/,/g, '')),
-    };
+    const text = value != null ? String(value) : '';
+
+    // Percentage: "." is a decimal separator here (e.g. "12.5%").
+    const pctMatch = text.match(/([\d.]+)\s*%/);
+    const percentage = pctMatch ? this.toNumber(parseFloat(pctMatch[1])) : null;
+
+    // Minimum (Bs): whole bolivianos; "." / "," are thousands separators (e.g. "1.000").
+    const minMatch = text.match(/Bs\.?\s*([\d.,]+)/i);
+    const minimum = minMatch ? this.toNumber(parseInt(minMatch[1].replace(/[.,]/g, ''), 10)) : null;
+
+    return { percentage, minimum };
+  }
+
+  private toNumber(n: number): number | null {
+    return isNaN(n) ? null : n;
   }
 
   onSubmit() {
@@ -187,9 +194,12 @@ export class PlanFormComponent implements OnInit, OnChanges {
       return;
     }
     const { franchisePercentage, franchiseMinimum, ...rest } = this.form.getRawValue();
-    const franchise = franchiseMinimum != null
-      ? `${franchisePercentage}% Min. Bs. ${franchiseMinimum}`
-      : `${franchisePercentage}%`;
+
+    const parts: string[] = [];
+    if (franchisePercentage != null) parts.push(`${franchisePercentage}%`);
+    if (franchiseMinimum != null) parts.push(`Min. Bs. ${franchiseMinimum}`);
+    const franchise = parts.join(' ');
+
     const payload = {
       ...rest,
       franchise,
