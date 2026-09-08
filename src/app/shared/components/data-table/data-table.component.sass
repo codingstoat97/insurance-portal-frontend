@@ -53,6 +53,50 @@ mat-paginator
   gap: 8px
   flex-wrap: wrap
 
+.column-filter-bar
+  flex: 0 0 auto
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  gap: 4px 8px
+  padding: 0 4px 8px
+
+  &__icon
+    color: var(--kin-gray-600)
+    font-size: 20px
+    height: 20px
+    width: 20px
+
+  .column-filter
+    width: 150px
+    max-width: 100%
+    font-size: 14px
+
+    ::ng-deep .mat-mdc-text-field-wrapper
+      padding-top: 0
+      padding-bottom: 0
+
+    ::ng-deep .mat-mdc-form-field-infix
+      min-height: 34px
+      padding-top: 6px
+      padding-bottom: 6px
+      width: auto
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper
+      display: none
+
+    ::ng-deep button.mat-mdc-icon-button.mat-mdc-icon-button
+      width: 28px
+      height: 28px
+      padding: 0
+      line-height: 28px
+
+      .mat-icon
+        font-size: 16px
+        height: 16px
+        width: 16px
+        line-height: 16px
+
 th.mat-mdc-header-cell,
 td.mat-mdc-cell
   text-align: center
@@ -107,6 +151,12 @@ td.mat-mdc-cell > div
     width: 100%
 
     mat-form-field
+      width: 100%
+
+  .column-filter-bar
+    margin: 0 8px
+
+    .column-filter
       width: 100%
 
   .no-data

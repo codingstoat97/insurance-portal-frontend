@@ -48,14 +48,14 @@ export class BrokerMainComponent implements OnInit {
     { id: 'regionalId', header: 'Regional', field: 'regionalId', valueGetter: (row) => this.regionMap[row.regionalId!]?.name ?? '—' },
     { id: 'insuranceId', header: 'Aseguradora', field: 'insuranceId', valueGetter: (row) => this.insuranceMap[row.insuranceId!]?.name ?? '—' },
     { id: 'minimumPremium', header: 'Prima (Bs.)', valueGetter: (row) => row.minimumPremium?.toFixed(2) ?? '—' },
-    { id: 'rate', header: 'Tasa (%)', field: 'rate' },
-    { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit' },
-    { id: 'discount', header: 'Descuento (%)', field: 'discount' },
-    { id: 'interest', header: 'Interés (%)', field: 'interest' },
+    { id: 'rate', header: 'Tasa (%)', field: 'rate', filterable: false },
+    { id: 'ageLimit', header: 'Límite de Años', field: 'ageLimit', filterable: false },
+    { id: 'discount', header: 'Descuento (%)', field: 'discount', filterable: false },
+    { id: 'interest', header: 'Interés (%)', field: 'interest', filterable: false },
     { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'planType', header: 'Tipo de Plan', field: 'planType' },
     { id: 'franchise', header: 'Franquicia', field: 'franchise' },
-    { id: 'state', header: 'Plan Activado', field: 'state' }
+    { id: 'state', header: 'Plan Activado', field: 'state', filterable: false }
   ];
 
   planRows: Plan[] = [];

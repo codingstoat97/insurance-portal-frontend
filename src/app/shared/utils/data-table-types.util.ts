@@ -4,6 +4,7 @@ export type Column<T = any> = {
   field?: keyof T & string;
   valueGetter?: (row: T) => any;
   iconGetter?: (row: T) => { icon: string; color: string } | null;
+  filterable?: boolean;
 };
 
 export type Action = {

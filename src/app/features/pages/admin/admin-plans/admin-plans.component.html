@@ -40,17 +40,17 @@
             <mat-tab-group>
                 <mat-tab label="Condiciones">
                     <app-data-table [rows]="planRows" [columns]="planColumns" [actions]="planActions" [addElement]="true"
-                        (action)="onPlanRowAction('Plan', $event)"
+                        [columnFilters]="true" (action)="onPlanRowAction('Plan', $event)"
                         (addNewElementAction)="onAddNewElement('Plan')"></app-data-table>
                 </mat-tab>
                 <mat-tab label="Coberturas Principales">
                     <app-data-table [rows]="benefitRows" [columns]="benefitColumns" [actions]="actions"
-                        [addElement]="true" (action)="onRowAction('Benefit', $event)"
+                        [addElement]="true" [columnFilters]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
                 <mat-tab label="Beneficios">
                     <app-data-table [rows]="benefitRows" [columns]="benefitColumns" [actions]="actions"
-                        [addElement]="true" (action)="onRowAction('Benefit', $event)"
+                        [addElement]="true" [columnFilters]="true" (action)="onRowAction('Benefit', $event)"
                         (addNewElementAction)="onAddNewElement('Benefit')"></app-data-table>
                 </mat-tab>
             </mat-tab-group>

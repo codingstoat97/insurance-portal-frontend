@@ -4,17 +4,35 @@
     </div>
     <div class="table-toolbar">
         <div class="toolbar-left">
-            <mat-form-field>
+            <mat-form-field *ngIf="!columnFilters">
                 <mat-label>Filtrar</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese filtro" #input>
             </mat-form-field>
         </div>
         <div class="toolbar-right">
+            <button *ngIf="columnFilters && hasActiveColumnFilters" mat-button type="button"
+                (click)="clearAllColumnFilters()">
+                <mat-icon>filter_alt_off</mat-icon>
+                Limpiar filtros
+            </button>
             <button *ngIf="addElement" mat-stroked-button (click)="onAddNewElement()">
                 <mat-icon>add</mat-icon>
                 Crear Nuevo
             </button>
         </div>
+    </div>
+
+    <div class="column-filter-bar" *ngIf="columnFilters">
+        <mat-icon class="column-filter-bar__icon">filter_list</mat-icon>
+        <mat-form-field class="column-filter" *ngFor="let col of filterableColumns" subscriptSizing="dynamic">
+            <input matInput [value]="columnFilterValues[col.id] || ''"
+                (keyup)="applyColumnFilter(col.id, $event)"
+                [placeholder]="col.header || col.id">
+            <button *ngIf="columnFilterValues[col.id]" matSuffix mat-icon-button type="button"
+                aria-label="Limpiar" (click)="clearColumnFilter(col.id)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
     </div>
 
     <div class="mat-elevation-z8">

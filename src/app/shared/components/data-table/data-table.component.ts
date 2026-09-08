@@ -37,6 +37,8 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   @Input() actions: any[] = [];
   @Input() title: string = '';
   @Input() addElement: boolean = false;
+  /** When true, replaces the single global filter with one filter input per column. */
+  @Input() columnFilters: boolean = false;
 
   @Output() addNewElementAction = new EventEmitter<void>();
   @Output() action = new EventEmitter<{ actionId: string; row: any }>();
@@ -46,6 +48,22 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>([]);
+
+  /** Active per-column filter terms, keyed by column id. */
+  columnFilterValues: Record<string, string> = {};
+
+  get filterableColumns(): Column[] {
+    return (this.columns || []).filter(c => {
+      if (c.filterable === false) return false;
+      if (c.filterable === true) return true;
+      // `id` columns are not useful to filter by default; opt in with `filterable: true`.
+      return c.id !== 'id';
+    });
+  }
+
+  get hasActiveColumnFilters(): boolean {
+    return Object.values(this.columnFilterValues).some(v => (v ?? '').trim() !== '');
+  }
 
   get isMobile(): boolean {
     return this.responsiveService.isPhonePortrait;
@@ -98,6 +116,32 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  applyColumnFilter(colId: string, event: Event): void {
+    this.columnFilterValues[colId] = (event.target as HTMLInputElement).value;
+    this.triggerColumnFilter();
+  }
+
+  clearColumnFilter(colId: string): void {
+    delete this.columnFilterValues[colId];
+    this.triggerColumnFilter();
+  }
+
+  clearAllColumnFilters(): void {
+    this.columnFilterValues = {};
+    this.triggerColumnFilter();
+  }
+
+  private triggerColumnFilter(): void {
+    const active = Object.entries(this.columnFilterValues)
+      .filter(([, v]) => (v ?? '').trim() !== '');
+    // MatTableDataSource only filters when `filter` is a non-empty string.
+    this.dataSource.filter = active.length ? JSON.stringify(Object.fromEntries(active)) : '';
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   onAction(a: any, row: any, ev?: MouseEvent): void {
     ev?.stopPropagation();
     this.action.emit({ actionId: a.id, row });
@@ -133,13 +177,31 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
 
   private setupFilterPredicate(): void {
     this.dataSource.filterPredicate = (row, filter) => {
-      const term = filter.trim().toLowerCase();
-      if (!term) return true;
+      const raw = (filter ?? '').trim();
+      if (!raw) return true;
 
+      if (this.columnFilters) {
+        let terms: Record<string, string>;
+        try {
+          terms = JSON.parse(raw);
+        } catch {
+          return true;
+        }
+        // AND across columns: every active column term must match.
+        return Object.entries(terms).every(([colId, term]) => {
+          const t = String(term ?? '').trim().toLowerCase();
+          if (!t) return true;
+          const cell = this.readCellValue(row, colId);
+          const text = (cell == null) ? '' : String(cell).toLowerCase();
+          return text.includes(t);
+        });
+      }
+
+      const term = raw.toLowerCase();
       // Solo columnas visibles (sin 'actions')
       for (const col of this.columns) {
-        const raw = this.readCellValue(row, col.id);
-        const text = (raw == null) ? '' : String(raw).toLowerCase();
+        const cellValue = this.readCellValue(row, col.id);
+        const text = (cellValue == null) ? '' : String(cellValue).toLowerCase();
         if (text.includes(term)) return true;
       }
       return false;
