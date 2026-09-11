@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+dist
+.angular
+.wrangler
+.vscode
+.idea
+.claude
+*.md
