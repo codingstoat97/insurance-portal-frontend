@@ -43,7 +43,7 @@
                         Vehículos
                     </ng-template>
                     <app-data-table [rows]="vehicleRows" [columns]="vehicleColumns" [actions]="actions"
-                        [addElement]="true" (addNewElementAction)="onAddNewElement('Vehicle')"
+                        [addElement]="true" [columnFilters]="true" (addNewElementAction)="onAddNewElement('Vehicle')"
                         (action)="onRowAction($event, 'Vehicle')"></app-data-table>
                 </mat-tab>
                 <mat-tab>
@@ -52,7 +52,7 @@
                         Aseguradoras
                     </ng-template>
                     <app-data-table [rows]="insuranceRows" [columns]="insuranceColumns" [actions]="actions"
-                        [addElement]="true" (addNewElementAction)="onAddNewElement('Insurance')"
+                        [addElement]="true" [columnFilters]="true" (addNewElementAction)="onAddNewElement('Insurance')"
                         (action)="onRowAction($event, 'Insurance')"></app-data-table>
                 </mat-tab>
                 <mat-tab>
@@ -61,7 +61,7 @@
                         Brokers
                     </ng-template>
                     <app-data-table [rows]="brokerRows" [columns]="brokerColumns" [addElement]="true"
-                        (addNewElementAction)="onAddNewElement('Broker')"
+                        [columnFilters]="true" (addNewElementAction)="onAddNewElement('Broker')"
                         (action)="onRowAction($event, 'Broker')"></app-data-table>
                 </mat-tab>
                 <mat-tab>
@@ -70,7 +70,7 @@
                         Clientes
                     </ng-template>
                     <app-data-table [rows]="clientRows" [columns]="clientColumns" [actions]="clientActions"
-                        (action)="onRowAction($event, 'Client')"></app-data-table>
+                        [columnFilters]="true" (action)="onRowAction($event, 'Client')"></app-data-table>
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
@@ -78,7 +78,7 @@
                         Regionales
                     </ng-template>
                     <app-data-table [rows]="regionRows" [columns]="regionColumns" [actions]="actions"
-                        [addElement]="true" (addNewElementAction)="onAddNewElement('Region')"
+                        [addElement]="true" [columnFilters]="true" (addNewElementAction)="onAddNewElement('Region')"
                         (action)="onRowAction($event, 'Region')"></app-data-table>
                 </mat-tab>
                 <mat-tab>
