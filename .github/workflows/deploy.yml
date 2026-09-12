@@ -1,0 +1,33 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and deploy frontend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /opt/bubo/insurance-portal-frontend
+            git pull origin production
+            cd /opt/bubo/deploy
+            docker compose build frontend
+            docker compose up -d frontend
+
+      - name: Health check
+        run: |
+          sleep 5
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://bubo.com.bo)
+          if [ "$status" -ge 400 ]; then
+            echo "Frontend health check failed with status $status"
+            exit 1
+          fi
+          echo "Frontend responded with status $status"
