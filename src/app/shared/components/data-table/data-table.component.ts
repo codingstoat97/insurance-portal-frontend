@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../../shared.module';
@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 import { Column } from 'src/app/shared/utils/data-table-types.util';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
@@ -26,6 +27,7 @@ import { DataCardListComponent } from 'src/app/shared/components/data-card-list/
     MatInputModule,
     MatTooltipModule,
     MatFormFieldModule,
+    MatBottomSheetModule,
     DataCardListComponent
   ],
   templateUrl: './data-table.component.html',
@@ -45,6 +47,9 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('filterSheet') filterSheetTemplate!: TemplateRef<unknown>;
+
+  private filterSheetRef?: MatBottomSheetRef<unknown>;
 
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>([]);
@@ -65,11 +70,15 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
     return Object.values(this.columnFilterValues).some(v => (v ?? '').trim() !== '');
   }
 
+  get activeColumnFilterCount(): number {
+    return Object.values(this.columnFilterValues).filter(v => (v ?? '').trim() !== '').length;
+  }
+
   get isMobile(): boolean {
     return this.responsiveService.isPhonePortrait;
   }
 
-  constructor(private responsiveService: ResponsiveService) {
+  constructor(private responsiveService: ResponsiveService, private bottomSheet: MatBottomSheet) {
     this.dataSource = new MatTableDataSource(this.rows);
   }
 
@@ -81,6 +90,7 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.filterSheetRef?.dismiss();
     this.dataSource.sortingDataAccessor = null!;
     this.dataSource.filterPredicate = null!;
     this.dataSource.data = [];
@@ -129,6 +139,16 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   clearAllColumnFilters(): void {
     this.columnFilterValues = {};
     this.triggerColumnFilter();
+  }
+
+  openFilterSheet(): void {
+    this.filterSheetRef = this.bottomSheet.open(this.filterSheetTemplate, {
+      panelClass: 'data-table-filter-sheet'
+    });
+  }
+
+  closeFilterSheet(): void {
+    this.filterSheetRef?.dismiss();
   }
 
   private triggerColumnFilter(): void {
