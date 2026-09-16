@@ -10,7 +10,13 @@
             </mat-form-field>
         </div>
         <div class="toolbar-right">
-            <button *ngIf="columnFilters && hasActiveColumnFilters" mat-button type="button"
+            <button *ngIf="columnFilters && isMobile" mat-stroked-button type="button"
+                (click)="openFilterSheet()">
+                <mat-icon>filter_list</mat-icon>
+                Filtros
+                <span *ngIf="activeColumnFilterCount" class="filter-count-badge">{{ activeColumnFilterCount }}</span>
+            </button>
+            <button *ngIf="columnFilters && !isMobile && hasActiveColumnFilters" mat-button type="button"
                 (click)="clearAllColumnFilters()">
                 <mat-icon>filter_alt_off</mat-icon>
                 Limpiar filtros
@@ -22,7 +28,7 @@
         </div>
     </div>
 
-    <div class="column-filter-bar" *ngIf="columnFilters">
+    <div class="column-filter-bar" *ngIf="columnFilters && !isMobile">
         <mat-icon class="column-filter-bar__icon">filter_list</mat-icon>
         <mat-form-field class="column-filter" *ngFor="let col of filterableColumns" subscriptSizing="dynamic">
             <input matInput [value]="columnFilterValues[col.id] || ''"
@@ -34,6 +40,37 @@
             </button>
         </mat-form-field>
     </div>
+
+    <ng-template #filterSheet>
+        <div class="filter-sheet">
+            <div class="filter-sheet__header">
+                <h3>Filtros</h3>
+                <button mat-icon-button type="button" aria-label="Cerrar" (click)="closeFilterSheet()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <div class="filter-sheet__fields">
+                <mat-form-field class="filter-sheet__field" *ngFor="let col of filterableColumns" subscriptSizing="dynamic">
+                    <mat-label>{{ col.header || col.id }}</mat-label>
+                    <input matInput [value]="columnFilterValues[col.id] || ''"
+                        (keyup)="applyColumnFilter(col.id, $event)">
+                    <button *ngIf="columnFilterValues[col.id]" matSuffix mat-icon-button type="button"
+                        aria-label="Limpiar" (click)="clearColumnFilter(col.id)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="filter-sheet__actions">
+                <button mat-button type="button" [disabled]="!hasActiveColumnFilters"
+                    (click)="clearAllColumnFilters()">
+                    Limpiar todo
+                </button>
+                <button mat-flat-button color="primary" type="button" (click)="closeFilterSheet()">
+                    Aplicar
+                </button>
+            </div>
+        </div>
+    </ng-template>
 
     <div class="mat-elevation-z8">
         <div class="table-scroll-wrapper" *ngIf="!isMobile; else mobileCards">
