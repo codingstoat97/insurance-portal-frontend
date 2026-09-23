@@ -129,8 +129,9 @@ $whatsapp-green: #25d366
   padding: 0
   margin: 0
   display: flex
-  flex-direction: column
-  gap: 8px
+  flex-direction: row
+  flex-wrap: wrap
+  gap: 8px 24px
 
 .contact-item
   display: flex
@@ -296,6 +297,10 @@ $whatsapp-green: #25d366
   .info-grid
     grid-template-columns: 1fr
     gap: 28px
+
+  .contact-list
+    flex-direction: column
+    gap: 8px
 
   .info-bottom
     flex-direction: column
