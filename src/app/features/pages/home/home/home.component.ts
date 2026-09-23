@@ -16,6 +16,27 @@ export class HomeComponent {
 
   readonly currentYear = new Date().getFullYear();
 
+  readonly steps = [
+    {
+      icon: 'assets/lapicero.svg',
+      alt: 'Registro',
+      title: 'Registra',
+      text: 'Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.'
+    },
+    {
+      icon: 'assets/auto.svg',
+      alt: 'Vehículo',
+      title: 'Compara',
+      text: 'Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.'
+    },
+    {
+      icon: 'assets/escudo.svg',
+      alt: 'Protección',
+      title: 'Elige',
+      text: 'Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.'
+    }
+  ];
+
   constructor(private router: Router, private responsiveService: ResponsiveService) { }
 
   get isMobile(): boolean {
