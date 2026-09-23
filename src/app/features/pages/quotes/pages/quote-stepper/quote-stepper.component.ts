@@ -9,6 +9,7 @@ import { SalesConfigService } from 'src/app/core/services/sales-config/sales-con
 
 import { ClientVehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
+import { CONTACT_PHONE_DISPLAY, WHATSAPP_ICON_PATH, WHATSAPP_URL } from 'src/app/shared/utils/contact.util';
 
 @Component({
   selector: 'app-quote-stepper',
@@ -16,6 +17,10 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   styleUrls: ['./quote-stepper.component.sass']
 })
 export class QuoteStepperComponent implements OnInit {
+
+  readonly contactPhone = CONTACT_PHONE_DISPLAY;
+  readonly whatsappUrl = WHATSAPP_URL;
+  readonly whatsappIconPath = WHATSAPP_ICON_PATH;
 
   constructor(
     private router: Router,
