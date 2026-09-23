@@ -79,14 +79,14 @@ $mobile-bp: 599px
 .info-section
   background-color: var(--kin-primary)
   color: var(--kin-white)
-  padding: 48px 64px 84px
+  padding: 24px 32px 24px
   border-radius: 16px 16px 0 0
   margin-top: 48px
   margin-bottom: -60px
 
 .info-grid
   display: grid
-  grid-template-columns: 2fr 1fr 1fr 1fr
+  grid-template-columns: 1fr auto
   gap: 40px
   margin-bottom: 40px
 
@@ -188,11 +188,8 @@ $mobile-bp: 599px
     padding: 40px 32px 80px
 
   .info-grid
-    grid-template-columns: 1fr 1fr
+    grid-template-columns: 1fr
     gap: 28px
-
-    .info-brand
-      grid-column: 1 / -1
 
 // ── Mobile ────────────────────────────────────────────────────────────────────
 
@@ -249,11 +246,8 @@ $mobile-bp: 599px
     margin-bottom: -60px
 
   .info-grid
-    grid-template-columns: 1fr 1fr
+    grid-template-columns: 1fr
     gap: 28px
-
-    .info-brand
-      grid-column: 1 / -1
 
   .info-bottom
     flex-direction: column
