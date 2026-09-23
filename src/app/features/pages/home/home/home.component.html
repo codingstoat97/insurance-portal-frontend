@@ -90,14 +90,48 @@
         <img src="assets/logo/logo-white.png" alt="bubo" />
       </div>
       <p class="info-tagline">Seguros digitales más simples,<br />rápidos y cercanos a ti.</p>
+      <!--<a class="whatsapp-cta" [href]="whatsappUrl" target="_blank" rel="noopener">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path [attr.d]="whatsappIconPath" />
+        </svg>
+        Escríbenos por WhatsApp
+      </a>-->
     </div>
 
     <div class="info-col">
       <h4 class="info-col-title">Contacto</h4>
-      <ul class="info-links">
-        <li><a [href]="whatsappUrl" target="_blank" rel="noopener">+591 70728783</a></li>
-        <li><a href="mailto:bubo.cotiza@gmail.com">bubo.cotiza&#64;gmail.com</a></li>
-        <li>Lun-Vie &middot; 8:00–18:00</li>
+      <ul class="contact-list">
+        <li>
+          <a class="contact-item" [href]="whatsappUrl" target="_blank" rel="noopener">
+            <span class="contact-icon">
+              <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path [attr.d]="whatsappIconPath" />
+              </svg>
+            </span>
+            <span class="contact-text">
+              <span class="contact-label">WhatsApp</span>
+              <span class="contact-value">+591 70728783</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="contact-item" href="mailto:bubo.cotiza@gmail.com">
+            <span class="contact-icon"><mat-icon>mail_outline</mat-icon></span>
+            <span class="contact-text">
+              <span class="contact-label">Correo</span>
+              <span class="contact-value">bubo.cotiza&#64;gmail.com</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <div class="contact-item static">
+            <span class="contact-icon"><mat-icon>schedule</mat-icon></span>
+            <span class="contact-text">
+              <span class="contact-label">Horario de atención</span>
+              <span class="contact-value">Lun – Vie &middot; 8:00 – 18:00</span>
+            </span>
+          </div>
+        </li>
       </ul>
     </div>
 
@@ -106,7 +140,7 @@
   <hr class="info-divider" />
 
   <div class="info-bottom">
-    <span class="info-copyright">© 2026 Bubo Insurtech. Todos los derechos reservados.</span>
+    <span class="info-copyright">© {{ currentYear }} Bubo Insurtech. Todos los derechos reservados.</span>
     <!-- TODO: add routerLink once legal routes are defined -->
     <div class="info-legal">
       <span>Términos</span>
