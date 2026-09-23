@@ -43,7 +43,13 @@
 
     <div class="help-card">
       <p class="help-title">¿Necesitas ayuda?</p>
-      <p class="help-text">Escríbenos al +591 800 123 456</p>
+      <p class="help-text">Escríbenos por WhatsApp</p>
+      <a class="help-whatsapp" [href]="whatsappUrl" target="_blank" rel="noopener">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path [attr.d]="whatsappIconPath" />
+        </svg>
+        {{ contactPhone }}
+      </a>
     </div>
   </aside>
 
@@ -65,7 +71,7 @@
 
     <ng-container [ngSwitch]="currentStep">
       <app-client-vehicle *ngSwitchCase="0" [value]="clientVehicleData" [showDescription]="true" [showCancel]="true"
-        (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
+        [loading]="searching" (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
       </app-client-vehicle>
 
       <div *ngSwitchCase="1">

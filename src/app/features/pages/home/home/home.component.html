@@ -1,4 +1,4 @@
-<section class="banner-container">
+<section class="banner-container" data-toolbar-hero>
   <div class="banner-content">
     <div class="banner-text">
       <h1>En tan solo un click</h1>
@@ -13,71 +13,15 @@
 <section class="intro-container">
   <img class="intro-logo" src="assets/logo/logo.png" alt="bubo" />
   <h2>Llevamos los seguros al siguiente nivel</h2>
-  <!-- Desktop: grid layout -->
-  <mat-grid-list *ngIf="!isMobile && !isTablet" cols="3" rowHeight="2:1">
-    <mat-grid-tile class="step-container">
-      <mat-card>
-        <div class="floating-avatar">
-          <img src="assets/lapicero.svg" alt="Registro" />
-        </div>
-        <mat-card-header class="centered-header">
-          <mat-card-title><h3>Registra</h3></mat-card-title>
-        </mat-card-header>
-        <mat-card-content><p>Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.</p></mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile class="step-container">
-      <mat-card>
-        <div class="floating-avatar">
-          <img src="assets/auto.svg" alt="Vehículo" />
-        </div>
-        <mat-card-header class="centered-header">
-          <mat-card-title><h3>Compara</h3></mat-card-title>
-        </mat-card-header>
-        <mat-card-content><p>Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.</p></mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile class="step-container">
-      <mat-card>
-        <div class="floating-avatar">
-          <img src="assets/escudo.svg" alt="Protección" />
-        </div>
-        <mat-card-header class="centered-header">
-          <mat-card-title><h3>Elige</h3></mat-card-title>
-        </mat-card-header>
-        <mat-card-content><p>Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.</p></mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-
-  <!-- Tablet & Mobile: content-height cards -->
-  <div *ngIf="isMobile || isTablet" class="mobile-step-list">
-    <mat-card class="step-container">
+  <div class="step-list">
+    <mat-card *ngFor="let step of steps" class="step-container">
       <div class="floating-avatar">
-        <img src="assets/lapicero.svg" alt="Registro" />
+        <img [src]="step.icon" [alt]="step.alt" />
       </div>
       <mat-card-header class="centered-header">
-        <mat-card-title><h3>Registra</h3></mat-card-title>
+        <mat-card-title><h3>{{ step.title }}</h3></mat-card-title>
       </mat-card-header>
-      <mat-card-content><p>Ingresa los datos de tu vehículo y ayúdanos a conocer sus características. Así podremos ofrecerte las opciones de seguro que realmente se adaptan a ti.</p></mat-card-content>
-    </mat-card>
-    <mat-card class="step-container">
-      <div class="floating-avatar">
-        <img src="assets/auto.svg" alt="Vehículo" />
-      </div>
-      <mat-card-header class="centered-header">
-        <mat-card-title><h3>Compara</h3></mat-card-title>
-      </mat-card-header>
-      <mat-card-content><p>Explora y compara las mejores opciones de seguros disponibles, filtradas automáticamente según tu vehículo y tus necesidades.</p></mat-card-content>
-    </mat-card>
-    <mat-card class="step-container">
-      <div class="floating-avatar">
-        <img src="assets/escudo.svg" alt="Protección" />
-      </div>
-      <mat-card-header class="centered-header">
-        <mat-card-title><h3>Elige</h3></mat-card-title>
-      </mat-card-header>
-      <mat-card-content><p>Selecciona un plan, completa tu registro en línea y recibe tu certificado de cobertura directamente en tu correo una vez aprobado.</p></mat-card-content>
+      <mat-card-content><p>{{ step.text }}</p></mat-card-content>
     </mat-card>
   </div>
 </section>
@@ -93,32 +37,39 @@
     </div>
 
     <div class="info-col">
-      <h4 class="info-col-title">Productos</h4>
-      <!-- TODO: add routerLink to each item once product routes are defined -->
-      <ul class="info-links">
-        <li>Automotor</li>
-        <li>Hogar</li>
-        <li>Vida</li>
-        <li>Salud</li>
-      </ul>
-    </div>
-
-    <div class="info-col">
-      <h4 class="info-col-title">Empresa</h4>
-      <!-- TODO: add routerLink to each item once section routes are defined -->
-      <ul class="info-links">
-        <li>Nosotros</li>
-        <li>Portal Bubo</li>
-        <li>Trabaja con nosotros</li>
-      </ul>
-    </div>
-
-    <div class="info-col">
       <h4 class="info-col-title">Contacto</h4>
-      <ul class="info-links">
-        <li>+591 70728783</li>
-        <li><a href="mailto:bubo.cotiza@gmail.com">bubo.cotiza&#64;gmail.com</a></li>
-        <li>Lun-Vie &middot; 8:00–18:00</li>
+      <ul class="contact-list">
+        <li>
+          <a class="contact-item" [href]="whatsappUrl" target="_blank" rel="noopener">
+            <span class="contact-icon">
+              <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path [attr.d]="whatsappIconPath" />
+              </svg>
+            </span>
+            <span class="contact-text">
+              <span class="contact-label">WhatsApp</span>
+              <span class="contact-value">+591 70728783</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="contact-item" href="mailto:bubo.cotiza@gmail.com">
+            <span class="contact-icon"><mat-icon>mail_outline</mat-icon></span>
+            <span class="contact-text">
+              <span class="contact-label">Correo</span>
+              <span class="contact-value">bubo.cotiza&#64;gmail.com</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <div class="contact-item static">
+            <span class="contact-icon"><mat-icon>schedule</mat-icon></span>
+            <span class="contact-text">
+              <span class="contact-label">Horario de atención</span>
+              <span class="contact-value">Lun – Vie &middot; 8:00 – 18:00</span>
+            </span>
+          </div>
+        </li>
       </ul>
     </div>
 
@@ -127,8 +78,7 @@
   <hr class="info-divider" />
 
   <div class="info-bottom">
-    <span class="info-copyright">© 2026 Bubo Insurtech. Todos los derechos reservados.</span>
-    <!-- TODO: add routerLink once legal routes are defined -->
+    <span class="info-copyright">© {{ currentYear }} Bubo Insurtech. Todos los derechos reservados.</span>
     <div class="info-legal">
       <span>Términos</span>
       <span class="info-legal-dot">·</span>

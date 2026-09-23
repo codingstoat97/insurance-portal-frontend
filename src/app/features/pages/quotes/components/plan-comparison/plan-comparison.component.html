@@ -14,12 +14,8 @@
                 <tr>
                     <th class="plan-name-cell"></th>
                     <th>Prima al contado</th>
-                    <th>Prima a crédito</th>
+                    <th>Prima crédito</th>
                     <th>Franquicia</th>
-                    <th>Descuento</th>
-                    <th>Tasa</th>
-                    <th>Límite de años del vehículo</th>
-                    <th *ngIf="loadingBenefits">Beneficios</th>
                     <th *ngFor="let benefitName of benefitNames">{{ benefitName }}</th>
                     <th></th>
                 </tr>
@@ -28,9 +24,15 @@
                 <tr *ngFor="let offer of offers">
                     <td class="plan-name-cell">
                         <div class="plan-row-header">
+                            <img *ngIf="insuranceLogo(offer.insuranceId) as logo" class="plan-insurer-logo"
+                                [src]="logo" [alt]="insuranceName(offer.insuranceId) + ' logo'"
+                                [title]="insuranceName(offer.insuranceId)">
                             <div class="plan-name-block">
-                                <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
-                                <span class="plan-level">Plan {{ offer.planType }}</span>
+                                <span class="plan-title">{{ (offer.name | titlecase) || 'Sin nombre' }}</span>
+                                <span *ngIf="offer.planType" class="plan-level">Plan {{ sentenceCase(offer.planType) }}</span>
+                                <span *ngIf="!insuranceLogo(offer.insuranceId)" class="plan-insurer">
+                                    {{ insuranceName(offer.insuranceId) }}
+                                </span>
                             </div>
                             <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
                                 aria-label="Quitar de la comparación" title="Quitar de la comparación">
@@ -41,14 +43,13 @@
                     <td class="highlight-cell">{{ primaAlContado(offer) | number:'1.0-0' }} Bs.</td>
                     <td>{{ primaACredito(offer) | number:'1.0-0' }} Bs.</td>
                     <td>{{ offer.franchise }}</td>
-                    <td>{{ offer.discount | number:'1.0-0' }}%</td>
-                    <td>{{ offer.rate | number:'1.0-0' }}%</td>
-                    <td>{{ offer.ageLimit | number:'1.0-0' }} años</td>
-                    <td *ngIf="loadingBenefits" class="loading-cell">Cargando...</td>
                     <td *ngFor="let benefitName of benefitNames" class="benefit-cell">
-                        <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
-                        <ng-template #noBenefit>
-                            <mat-icon class="benefit-no">remove</mat-icon>
+                        <span *ngIf="loadingBenefits; else benefitMark" class="loading-cell">…</span>
+                        <ng-template #benefitMark>
+                            <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
+                            <ng-template #noBenefit>
+                                <mat-icon class="benefit-no">remove</mat-icon>
+                            </ng-template>
                         </ng-template>
                     </td>
                     <td class="action-cell">

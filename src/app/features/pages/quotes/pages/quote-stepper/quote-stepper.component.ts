@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, finalize } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
@@ -9,6 +9,8 @@ import { SalesConfigService } from 'src/app/core/services/sales-config/sales-con
 
 import { ClientVehicle } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
+import { CONTACT_PHONE_DISPLAY, WHATSAPP_ICON_PATH, WHATSAPP_URL } from 'src/app/shared/utils/contact.util';
+import { getApiErrorMessage, isErrorHandledGlobally } from 'src/app/shared/utils/http-error.util';
 
 @Component({
   selector: 'app-quote-stepper',
@@ -16,6 +18,10 @@ import * as PATH from 'src/app/shared/utils/request-paths.util';
   styleUrls: ['./quote-stepper.component.sass']
 })
 export class QuoteStepperComponent implements OnInit {
+
+  readonly contactPhone = CONTACT_PHONE_DISPLAY;
+  readonly whatsappUrl = WHATSAPP_URL;
+  readonly whatsappIconPath = WHATSAPP_ICON_PATH;
 
   constructor(
     private router: Router,
@@ -34,6 +40,7 @@ export class QuoteStepperComponent implements OnInit {
   clientVehicleData: ClientVehicle | null = null;
   offerList: any[] = [];
   salesEnabled = true;
+  searching = false;
 
   get totalSteps(): number {
     return this.salesEnabled ? 3 : 2;
@@ -61,17 +68,27 @@ export class QuoteStepperComponent implements OnInit {
     this.clientVehicleData = clientVehicle;
     this.stepperService.clientVehicleData = clientVehicle;
     this.sendForm();
-    this.currentStep++;
-    this.stepperService.currentStep = this.currentStep;
   }
 
+  // Only advance to the offers step once the search succeeds, so the user can
+  // fix the form when the API rejects it (e.g. "Vehiculo no encontrado").
   sendForm(): void {
     const params = this.buildParams();
+    this.searching = true;
     this.httpService.post<any>(PATH.planSearch, params)
-      .pipe(catchError(() => { this.snackbar.error('Error al buscar planes disponibles.'); return EMPTY; }))
+      .pipe(
+        finalize(() => (this.searching = false)),
+        catchError(error => {
+          if (!isErrorHandledGlobally(error)) {
+            this.snackbar.error(getApiErrorMessage(error, 'Error al buscar planes disponibles.'));
+          }
+          return EMPTY;
+        }))
       .subscribe(res => {
         this.offerList = res;
         this.stepperService.offerList = res;
+        this.currentStep++;
+        this.stepperService.currentStep = this.currentStep;
       });
   }
 
