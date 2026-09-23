@@ -9,6 +9,9 @@ import { ResponsiveService } from 'src/app/core/services/responsive/responsive.s
 })
 export class HomeComponent {
 
+  readonly whatsappUrl = 'https://wa.me/59170728783?text=' +
+    encodeURIComponent('Hola Bubo, quisiera más información sobre sus seguros.');
+
   constructor(private router: Router, private responsiveService: ResponsiveService) { }
 
   get isMobile(): boolean {
