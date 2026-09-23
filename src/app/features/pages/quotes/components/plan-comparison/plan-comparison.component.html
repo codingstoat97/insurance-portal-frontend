@@ -14,12 +14,8 @@
                 <tr>
                     <th class="plan-name-cell"></th>
                     <th>Prima al contado</th>
-                    <th>Prima a crédito</th>
+                    <th>Prima crédito</th>
                     <th>Franquicia</th>
-                    <th>Descuento</th>
-                    <th>Tasa</th>
-                    <th>Límite de años del vehículo</th>
-                    <th *ngIf="loadingBenefits">Beneficios</th>
                     <th *ngFor="let benefitName of benefitNames">{{ benefitName }}</th>
                     <th></th>
                 </tr>
@@ -41,14 +37,13 @@
                     <td class="highlight-cell">{{ primaAlContado(offer) | number:'1.0-0' }} Bs.</td>
                     <td>{{ primaACredito(offer) | number:'1.0-0' }} Bs.</td>
                     <td>{{ offer.franchise }}</td>
-                    <td>{{ offer.discount | number:'1.0-0' }}%</td>
-                    <td>{{ offer.rate | number:'1.0-0' }}%</td>
-                    <td>{{ offer.ageLimit | number:'1.0-0' }} años</td>
-                    <td *ngIf="loadingBenefits" class="loading-cell">Cargando...</td>
                     <td *ngFor="let benefitName of benefitNames" class="benefit-cell">
-                        <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
-                        <ng-template #noBenefit>
-                            <mat-icon class="benefit-no">remove</mat-icon>
+                        <span *ngIf="loadingBenefits; else benefitMark" class="loading-cell">…</span>
+                        <ng-template #benefitMark>
+                            <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
+                            <ng-template #noBenefit>
+                                <mat-icon class="benefit-no">remove</mat-icon>
+                            </ng-template>
                         </ng-template>
                     </td>
                     <td class="action-cell">

@@ -13,6 +13,15 @@ import * as premium from 'src/app/shared/utils/premium.util';
 import { Insurance, Plan, PlanBenefit } from 'src/app/shared/models';
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 
+function normalizeName(name: string | null | undefined): string {
+  return (name ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
 @Component({
   selector: 'app-plan-comparison',
   standalone: true,
@@ -52,14 +61,19 @@ export class PlanComparisonComponent implements OnChanges {
     }
   }
 
-  get benefitNames(): string[] {
-    const names = new Set<string>();
-    this.benefitsByPlan.forEach(list => list.forEach(b => names.add(b.benefitName)));
-    return Array.from(names);
-  }
+  readonly benefitNames = [
+    'Pérdida total por accidente',
+    'Pérdida total por Robo',
+    'Daños parciales al vehículo',
+    'Robo parcial o robo de partes',
+    'Riesgos de la naturaleza',
+    'Accidentes Personales',
+    'Extraterritorialidad'
+  ];
 
   hasBenefit(planId: number, benefitName: string): boolean {
-    return !!this.benefitsByPlan.get(planId)?.some(b => b.benefitName === benefitName);
+    const target = normalizeName(benefitName);
+    return !!this.benefitsByPlan.get(planId)?.some(b => normalizeName(b.benefitName) === target);
   }
 
   insuranceName(insuranceId: number): string {

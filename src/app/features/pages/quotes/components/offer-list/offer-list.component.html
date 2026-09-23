@@ -18,15 +18,6 @@
     <mat-tab *ngFor="let tab of planTypeTabs" [label]="tab.label"></mat-tab>
 </mat-tab-group>
 
-<!--<div *ngIf="filteredOfferList.length > 0" class="offer-list-container">
-    <app-quote-offer *ngFor="let offer of filteredOfferList; trackBy: trackById" [offer]="offer"
-        [insuranceName]="insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre'"
-        [logo]="insuranceMap.get(offer.insuranceId)?.logo"
-        [selected]="selectedIds.has(offer.id)"
-        [compareDisabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
-        (compareToggled)="toggleCompare(offer.id)"></app-quote-offer>
-</div>-->
-
 <div *ngIf="filteredOfferList.length === 0" class="empty-list">
     <h2>No se encontraron ofertas disponibles.</h2>
 </div>
@@ -37,7 +28,7 @@
             <tr>
                 <th class="select-col"></th>
                 <th *ngIf="columnVisible['logo']" class="logo-col"></th>
-                <th *ngIf="columnVisible['aseguradora']">Nombre del Plan</th>
+                <th *ngIf="columnVisible['aseguradora']">Plan</th>
                 <th *ngIf="columnVisible['primaAnual']">Prima Anual</th>
                 <th *ngIf="columnVisible['primaACredito']">Prima a Crédito</th>
                 <th *ngIf="columnVisible['franquicia']">Franquicia</th>
