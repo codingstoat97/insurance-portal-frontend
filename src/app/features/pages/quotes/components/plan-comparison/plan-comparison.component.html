@@ -24,9 +24,15 @@
                 <tr *ngFor="let offer of offers">
                     <td class="plan-name-cell">
                         <div class="plan-row-header">
+                            <img *ngIf="insuranceLogo(offer.insuranceId) as logo" class="plan-insurer-logo"
+                                [src]="logo" [alt]="insuranceName(offer.insuranceId) + ' logo'"
+                                [title]="insuranceName(offer.insuranceId)">
                             <div class="plan-name-block">
-                                <span class="insurance-name">{{ insuranceName(offer.insuranceId) }}</span>
-                                <span class="plan-level">Plan {{ offer.planType }}</span>
+                                <span class="plan-title">{{ (offer.name | titlecase) || 'Sin nombre' }}</span>
+                                <span *ngIf="offer.planType" class="plan-level">Plan {{ sentenceCase(offer.planType) }}</span>
+                                <span *ngIf="!insuranceLogo(offer.insuranceId)" class="plan-insurer">
+                                    {{ insuranceName(offer.insuranceId) }}
+                                </span>
                             </div>
                             <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
                                 aria-label="Quitar de la comparación" title="Quitar de la comparación">

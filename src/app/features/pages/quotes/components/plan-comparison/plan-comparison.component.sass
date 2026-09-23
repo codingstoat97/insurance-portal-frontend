@@ -22,7 +22,21 @@
     margin: 4px 0 12px
 
 .comparison-scroll
-    overflow-x: auto
+    overflow-x: scroll
+    padding-bottom: 4px
+    scrollbar-width: thin
+    scrollbar-color: var(--kin-primary) var(--kin-gray-200)
+
+    &::-webkit-scrollbar
+        height: 8px
+
+    &::-webkit-scrollbar-track
+        background: var(--kin-gray-200)
+        border-radius: 4px
+
+    &::-webkit-scrollbar-thumb
+        background: var(--kin-primary)
+        border-radius: 4px
 
 .comparison-table
     width: 100%
@@ -52,18 +66,28 @@
     display: flex
     flex-direction: row
     align-items: center
-    justify-content: space-between
-    gap: 8px
+    gap: 3px
 
     .plan-name-block
         display: flex
         flex-direction: column
+        flex: 1
+        min-width: 0
 
-    .insurance-name
+    .plan-title
         font-weight: 700
         font-size: 14px
 
-    .plan-level
+    .plan-insurer-logo
+        display: block
+        width: 64px
+        height: 36px
+        flex-shrink: 0
+        object-fit: contain
+        object-position: center
+
+    .plan-level,
+    .plan-insurer
         font-size: 12px
         color: var(--kin-gray-600)
 

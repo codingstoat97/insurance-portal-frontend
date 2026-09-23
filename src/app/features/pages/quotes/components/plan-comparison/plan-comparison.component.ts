@@ -80,6 +80,15 @@ export class PlanComparisonComponent implements OnChanges {
     return this.insuranceMap.get(insuranceId)?.name || 'Sin nombre';
   }
 
+  sentenceCase(value: string | null | undefined): string {
+    const text = (value ?? '').trim().toLowerCase();
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  insuranceLogo(insuranceId: number): string | null {
+    return this.insuranceMap.get(insuranceId)?.logo || null;
+  }
+
   primaAlContado(offer: Plan): number {
     return premium.primaAlContado(offer, this.vehicleValue);
   }
