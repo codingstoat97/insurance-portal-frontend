@@ -71,7 +71,7 @@
 
     <ng-container [ngSwitch]="currentStep">
       <app-client-vehicle *ngSwitchCase="0" [value]="clientVehicleData" [showDescription]="true" [showCancel]="true"
-        (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
+        [loading]="searching" (submitted)="onClientVehicleSubmitted($event)" (cancelled)="onCancelled()">
       </app-client-vehicle>
 
       <div *ngSwitchCase="1">

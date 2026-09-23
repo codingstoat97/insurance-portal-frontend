@@ -111,8 +111,8 @@
                 ← Atrás
             </button>
             <span *ngIf="!showCancel"></span>
-            <button mat-flat-button type="submit" class="btn-next" [disabled]="form.invalid">
-                {{ submitLabel }} →
+            <button mat-flat-button type="submit" class="btn-next" [disabled]="form.invalid || loading">
+                {{ loading ? 'Buscando planes…' : submitLabel + ' →' }}
             </button>
         </div>
     </form>

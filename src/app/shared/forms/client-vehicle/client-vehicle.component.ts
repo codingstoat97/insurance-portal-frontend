@@ -31,6 +31,7 @@ export class ClientVehicleComponent implements OnInit {
   @Input() submitLabel: string | null = 'Siguiente';
   @Input() showCancel = false;
   @Input() showDescription: boolean = false;
+  @Input() loading = false;
 
   @Output() submitted = new EventEmitter<ClientVehicle>();
   @Output() cancelled = new EventEmitter<void>();
