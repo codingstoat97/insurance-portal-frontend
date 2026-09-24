@@ -23,7 +23,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Placa del Vehículo:</mat-label>
-                    <input matInput formControlName="vehiclePlate" placeholder="Ej. RSCA1508" />
+                    <input matInput formControlName="vehiclePlate" placeholder="Ej. 1234ABCD" />
                     <mat-error *ngIf="form.get('vehiclePlate')?.hasError('required')">
                         Campo obligatorio
                     </mat-error>
@@ -189,7 +189,7 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Área:</mat-label>
+                    <mat-label>Ciudad:</mat-label>
                     <input matInput formControlName="area" placeholder="Cochabamba" />
                     <mat-error *ngIf="form.get('area')?.hasError('required')">
                         Campo obligatorio
@@ -253,9 +253,22 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="span-2">
                     <mat-label>Salario:</mat-label>
-                    <input matInput formControlName="salary" placeholder="3000" />
+                    <mat-select formControlName="salary">
+                        <mat-option [value]="'Menos de 2.000 Bs'">
+                            Menos de 2.000 Bs
+                        </mat-option>
+                        <mat-option [value]="'2.000 - 4.000 Bs'">
+                            2.000 - 4.000 Bs
+                        </mat-option>
+                        <mat-option [value]="'4.001 - 6.000 Bs'">
+                            4.001 - 6.000 Bs
+                        </mat-option>
+                        <mat-option [value]="'Más de 6.000 Bs'">
+                            Más de 6.000 Bs
+                        </mat-option>
+                    </mat-select>
                     <mat-error *ngIf="form.get('salary')?.hasError('required')">
-                        Campo obligatorio
+                        Selecciona una opción
                     </mat-error>
                 </mat-form-field>
             </div>

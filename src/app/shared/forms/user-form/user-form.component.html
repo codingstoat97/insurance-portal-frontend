@@ -23,10 +23,10 @@
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>CI:</mat-label>
+                    <mat-label>NIT:</mat-label>
                     <input matInput formControlName="ci" />
                     <mat-error *ngIf="form.get('ci')?.hasError('required')">
-                        El número de carnet es obligatorio.
+                        El NIT es obligatorio.
                     </mat-error>
                     <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
                         Debe tener al menos 2 caracteres
