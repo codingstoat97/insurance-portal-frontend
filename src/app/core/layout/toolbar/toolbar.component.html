@@ -1,4 +1,4 @@
-<mat-toolbar class="toolbar-container" [class.is-home]="variant === 'transparent' && (!isScrolled || isMobile)">
+<mat-toolbar class="toolbar-container" [class.is-home]="variant === 'transparent' && !isScrolled">
   <a class="brand" routerLink="/home" aria-label="Go to home">
     <img src="assets/logo/logo-white.png" alt="bubo" />
   </a>
@@ -28,5 +28,12 @@
 </mat-toolbar>
 
 <mat-menu #mobileMenu="matMenu">
-  <button mat-menu-item (click)="redirectToPortal()">Portal Bubo</button>
+  <button mat-menu-item (click)="redirectToPortal()">
+    <mat-icon>account_circle</mat-icon>
+    <span>Portal Bubo</span>
+  </button>
+  <button mat-menu-item (click)="themeService.toggle()">
+    <mat-icon>{{ (themeService.isDark$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    <span>{{ (themeService.isDark$ | async) ? 'Modo claro' : 'Modo oscuro' }}</span>
+  </button>
 </mat-menu>

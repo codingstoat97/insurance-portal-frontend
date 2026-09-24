@@ -72,8 +72,9 @@ export class AdminMainComponent implements OnInit {
   insuranceRows = [];
 
   brokerColumns = [
-    { id: 'ci', header: 'ID', field: 'id' },
+    { id: 'id', header: 'ID', field: 'id' },
     { id: 'name', header: 'Nombre', field: 'name' },
+    { id: 'ci', header: 'NIT', field: 'ci' },
     { id: 'email', header: 'Correo Electrónico', field: 'email' }
   ];
 
