@@ -51,7 +51,6 @@ $mobile-bp: 599px
   display: grid
   grid-template-columns: repeat(3, minmax(0, 1fr))
   align-items: stretch
-  // row-gap leaves room for the avatar that floats above each card
   gap: 56px 32px
   max-width: 1200px
   margin: 0 auto
@@ -229,7 +228,6 @@ $whatsapp-green: #25d366
     gap: 56px 24px
     padding: 40px 32px 32px
 
-    // center the lone card on the last row
     .step-container:last-child:nth-child(odd)
       grid-column: 1 / -1
       justify-self: center

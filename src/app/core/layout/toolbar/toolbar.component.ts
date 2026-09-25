@@ -37,8 +37,6 @@ export class ToolbarComponent implements OnDestroy {
 
   private subscription = new Subscription();
 
-  // The page scrolls inside the layout's <main>, not the window, and scroll
-  // events don't bubble — so listen in the capture phase on the document.
   private readonly scrollListener = () => this.updateScrolled();
 
   constructor(
@@ -69,8 +67,6 @@ export class ToolbarComponent implements OnDestroy {
     document.removeEventListener('scroll', this.scrollListener, { capture: true });
   }
 
-  // Solid once the page's hero (marked with data-toolbar-hero) has scrolled out
-  // from under the toolbar; pages without a hero fall back to a small offset.
   private updateScrolled(): void {
     const toolbarBottom = this.host.nativeElement.getBoundingClientRect().bottom;
     const hero = document.querySelector('[data-toolbar-hero]');

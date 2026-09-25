@@ -10,9 +10,10 @@ export interface Client {
     marriedName: string;
     documentType: string;
     ci: number;
+    ciPicFront?: string;
+    ciPicBack?: string;
     countryOfBirth: string;
     birthdate: string;
-    cellphone: number;
     maritalStatus: string;
     countryOfResidence: string;
     area: string;

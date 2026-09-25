@@ -39,7 +39,6 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   @Input() actions: any[] = [];
   @Input() title: string = '';
   @Input() addElement: boolean = false;
-  /** When true, replaces the single global filter with one filter input per column. */
   @Input() columnFilters: boolean = false;
 
   @Output() addNewElementAction = new EventEmitter<void>();
@@ -54,14 +53,12 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<any>([]);
 
-  /** Active per-column filter terms, keyed by column id. */
   columnFilterValues: Record<string, string> = {};
 
   get filterableColumns(): Column[] {
     return (this.columns || []).filter(c => {
       if (c.filterable === false) return false;
       if (c.filterable === true) return true;
-      // `id` columns are not useful to filter by default; opt in with `filterable: true`.
       return c.id !== 'id';
     });
   }
@@ -154,7 +151,6 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
   private triggerColumnFilter(): void {
     const active = Object.entries(this.columnFilterValues)
       .filter(([, v]) => (v ?? '').trim() !== '');
-    // MatTableDataSource only filters when `filter` is a non-empty string.
     this.dataSource.filter = active.length ? JSON.stringify(Object.fromEntries(active)) : '';
 
     if (this.dataSource.paginator) {
@@ -207,7 +203,6 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
         } catch {
           return true;
         }
-        // AND across columns: every active column term must match.
         return Object.entries(terms).every(([colId, term]) => {
           const t = String(term ?? '').trim().toLowerCase();
           if (!t) return true;
@@ -218,7 +213,6 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
       }
 
       const term = raw.toLowerCase();
-      // Solo columnas visibles (sin 'actions')
       for (const col of this.columns) {
         const cellValue = this.readCellValue(row, col.id);
         const text = (cellValue == null) ? '' : String(cellValue).toLowerCase();

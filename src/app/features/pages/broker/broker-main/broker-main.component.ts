@@ -9,7 +9,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 
 import { DeleteModalComponent } from 'src/app/shared/components/delete-modal/delete-modal.component';
-import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+import { InfoImage, InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 import { AddBenefitModalComponent } from 'src/app/shared/components/add-benefit-modal/add-benefit-modal.component';
 import { BenefitFormComponent } from 'src/app/shared/forms/benefit-form/benefit-form.component';
 import { PlanFormComponent } from 'src/app/shared/forms/plan-form/plan-form.component';
@@ -72,10 +72,27 @@ export class BrokerMainComponent implements OnInit {
   approvalColumns: Column<ClientPlanApproval>[] = [
     { id: 'id', header: 'ID', field: 'id' },
     { id: 'clientName', header: 'Cliente', valueGetter: (row) => this.getClientFullName(row) },
-    { id: 'clientCellphone', header: 'Celular', valueGetter: (row) => row.client?.cellphone ?? '—' },
+    { id: 'clientPhone', header: 'Celular', valueGetter: (row) => row.client?.phone ?? '—' },
     { id: 'vehiclePlate', header: 'Placa', field: 'vehiclePlate' },
     { id: 'vehiclePrice', header: 'Precio Vehículo (Bs.)', field: 'vehiclePrice' },
     { id: 'insurance', header: 'Aseguradora', valueGetter: (row) => this.insuranceMap[row.plan?.insuranceId!]?.name ?? '—' },
+    { id: 'planType', header: 'Tipo de Plan', valueGetter: (row) => row.plan?.planType ?? '—' },
+  ];
+
+  approvalDetailColumns: Column<ClientPlanApproval>[] = [
+    { id: 'id', header: 'ID', field: 'id' },
+    { id: 'clientName', header: 'Cliente', valueGetter: (row) => this.getClientFullName(row) },
+    { id: 'clientDocType', header: 'Tipo de Documento', valueGetter: (row) => row.client?.documentType ?? '—' },
+    { id: 'clientCi', header: 'CI', valueGetter: (row) => row.client?.ci ?? '—' },
+    { id: 'clientBirthdate', header: 'Fecha de Nacimiento', valueGetter: (row) => row.client?.birthdate ?? '—' },
+    { id: 'clientPhone', header: 'Celular', valueGetter: (row) => row.client?.phone ?? '—' },
+    { id: 'clientEmail', header: 'Correo Electrónico', valueGetter: (row) => row.client?.email ?? '—' },
+    { id: 'clientAddress', header: 'Dirección', valueGetter: (row) => [row.client?.address, row.client?.area].filter(Boolean).join(', ') || '—' },
+    { id: 'vehicle', header: 'Vehículo', valueGetter: (row) => [row.vehicleBrand, row.vehicleModel].filter(Boolean).join(' ') || '—' },
+    { id: 'vehiclePlate', header: 'Placa', field: 'vehiclePlate' },
+    { id: 'vehiclePrice', header: 'Precio Vehículo (Bs.)', field: 'vehiclePrice' },
+    { id: 'insurance', header: 'Aseguradora', valueGetter: (row) => this.insuranceMap[row.plan?.insuranceId!]?.name ?? '—' },
+    { id: 'plan', header: 'Plan', valueGetter: (row) => row.plan?.name ?? '—' },
     { id: 'planType', header: 'Tipo de Plan', valueGetter: (row) => row.plan?.planType ?? '—' },
   ];
 
@@ -83,7 +100,12 @@ export class BrokerMainComponent implements OnInit {
   soldPlanRows: ClientPlanApproval[] = [];
 
   waitingListActions: Action[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
     { id: 'approve', icon: 'check_circle', tooltip: 'Aprobar' },
+  ];
+
+  soldPlanActions: Action[] = [
+    { id: 'info', icon: 'info', tooltip: 'Detalles' },
   ];
 
   planActions: Action[] = [
@@ -157,9 +179,36 @@ export class BrokerMainComponent implements OnInit {
   }
 
   onWaitingListRowAction(e: { actionId: string; row: ClientPlanApproval }): void {
-    if (e.actionId === 'approve') {
-      this.confirmSoldPlan(e.row);
+    switch (e.actionId) {
+      case 'info': this.openApprovalDetails(e.row); break;
+      case 'approve': this.confirmSoldPlan(e.row); break;
     }
+  }
+
+  onSoldPlanRowAction(e: { actionId: string; row: ClientPlanApproval }): void {
+    if (e.actionId === 'info') {
+      this.openApprovalDetails(e.row);
+    }
+  }
+
+  private openApprovalDetails(row: ClientPlanApproval): void {
+    const images: InfoImage[] = [
+      { label: 'CI - Anverso', src: row.client?.ciPicFront },
+      { label: 'CI - Reverso', src: row.client?.ciPicBack },
+      { label: 'RUAT', src: row.vehiclePicRuat },
+      { label: 'Frontal', src: row.vehiclePicFront },
+      { label: 'Trasera', src: row.vehiclePicBack },
+      { label: 'Lateral derecho', src: row.vehiclePicRight },
+      { label: 'Lateral izquierdo', src: row.vehiclePicLeft },
+      { label: 'Número de chasis', src: row.vehiclePicChasis },
+      { label: 'Kilometraje', src: row.vehiclePicMileage },
+    ];
+    this.dialog.open(InfoModalComponent, {
+      width: '720px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      data: { title: 'Detalles de la Venta', columns: this.approvalDetailColumns, element: row, images },
+    });
   }
 
   private confirmSoldPlan(row: ClientPlanApproval): void {

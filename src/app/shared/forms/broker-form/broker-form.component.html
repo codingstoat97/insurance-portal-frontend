@@ -28,6 +28,9 @@
                     <mat-error *ngIf="form.get('ci')?.hasError('minlength')">
                         Debe tener al menos 2 caracteres
                     </mat-error>
+                    <mat-error *ngIf="form.get('ci')?.hasError('pattern')">
+                        Solo se permiten números
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Correo electrónico:</mat-label>

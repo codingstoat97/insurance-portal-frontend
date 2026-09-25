@@ -70,8 +70,6 @@ export class QuoteStepperComponent implements OnInit {
     this.sendForm();
   }
 
-  // Only advance to the offers step once the search succeeds, so the user can
-  // fix the form when the API rejects it (e.g. "Vehiculo no encontrado").
   sendForm(): void {
     const params = this.buildParams();
     this.searching = true;

@@ -35,3 +35,70 @@
 .value
   font-size: .95rem
   color: var(--kin-text)
+.info-modal
+  position: relative
+
+.images-title
+  margin: 1.25rem 0 .5rem
+  font-size: .95rem
+  color: var(--kin-text)
+
+.image-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr))
+  gap: .75rem
+
+.image-item
+  display: flex
+  flex-direction: column
+  gap: .35rem
+
+.image-thumb
+  height: 96px
+  padding: 0
+  border: 1px solid var(--kin-gray-200)
+  border-radius: 8px
+  overflow: hidden
+  background: var(--kin-white)
+  cursor: zoom-in
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+.image-thumb--empty
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: .85rem
+  color: var(--kin-gray-600)
+  cursor: default
+
+.image-viewer
+  position: absolute
+  inset: 0
+  z-index: 10
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: .75rem
+  padding: 1rem
+  background: rgba(0, 0, 0, .85)
+  border-radius: inherit
+
+  img
+    max-width: 100%
+    max-height: calc(100% - 56px)
+    object-fit: contain
+    border-radius: 4px
+
+.image-viewer-actions
+  display: flex
+  align-items: center
+  gap: .5rem
+  color: #fff
+
+  a, button
+    color: #fff

@@ -106,7 +106,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'name', header: 'Nombre', valueGetter: (row: Client) => [row.name, row.paternalSurname, row.maternalSurname].filter(Boolean).join(' ') },
     { id: 'ci', header: 'CI', field: 'ci' },
     { id: 'email', header: 'Correo Electrónico', field: 'email' },
-    { id: 'phone', header: 'Teléfono', field: 'phone' }
+    { id: 'phone', header: 'Celular', field: 'phone' }
   ];
 
   clientRows = [];
@@ -131,8 +131,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'countryOfResidence', header: 'País de Residencia', field: 'countryOfResidence' },
     { id: 'maritalStatus', header: 'Estado Civil', field: 'maritalStatus' },
     { id: 'email', header: 'Correo Electrónico', field: 'email' },
-    { id: 'phone', header: 'Teléfono', field: 'phone' },
-    { id: 'cellphone', header: 'Celular', field: 'cellphone' },
+    { id: 'phone', header: 'Celular', field: 'phone' },
     { id: 'address', header: 'Dirección', field: 'address' },
     { id: 'area', header: 'Área', field: 'area' },
     { id: 'profession', header: 'Profesión', field: 'profession' },
@@ -278,8 +277,14 @@ export class AdminMainComponent implements OnInit {
   }
 
   openInformationDialog(type: string, item: Vehicle | Region | Insurance | NamedCatalogEntity | Client): void {
+    const images = type === 'Client'
+      ? [
+        { label: 'CI - Anverso', src: (item as Client).ciPicFront },
+        { label: 'CI - Reverso', src: (item as Client).ciPicBack },
+      ]
+      : undefined;
     this.infoDialogRef = this.dialog.open(InfoModalComponent, {
-      data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item },
+      data: { title: 'Detalles', columns: this.getInformationColumns(type), element: item, images },
       scrollStrategy: this.scrollStrategy
     });
   }

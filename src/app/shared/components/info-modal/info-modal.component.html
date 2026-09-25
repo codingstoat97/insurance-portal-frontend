@@ -13,7 +13,34 @@
                 </span>
             </div>
         </div>
+        <ng-container *ngIf="data.images?.length">
+            <h5 class="images-title">Fotografías</h5>
+            <div class="image-grid">
+                <div class="image-item" *ngFor="let image of data.images">
+                    <span class="label">{{ image.label }}</span>
+                    <button *ngIf="image.src; else noImage" type="button" class="image-thumb"
+                        (click)="selectedImage = image">
+                        <img [src]="image.src" [alt]="image.label" />
+                    </button>
+                    <ng-template #noImage>
+                        <div class="image-thumb image-thumb--empty">Sin foto</div>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-container>
     </mat-dialog-content>
+    <div class="image-viewer" *ngIf="selectedImage" (click)="selectedImage = null">
+        <img [src]="selectedImage.src" [alt]="selectedImage.label" (click)="$event.stopPropagation()" />
+        <div class="image-viewer-actions" (click)="$event.stopPropagation()">
+            <span>{{ selectedImage.label }}</span>
+            <a mat-button [href]="selectedImage.src" [download]="selectedImage.label + '.jpg'">
+                <mat-icon>download</mat-icon> Descargar
+            </a>
+            <button mat-button type="button" (click)="selectedImage = null">
+                <mat-icon>close</mat-icon> Cerrar
+            </button>
+        </div>
+    </div>
     <mat-dialog-actions align="end">
         <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Cerrar</button>
     </mat-dialog-actions>

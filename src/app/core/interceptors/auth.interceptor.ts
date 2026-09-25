@@ -10,15 +10,6 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { SnackBarService } from '../services/snack-bar/snack-bar.service';
 
-/**
- * Set this token to true on a request to skip Bearer token injection
- * and global error handling. Use for public endpoints (e.g. login).
- *
- * Usage:
- *   this.http.post(url, body, {
- *     context: new HttpContext().set(SKIP_AUTH, true)
- *   });
- */
 export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

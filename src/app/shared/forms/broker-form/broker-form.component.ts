@@ -33,7 +33,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
 
   form = this.fb.group({
     name: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2)] }),
-    ci: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2)] }),
+    ci: this.fb.control<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2), Validators.pattern(/^\s*\d+\s*$/)] }),
     email: this.fb.control<string>({ value: '', disabled: true }, { nonNullable: true }),
     password: this.fb.control<string>('', { nonNullable: true, validators: [Validators.minLength(6)] }),
     logo: this.fb.control<string>(''),
@@ -60,7 +60,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
     const payload: Broker = {
       id: this.value?.id,
       name: raw.name,
-      ci: raw.ci,
+      ci: raw.ci.trim(),
       email: raw.email,
       logo: raw.logo || undefined,
       password: raw.password ? raw.password : undefined,
@@ -93,7 +93,7 @@ export class BrokerFormComponent implements OnInit, OnChanges {
     this.form.reset(
       {
         name: v?.name ?? '',
-        ci: v?.ci ?? '',
+        ci: v?.ci != null ? String(v.ci) : '',
         email: v?.email ?? '',
         password: '',
         logo: v?.logo ?? '',

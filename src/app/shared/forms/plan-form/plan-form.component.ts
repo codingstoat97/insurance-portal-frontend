@@ -173,11 +173,9 @@ export class PlanFormComponent implements OnInit, OnChanges {
   private parseFranchise(value: unknown): { percentage: number | null; minimum: number | null } {
     const text = value != null ? String(value) : '';
 
-    // Percentage: "." is a decimal separator here (e.g. "12.5%").
     const pctMatch = text.match(/([\d.]+)\s*%/);
     const percentage = pctMatch ? this.toNumber(parseFloat(pctMatch[1])) : null;
 
-    // Minimum (Bs): whole bolivianos; "." / "," are thousands separators (e.g. "1.000").
     const minMatch = text.match(/Bs\.?\s*([\d.,]+)/i);
     const minimum = minMatch ? this.toNumber(parseInt(minMatch[1].replace(/[.,]/g, ''), 10)) : null;
 

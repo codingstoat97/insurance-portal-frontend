@@ -2,8 +2,17 @@ import { Region } from "./region-model";
 
 export interface ClientPlan {
     planId: number;
+    vehicleBrand?: string;
+    vehicleModel?: string;
     vehiclePrice: number;
     vehiclePlate: string;
+    vehiclePicRuat: string;
+    vehiclePicFront: string;
+    vehiclePicBack: string;
+    vehiclePicRight: string;
+    vehiclePicLeft: string;
+    vehiclePicChasis: string;
+    vehiclePicMileage: string;
     gender: string;
     name: string;
     paternalSurname: string;
@@ -11,6 +20,8 @@ export interface ClientPlan {
     marriedName: string;
     documentType: string;
     documentNumber: number;
+    docPicFront: string;
+    docPicBack: string;
     countryOfBirth: string;
     birthdate: string;
     cellphone: number;
