@@ -23,7 +23,7 @@
             <div class="field-half">
                 <label class="field-label">Marca *</label>
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="brand" placeholder="Ej. Toyota" [matAutocomplete]="brandAuto" />
+                    <input matInput formControlName="brand" placeholder="Ej. Toyota" [matAutocomplete]="brandAuto" (blur)="snapToCatalog('brand')" />
                     <mat-autocomplete #brandAuto="matAutocomplete">
                         <mat-option *ngFor="let b of (filteredBrandList$ | async)" [value]="b">
                             {{ b }}
@@ -32,12 +32,15 @@
                     <mat-error *ngIf="form.get('brand')?.hasError('required')">
                         La marca del vehículo es obligatoria
                     </mat-error>
+                    <mat-error *ngIf="form.get('brand')?.hasError('notInCatalog')">
+                        Selecciona una marca de la lista
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="field-half">
                 <label class="field-label">Modelo / Tipo *</label>
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="model" placeholder="Ej. Corolla XEI" [matAutocomplete]="modelAuto" />
+                    <input matInput formControlName="model" placeholder="Ej. Corolla XEI" [matAutocomplete]="modelAuto" (blur)="snapToCatalog('model')" />
                     <mat-autocomplete #modelAuto="matAutocomplete">
                         <mat-option *ngFor="let m of (filteredModelList$ | async)" [value]="m">
                             {{ m }}
@@ -45,6 +48,9 @@
                     </mat-autocomplete>
                     <mat-error *ngIf="form.get('model')?.hasError('required')">
                         El modelo es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="form.get('model')?.hasError('notInCatalog')">
+                        Selecciona un modelo de la lista
                     </mat-error>
                 </mat-form-field>
             </div>

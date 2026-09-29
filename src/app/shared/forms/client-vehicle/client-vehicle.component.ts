@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -49,11 +49,11 @@ export class ClientVehicleComponent implements OnInit {
   form = this.fb.group({
     brand: this.fb.control<string>('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(50)],
+      validators: [Validators.required, Validators.maxLength(50), this.inCatalog(() => this.brandListSubject.value)],
     }),
     model: this.fb.control<string>('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(50)],
+      validators: [Validators.required, Validators.maxLength(50), this.inCatalog(() => this.modelListSubject.value)],
     }),
     year: this.fb.control<number | null>(null, {
       validators: [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
@@ -113,14 +113,16 @@ export class ClientVehicleComponent implements OnInit {
       this.modelListSubject,
     ]).pipe(map(([typed, list]) => this.filterOptions(list, typed)));
 
+    this.brandListSubject.subscribe(() => brandControl.updateValueAndValidity({ emitEvent: false }));
+    this.modelListSubject.subscribe(() => modelControl.updateValueAndValidity({ emitEvent: false }));
+
     const brandStable$ = brandControl.valueChanges.pipe(
       startWith(brandControl.value),
       debounceTime(300),
+      map(brand => this.findInCatalog(this.brandListSubject.value, brand) ?? (brand ?? '').trim()),
       distinctUntilChanged(),
     );
 
-    // Only clear the model once the brand genuinely changes after the initial/prefilled value —
-    // pairwise() skips the first emission, so patched edit values are left untouched.
     brandStable$.pipe(pairwise())
       .subscribe(() => modelControl.setValue('', { emitEvent: false }));
 
@@ -130,6 +132,29 @@ export class ClientVehicleComponent implements OnInit {
           .pipe(catchError(() => of([])))
         : of([])),
     ).subscribe(models => this.modelListSubject.next(models ?? []));
+  }
+
+  snapToCatalog(field: 'brand' | 'model'): void {
+    const control = this.form.controls[field];
+    const list = field === 'brand' ? this.brandListSubject.value : this.modelListSubject.value;
+    const match = this.findInCatalog(list, control.value);
+    if (match && match !== control.value) {
+      control.setValue(match);
+    }
+  }
+
+  private findInCatalog(list: string[], typed: string | null): string | null {
+    const value = (typed ?? '').trim().toLowerCase();
+    if (!value) return null;
+    return list.find(o => o.toLowerCase() === value) ?? null;
+  }
+
+  private inCatalog(getList: () => string[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const list = getList();
+      if (!control.value || !list.length) return null;
+      return this.findInCatalog(list, control.value) ? null : { notInCatalog: true };
+    };
   }
 
   private filterOptions(list: string[], typed: string | null): string[] {
@@ -151,6 +176,8 @@ export class ClientVehicleComponent implements OnInit {
   }
 
   onSubmit() {
+    this.snapToCatalog('brand');
+    this.snapToCatalog('model');
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

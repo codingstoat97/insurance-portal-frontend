@@ -98,7 +98,6 @@ export class OfferListComponent implements OnInit, OnChanges {
   }
 
   private franchiseMinimum(value: unknown): number {
-    // Franchise strings use "." as the thousands separator, e.g. "10% Min. Bs. 1.000".
     const match = value != null ? String(value).match(/Bs\.?\s*([\d.,]+)/i) : null;
     if (!match) return 0;
     const normalized = match[1].replace(/\./g, '').replace(',', '.');

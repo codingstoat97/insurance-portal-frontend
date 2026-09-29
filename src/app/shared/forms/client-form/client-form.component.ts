@@ -39,7 +39,6 @@ export class ClientFormComponent implements OnInit, OnChanges {
     documentType: this.fb.nonNullable.control('', [Validators.required]),
     ci: this.fb.nonNullable.control('', [Validators.required]),
     phone: this.fb.nonNullable.control('', [Validators.required]),
-    cellphone: this.fb.nonNullable.control('', [Validators.required]),
     email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
     countryOfBirth: this.fb.nonNullable.control('', [Validators.required]),
     countryOfResidence: this.fb.nonNullable.control('', [Validators.required]),
@@ -76,7 +75,6 @@ export class ClientFormComponent implements OnInit, OnChanges {
       documentType: v?.documentType ?? '',
       ci: v?.ci != null ? String(v.ci) : '',
       phone: v?.phone != null ? String(v.phone) : '',
-      cellphone: v?.cellphone != null ? String(v.cellphone) : '',
       email: v?.email ?? '',
       countryOfBirth: v?.countryOfBirth ?? '',
       countryOfResidence: v?.countryOfResidence ?? '',
@@ -103,7 +101,6 @@ export class ClientFormComponent implements OnInit, OnChanges {
       ...formValue,
       ci: Number(formValue.ci),
       phone: Number(formValue.phone),
-      cellphone: Number(formValue.cellphone),
       birthdate: this.toIsoDate(formValue.birthdate!),
     };
 

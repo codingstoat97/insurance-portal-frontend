@@ -7,10 +7,16 @@ import { MatDividerModule } from '@angular/material/divider';
 
 import { SharedModule } from '../../shared.module';
 
+export interface InfoImage {
+  label: string;
+  src?: string | null;
+}
+
 export interface DialogData {
   title: string;
   columns: any[];
   element: any;
+  images?: InfoImage[];
 }
 
 @Component({
@@ -21,6 +27,8 @@ export interface DialogData {
   styleUrls: ['./info-modal.component.sass']
 })
 export class InfoModalComponent {
+  selectedImage: InfoImage | null = null;
+
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<InfoModalComponent>,

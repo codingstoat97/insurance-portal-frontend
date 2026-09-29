@@ -6,7 +6,6 @@ export interface Plan {
     regionalId: number;
     insuranceId: number;
     minimumPremium: number;
-    /** Annual premium computed by the backend on `plans/search` results. */
     price?: number;
     rate: number;
     ageLimit: number;

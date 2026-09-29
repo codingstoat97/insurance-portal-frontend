@@ -9,6 +9,5 @@ import { ThemeService } from './core/services/theme/theme.service';
 export class AppComponent {
   title = 'insurance-web-portal';
 
-  // Eagerly inject so the .dark class is applied before any route renders
   constructor(_theme: ThemeService) {}
 }

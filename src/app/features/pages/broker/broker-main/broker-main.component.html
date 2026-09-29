@@ -53,7 +53,8 @@
                         </mat-tab>
                         <mat-tab label="Aprobadas">
                             <app-data-table [rows]="soldPlanRows" [columns]="approvalColumns"
-                                [columnFilters]="true"></app-data-table>
+                                [actions]="soldPlanActions" [columnFilters]="true"
+                                (action)="onSoldPlanRowAction($event)"></app-data-table>
                         </mat-tab>
                     </mat-tab-group>
                 </mat-tab>

@@ -115,16 +115,9 @@
             </h4>
             <div class="form-grid">
                 <mat-form-field appearance="outline">
-                    <mat-label>Teléfono:</mat-label>
-                    <input matInput formControlName="phone" placeholder="Ej. 44551122" />
-                    <mat-error *ngIf="form.get('phone')?.hasError('required')">
-                        Campo obligatorio
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
                     <mat-label>Número de Celular:</mat-label>
-                    <input matInput formControlName="cellphone" placeholder="Ej. 70776334" />
-                    <mat-error *ngIf="form.get('cellphone')?.hasError('required')">
+                    <input matInput formControlName="phone" placeholder="Ej. 70776334" />
+                    <mat-error *ngIf="form.get('phone')?.hasError('required')">
                         Campo obligatorio
                     </mat-error>
                 </mat-form-field>

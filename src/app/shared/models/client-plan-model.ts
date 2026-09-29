@@ -12,9 +12,10 @@ export interface ClientPlanApprovalClient {
     marriedName: string;
     documentType: string;
     ci: number;
+    ciPicFront?: string;
+    ciPicBack?: string;
     countryOfBirth: string;
     birthdate: string;
-    cellphone: number;
     maritalStatus: string;
     countryOfResidence: string;
     area: string;
@@ -33,5 +34,12 @@ export interface ClientPlanApproval {
     vehicleModel: string;
     vehiclePlate: string;
     vehiclePrice: number;
+    vehiclePicRuat?: string;
+    vehiclePicFront?: string;
+    vehiclePicBack?: string;
+    vehiclePicRight?: string;
+    vehiclePicLeft?: string;
+    vehiclePicChasis?: string;
+    vehiclePicMileage?: string;
     soldConfirmation: boolean;
 }

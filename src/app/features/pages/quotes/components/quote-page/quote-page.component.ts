@@ -156,7 +156,6 @@ export class QuotePageComponent {
     const tileY = cursorY - 6;
     const tileWidth = pageWidth - marginX * 2;
 
-    // --kin-accent (#ff8b22), same solid-bar treatment as the section headers below
     doc.setFillColor(255, 139, 34);
     doc.rect(tileX, tileY, tileWidth, tileHeight, 'F');
 
