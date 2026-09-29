@@ -22,7 +22,37 @@
     <h2>No se encontraron ofertas disponibles.</h2>
 </div>
 
-<div *ngIf="filteredOfferList.length > 0" class="offer-table-container">
+<div *ngIf="filteredOfferList.length > 0 && isMobile" class="offer-card-list">
+    <div *ngFor="let offer of tableOfferList; trackBy: trackById" class="offer-card"
+        [class.selected]="selectedIds.has(offer.id)">
+        <div class="offer-card-header">
+            <img *ngIf="columnVisible['logo'] && insuranceMap.get(offer.insuranceId)?.logo" class="card-logo"
+                [src]="insuranceMap.get(offer.insuranceId)?.logo"
+                [alt]="(insuranceMap.get(offer.insuranceId)?.name || 'Sin nombre') + ' logo'">
+            <span *ngIf="columnVisible['aseguradora']" class="card-title">{{ (offer.name | titlecase) || 'Sin nombre' }}</span>
+        </div>
+        <div *ngIf="columnVisible['primaAnual']" class="offer-card-row">
+            <span class="card-label">Prima Anual</span>
+            <span class="card-value premium">Bs. {{ primaAnual(offer) | number:'1.0-0' }}</span>
+        </div>
+        <div *ngIf="columnVisible['primaACredito']" class="offer-card-row">
+            <span class="card-label">Prima a Crédito</span>
+            <span class="card-value premium">Bs. {{ primaACredito(offer) | number:'1.0-0' }}</span>
+        </div>
+        <div *ngIf="columnVisible['franquicia']" class="offer-card-row">
+            <span class="card-label">Franquicia</span>
+            <span class="card-value">{{ offer.franchise }}</span>
+        </div>
+        <div class="offer-card-actions">
+            <mat-checkbox [checked]="selectedIds.has(offer.id)"
+                [disabled]="!selectedIds.has(offer.id) && selectedIds.size >= maxCompare"
+                (change)="toggleCompare(offer.id)">Comparar</mat-checkbox>
+            <button mat-stroked-button color="primary" (click)="goToQuotePage(offer.id)">Ver Detalles</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="filteredOfferList.length > 0 && !isMobile" class="offer-table-container">
     <table class="offer-comparison-table">
         <thead>
             <tr>

@@ -8,6 +8,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { SnackBarService } from 'src/app/core/services/snack-bar/snack-bar.service';
 import { OfferColumnConfigService } from 'src/app/core/services/offer-column-config/offer-column-config.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import * as premium from 'src/app/shared/utils/premium.util';
 
@@ -116,11 +117,16 @@ export class OfferListComponent implements OnInit, OnChanges {
     return premium.primaACredito(offer, this.vehicleValue);
   }
 
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
+
   constructor(
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private offerColumnConfigService: OfferColumnConfigService,
     private stepperService: QuoteStepperService,
+    private responsiveService: ResponsiveService,
     private router: Router) { }
 
   goToQuotePage(offerId: number): void {

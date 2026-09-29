@@ -122,6 +122,36 @@
 .action-cell
     padding-top: 14px
 
+.comparison-card-list
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+.comparison-card
+    border: 1px solid var(--kin-gray-200)
+    border-radius: 8px
+    padding: 8px 12px 12px
+
+    .card-row
+        display: flex
+        justify-content: space-between
+        align-items: center
+        gap: 12px
+        padding: 6px 0
+        border-bottom: 1px solid var(--kin-gray-200)
+        font-size: 14px
+
+    .card-label
+        font-size: 13px
+        color: var(--kin-gray-600)
+
+    .card-value
+        text-align: right
+
+    .card-action
+        width: 100%
+        margin-top: 12px
+
 @media (max-width: 599px)
     .comparison-panel
         padding: 12px

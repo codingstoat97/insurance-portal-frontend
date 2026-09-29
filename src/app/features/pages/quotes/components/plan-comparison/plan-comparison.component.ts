@@ -7,6 +7,7 @@ import { HttpService } from 'src/app/core/services/http/http.service';
 import { PlanPurchaseService } from 'src/app/core/services/plan-purchase/plan-purchase.service';
 import { SalesConfigService } from 'src/app/core/services/sales-config/sales-config.service';
 import { QuoteStepperService } from 'src/app/core/services/quote-stepper/quote-stepper.service';
+import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import * as premium from 'src/app/shared/utils/premium.util';
 
@@ -44,11 +45,16 @@ export class PlanComparisonComponent implements OnChanges {
   loadingBenefits = false;
   readonly salesEnabled$ = this.salesConfigService.enabled$;
 
+  get isMobile(): boolean {
+    return this.responsiveService.isPhonePortrait;
+  }
+
   constructor(
     private httpService: HttpService,
     private purchaseService: PlanPurchaseService,
     private salesConfigService: SalesConfigService,
-    private stepperService: QuoteStepperService
+    private stepperService: QuoteStepperService,
+    private responsiveService: ResponsiveService
   ) { }
 
   private get vehicleValue(): number {
