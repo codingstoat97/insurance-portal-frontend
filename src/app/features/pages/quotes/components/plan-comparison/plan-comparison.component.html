@@ -8,7 +8,52 @@
 
     <p *ngIf="offers.length === 1" class="hint">Selecciona al menos un plan más para comparar en la lista de abajo.</p>
 
-    <div class="comparison-scroll">
+    <div *ngIf="isMobile" class="comparison-card-list">
+        <div *ngFor="let offer of offers" class="comparison-card">
+            <div class="plan-row-header">
+                <img *ngIf="insuranceLogo(offer.insuranceId) as logo" class="plan-insurer-logo"
+                    [src]="logo" [alt]="insuranceName(offer.insuranceId) + ' logo'"
+                    [title]="insuranceName(offer.insuranceId)">
+                <div class="plan-name-block">
+                    <span class="plan-title">{{ (offer.name | titlecase) || 'Sin nombre' }}</span>
+                    <span *ngIf="offer.planType" class="plan-level">Plan {{ sentenceCase(offer.planType) }}</span>
+                    <span *ngIf="!insuranceLogo(offer.insuranceId)" class="plan-insurer">
+                        {{ insuranceName(offer.insuranceId) }}
+                    </span>
+                </div>
+                <button mat-icon-button class="remove-btn" (click)="removeOffer.emit(offer.id)"
+                    aria-label="Quitar de la comparación" title="Quitar de la comparación">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <div class="card-row">
+                <span class="card-label">Prima al contado</span>
+                <span class="highlight-cell">{{ primaAlContado(offer) | number:'1.0-0' }} Bs.</span>
+            </div>
+            <div class="card-row">
+                <span class="card-label">Prima crédito</span>
+                <span>{{ primaACredito(offer) | number:'1.0-0' }} Bs.</span>
+            </div>
+            <div class="card-row">
+                <span class="card-label">Franquicia</span>
+                <span class="card-value">{{ offer.franchise }}</span>
+            </div>
+            <div *ngFor="let benefitName of benefitNames" class="card-row benefit-cell">
+                <span class="card-label">{{ benefitName }}</span>
+                <span *ngIf="loadingBenefits; else benefitMark" class="loading-cell">…</span>
+                <ng-template #benefitMark>
+                    <mat-icon *ngIf="hasBenefit(offer.id, benefitName); else noBenefit" class="benefit-yes">check</mat-icon>
+                    <ng-template #noBenefit>
+                        <mat-icon class="benefit-no">remove</mat-icon>
+                    </ng-template>
+                </ng-template>
+            </div>
+            <button *ngIf="salesEnabled$ | async" mat-raised-button color="primary" class="card-action"
+                (click)="contratar(offer)">Contratar</button>
+        </div>
+    </div>
+
+    <div *ngIf="!isMobile" class="comparison-scroll">
         <table class="comparison-table">
             <thead>
                 <tr>
