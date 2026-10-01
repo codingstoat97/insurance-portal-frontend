@@ -20,6 +20,7 @@ import * as PATHS from 'src/app/shared/utils/request-paths.util';
 import { Action, Column } from 'src/app/shared/utils/data-table-types.util';
 
 import { CoverageLabelPipe } from 'src/app/shared/pipes/coverage-pipe/coverage-label.pipe';
+import { EngineTypeLabelPipe } from 'src/app/shared/pipes/engine-type-pipe/engine-type-label.pipe';
 
 import { catchError, EMPTY, forkJoin } from 'rxjs';
 
@@ -28,7 +29,7 @@ import { catchError, EMPTY, forkJoin } from 'rxjs';
   selector: 'app-admin-plans',
   templateUrl: './admin-plans.component.html',
   styleUrls: ['./admin-plans.component.sass'],
-  providers: [CoverageLabelPipe]
+  providers: [CoverageLabelPipe, EngineTypeLabelPipe]
 })
 export class AdminPlansComponent implements OnInit {
 
@@ -53,12 +54,18 @@ export class AdminPlansComponent implements OnInit {
     { id: 'interest', header: 'Interés (%)', field: 'interest', filterable: false },
     { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'planType', header: 'Tipo de Plan', field: 'planType' },
+    { id: 'engineType', header: 'Tipo de Motor', field: 'engineType', valueGetter: (row) => this.engineTypeLabelPipe.transform(row.engineType) },
     { id: 'franchise', header: 'Franquicia', field: 'franchise' },
-    { id: 'state', header: 'Plan Activado', field: 'state', filterable: false },
+    { id: 'state', header: 'Plan Activado', field: 'state', filterable: false, valueGetter: (row) => row.state ? 'Sí' : 'No' },
     { id: 'createdBy', header: 'Broker', field: 'createdBy' }
   ];
 
   planRows: Plan[] = [];
+
+  // Info modal shows every table column plus fields too wide for the table.
+  planDetailColumns: Column<Plan>[] = this.planColumns.flatMap(col => col.id === 'engineType'
+    ? [{ id: 'vehicleType', header: 'Tipo de Vehículo', field: 'vehicleType' }, col]
+    : [col]);
 
   benefitColumns: Column<Benefit>[] = [
     { id: 'id', header: 'ID', field: 'id' },
@@ -90,6 +97,7 @@ export class AdminPlansComponent implements OnInit {
     private httpService: HttpService,
     private snackbar: SnackBarService,
     private coverageLabelPipe: CoverageLabelPipe,
+    private engineTypeLabelPipe: EngineTypeLabelPipe,
     private responsiveService: ResponsiveService,
     private authService: AuthService,
     private router: Router) { }
@@ -186,7 +194,7 @@ export class AdminPlansComponent implements OnInit {
 
   private getInformationColumns(type: string): any[] {
     switch (type) {
-      case 'Plan': return this.planColumns;
+      case 'Plan': return this.planDetailColumns;
       case 'Benefit': return this.benefitColumns;
       default: return [];
     }
