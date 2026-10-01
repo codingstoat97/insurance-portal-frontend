@@ -62,10 +62,13 @@
                         <mat-card-title>Beneficios</mat-card-title>
                     </mat-card-header>
                     <mat-card-content class="detail-card-content">
-                        <div class="detail-row benefit-row" *ngFor="let benefit of planBenefits">
-                            <span class="detail-label">{{ benefit.benefitName }}</span>
-                            <span *ngIf="benefit.description" class="detail-value">{{ benefit.description }}</span>
-                        </div>
+                        <section class="benefit-group" *ngFor="let group of benefitGroups">
+                            <h4 class="benefit-group-title">{{ group.title }}</h4>
+                            <div class="detail-row benefit-row" *ngFor="let benefit of group.benefits">
+                                <span class="detail-label">{{ benefit.benefitName }}</span>
+                                <span *ngIf="benefit.description" class="detail-value">{{ benefit.description }}</span>
+                            </div>
+                        </section>
                     </mat-card-content>
                 </mat-card>
             </div>

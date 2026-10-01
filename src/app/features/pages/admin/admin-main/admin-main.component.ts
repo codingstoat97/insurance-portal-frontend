@@ -26,13 +26,16 @@ import { Insurance, Region, User, Vehicle, VehicleType, Segment, PlanType, Offer
 import * as PATH from 'src/app/shared/utils/request-paths.util'
 import { UserFormComponent } from 'src/app/shared/forms/user-form/user-form.component';
 
+import { EngineTypeLabelPipe } from 'src/app/shared/pipes/engine-type-pipe/engine-type-label.pipe';
+
 type NamedCatalogEntity = VehicleType | Segment | PlanType;
 
 
 @Component({
   selector: 'app-admin-main',
   templateUrl: './admin-main.component.html',
-  styleUrls: ['./admin-main.component.sass']
+  styleUrls: ['./admin-main.component.sass'],
+  providers: [EngineTypeLabelPipe]
 })
 export class AdminMainComponent implements OnInit {
 
@@ -57,7 +60,7 @@ export class AdminMainComponent implements OnInit {
     { id: 'model', header: 'Modelo', field: 'model' },
     { id: 'segment', header: 'Segmento', field: 'segment' },
     { id: 'vehicleType', header: 'Tipo de Vehículo', field: 'vehicleType' },
-    { id: 'engineType', header: 'Tipo de Motor', field: 'engineType' }
+    { id: 'engineType', header: 'Tipo de Motor', field: 'engineType', valueGetter: (row: Vehicle) => this.engineTypeLabelPipe.transform(row.engineType) }
   ];
 
   vehicleRows = [];
@@ -164,6 +167,7 @@ export class AdminMainComponent implements OnInit {
     private authService: AuthService,
     private salesConfigService: SalesConfigService,
     private offerColumnConfigService: OfferColumnConfigService,
+    private engineTypeLabelPipe: EngineTypeLabelPipe,
     private router: Router) { }
 
   logout(): void {

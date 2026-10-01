@@ -4,4 +4,5 @@ export interface PlanBenefit {
     benefitId: number;
     benefitName: string;
     description: string;
+    coverage?: string;
 }

@@ -22,6 +22,14 @@ import { ClientVehicle, Insurance, Plan, PlanBenefit, Region } from 'src/app/sha
 import * as PATH from 'src/app/shared/utils/request-paths.util';
 import { primaAnual, primaAlContado, primaACredito } from 'src/app/shared/utils/premium.util';
 
+interface BenefitGroup {
+  title: string;
+  benefits: PlanBenefit[];
+}
+
+// Display order of the benefit sections; values match the backend's coverage labels.
+const COVERAGE_ORDER = ['COBERTURAS PRINCIPALES', 'CLAUSULAS Y ANEXOS', 'COBERTURAS ADICIONALES'];
+
 @Component({
   selector: 'app-quote-page',
   templateUrl: './quote-page.component.html',
@@ -32,6 +40,7 @@ export class QuotePageComponent {
   public quotePlan!: Plan | null;
 
   public planBenefits: PlanBenefit[] | null = [];
+  public benefitGroups: BenefitGroup[] = [];
   public insuranceData!: Insurance | null;
   public regionData!: Region | null;
   public clientVehicleData!: ClientVehicle | null;
@@ -76,7 +85,21 @@ export class QuotePageComponent {
     if (!this.quotePlan) return;
     this.httpService.get<PlanBenefit[]>(PATH.planBenefitsGetAllByPlan + '/' + this.quotePlan?.id)
       .pipe(catchError(() => { this.snackbarService.error('Error al cargar los beneficios del plan.'); return EMPTY; }))
-      .subscribe(res => { this.planBenefits = res; });
+      .subscribe(res => {
+        this.planBenefits = res;
+        this.benefitGroups = this.groupBenefitsByCoverage(res ?? []);
+      });
+  }
+
+  private groupBenefitsByCoverage(benefits: PlanBenefit[]): BenefitGroup[] {
+    const groups = COVERAGE_ORDER.map(title => ({
+      title,
+      benefits: benefits.filter(b => b.coverage?.toUpperCase() === title)
+    }));
+    // Keep benefits with a missing/unknown coverage visible instead of dropping them.
+    const others = benefits.filter(b => !COVERAGE_ORDER.includes(b.coverage?.toUpperCase() ?? ''));
+    groups.push({ title: 'OTROS', benefits: others });
+    return groups.filter(g => g.benefits.length);
   }
 
   private fetchInsuranceData(): void {
@@ -223,15 +246,19 @@ export class QuotePageComponent {
     doc.setTextColor(0);
     cursorY += creditLegend.length * 3.5 + 5;
 
-    const benefitRows = (this.planBenefits ?? []).map(b => [b.benefitName ?? '-', b.description ?? '-']);
-    autoTable(doc, {
-      startY: cursorY,
-      head: [['Coberturas', 'Descripción']],
-      body: benefitRows.length ? benefitRows : [['-', 'No se registraron beneficios para este plan.']],
-      theme: 'grid',
-      headStyles: { fillColor: [64, 136, 162], textColor: [244, 240, 230] },
-      margin: { left: marginX, right: marginX },
-      columnStyles: { 0: { cellWidth: 55 } },
+    const benefitTables = this.benefitGroups.length
+      ? this.benefitGroups.map(g => ({ title: g.title, rows: g.benefits.map(b => [b.benefitName ?? '-', b.description ?? '-']) }))
+      : [{ title: 'Coberturas', rows: [['-', 'No se registraron beneficios para este plan.']] }];
+    benefitTables.forEach((table, i) => {
+      autoTable(doc, {
+        startY: i === 0 ? cursorY : (doc as any).lastAutoTable.finalY + 6,
+        head: [[table.title, 'Descripción']],
+        body: table.rows,
+        theme: 'grid',
+        headStyles: { fillColor: [64, 136, 162], textColor: [244, 240, 230] },
+        margin: { left: marginX, right: marginX },
+        columnStyles: { 0: { cellWidth: 55 } },
+      });
     });
 
     const finalY = (doc as any).lastAutoTable.finalY + 10;
