@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { Column } from 'src/app/shared/utils/data-table-types.util';
+import { Column, getCellValue } from 'src/app/shared/utils/data-table-types.util';
 
 @Component({
   selector: 'app-data-card-list',
@@ -29,7 +29,7 @@ export class DataCardListComponent {
   @Output() action = new EventEmitter<{ actionId: string; row: any }>();
 
   getValue(col: Column, row: any): unknown {
-    return col.valueGetter ? col.valueGetter(row) : row[col.field || col.id];
+    return getCellValue(col, row);
   }
 
   onAction(a: any, row: any, ev?: MouseEvent): void {

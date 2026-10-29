@@ -12,3 +12,8 @@ export type Action = {
   icon: string;
   tooltip: string;
 };
+// Resolves a column's display value; fractional numbers are shown with 2 decimals.
+export function getCellValue<T>(col: Column<T>, row: T): any {
+  const val = col.valueGetter ? col.valueGetter(row) : (row as any)[col.field || col.id];
+  return typeof val === 'number' && !Number.isInteger(val) ? val.toFixed(2) : val;
+}
