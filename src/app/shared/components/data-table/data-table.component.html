@@ -84,7 +84,7 @@
                     <mat-icon *ngIf="col.iconGetter as getIcon; else plainValue"
                         [style.color]="getIcon(row)?.color">{{ getIcon(row)?.icon }}</mat-icon>
                     <ng-template #plainValue>
-                        {{ col.valueGetter ? col.valueGetter(row) : row[col.field || col.id] }}
+                        {{ displayValue(col, row) }}
                     </ng-template>
                 </td>
             </ng-container>

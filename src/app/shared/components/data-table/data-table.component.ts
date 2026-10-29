@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
-import { Column } from 'src/app/shared/utils/data-table-types.util';
+import { Column, getCellValue } from 'src/app/shared/utils/data-table-types.util';
 import { ResponsiveService } from 'src/app/core/services/responsive/responsive.service';
 import { DataCardListComponent } from 'src/app/shared/components/data-card-list/data-card-list.component';
 
@@ -165,6 +165,10 @@ export class DataTableComponent implements AfterViewInit, OnDestroy {
 
   onAddNewElement(): void {
     this.addNewElementAction.emit();
+  }
+
+  displayValue(col: Column, row: any): unknown {
+    return getCellValue(col, row);
   }
 
   private readCellValue(row: any, colId: string): unknown {

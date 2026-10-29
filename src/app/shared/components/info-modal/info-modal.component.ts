@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angu
 import { MatDividerModule } from '@angular/material/divider';
 
 import { SharedModule } from '../../shared.module';
+import { getCellValue } from '../../utils/data-table-types.util';
 
 export interface InfoImage {
   label: string;
@@ -39,6 +40,6 @@ export class InfoModalComponent {
   }
 
   getValue(col: any): any {
-    return col.valueGetter ? col.valueGetter(this.data.element) : this.data.element[col.field ?? col.id];
+    return getCellValue(col, this.data.element);
   }
 }
